@@ -31,7 +31,13 @@ public class Sql2oSpellDao implements SpellDao{
 
     @Override
     public Spell findById(int id) {
-        return null;
+        String sql = "SELECT * FROM spells WHERE id = :id";
+        try (Connection connection = sql2o.open()) {
+            return connection.createQuery(sql)
+                    .addParameter("id", id)
+                    .executeAndFetchFirst(Spell.class);
+        }
+
     }
 
     @Override
