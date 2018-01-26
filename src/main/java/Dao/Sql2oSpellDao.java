@@ -79,6 +79,12 @@ public class Sql2oSpellDao implements SpellDao{
 
     @Override
     public void deleteAll() {
-
+        String sql = "DELETE FROM spells";
+        try (Connection connection = sql2o.open()) {
+            connection.createQuery(sql)
+                    .executeUpdate();
+        } catch (Sql2oException ex) {
+            System.out.println(ex);
+        }
     }
 }
