@@ -17,7 +17,7 @@ public class Sql2oSpellDao implements SpellDao{
 
     @Override
     public void add(Spell spell) {
-        String sql = "";
+        String sql = "INSERT INTO spells (name, description, damage, effects) VALUES (:name, :description, :damage, :effects)";
         try (Connection con = sql2o.open()) {
             int id = (int) con.createQuery(sql)
                     .bind(spell)
