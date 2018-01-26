@@ -83,6 +83,12 @@ public class Sql2oEffectDao implements EffectDao{
 
     @Override
     public void deleteAll() {
-
+        String sql = "DELETE FROM effects";
+        try (Connection connection = sql2o.open()) {
+            connection.createQuery(sql)
+                    .executeUpdate();
+        } catch (Sql2oException ex) {
+            System.out.println(ex);
+        }
     }
 }
