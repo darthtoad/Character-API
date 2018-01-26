@@ -43,8 +43,11 @@ public class Sql2oCharacterCDao implements CharacterCDao {
 
     @Override
     public List<CharacterC> getAll() {
-        return null;
-    }
+        String sql = "SELECT * FROM characters";
+        try (Connection connection = sql2o.open()) {
+            return connection.createQuery(sql)
+                    .executeAndFetch(CharacterC.class);
+        }    }
 
     @Override
     public void update(int id, String name, String description, int level, int experience, int HP, int currentHP, int defense, int magicDefense, int strength, int MP, int currentMP, int magic, int dexterity, String spells, String equipment, String effects) {
