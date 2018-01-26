@@ -36,7 +36,11 @@ public class Sql2oSpellDao implements SpellDao{
 
     @Override
     public List<Spell> getAll() {
-        return null;
+        String sql = "SELECT * FROM spells";
+        try (Connection connection = sql2o.open()) {
+            return connection.createQuery(sql)
+                    .executeAndFetch(Spell.class);
+        }
     }
 
     @Override
