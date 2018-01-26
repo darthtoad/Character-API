@@ -71,7 +71,18 @@ public class Sql2oCharacterCDaoTest {
     }
 
     @Test
-    public void update() throws Exception {
+    public void updateUpdatesCharacterInfoCorrectly() throws Exception {
+        CharacterC testCharacterC = setupNewCharacterC();
+        characterCDao.add(testCharacterC);
+        String originalName = characterCDao.findById(testCharacterC.getId()).getName();
+        String originalDescription = characterCDao.findById(testCharacterC.getId()).getDescription();
+        int originalLevel = characterCDao.findById(testCharacterC.getId()).getLevel();
+        String originalEffects = characterCDao.findById(testCharacterC.getId()).getEffects();
+        characterCDao.update(testCharacterC.getId(), "Fire", "He likes to burn things", 3, 50, 5, 5, 5, 5, 5, 5, 5, 5, 5, "1, 4, 5", "", "144");
+        assertNotEquals(originalLevel, characterCDao.findById(testCharacterC.getId()).getLevel());
+        assertNotEquals(originalDescription, characterCDao.findById(testCharacterC.getId()).getDescription());
+        assertNotEquals(originalEffects, characterCDao.findById(testCharacterC.getId()).getEffects());
+        assertNotEquals(originalName, characterCDao.findById(testCharacterC.getId()).getName());
     }
 
     @Test
