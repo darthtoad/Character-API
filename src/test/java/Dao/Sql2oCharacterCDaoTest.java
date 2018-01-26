@@ -1,6 +1,6 @@
 package Dao;
 
-import models.CharacterC;
+import models.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,6 +12,15 @@ import static org.junit.Assert.*;
 public class Sql2oCharacterCDaoTest {
     private Connection connection;
     private Sql2oCharacterCDao characterCDao;
+    private Sql2oEquipmentDao equipmentDao;
+
+    public Equipment setupNewEquipment() {
+        return new Equipment("Sword of Awesome", "Sword", 4, 0, 0, 0, 0);
+    }
+
+    public Equipment setupNewEquipment1() {
+        return new Equipment("Shield of Awesome", "Sheild", 0, 0, -1, 4, 2);
+    }
 
     public CharacterC setupNewCharacterC() {
         return new CharacterC("Fog", "A blonde hero who is not name Cloud", 4, 588, 49, 38, 5, 4, 7, 3, 2, 5, 8, "1, 3, 4", "2, 5, 7", "3");
@@ -46,6 +55,19 @@ public class Sql2oCharacterCDaoTest {
     }
 
     @Test
+    public void addEquipmentToCharacterAssociatesCorrectly() throws Exception {
+        CharacterC characterC = setupNewCharacterC();
+        CharacterC characterC1 = setupNewCharacterC1();
+        Equipment equipment = setupNewEquipment();
+        characterCDao.add(characterC);
+        characterCDao.add(characterC1);
+        equipmentDao.add(equipment);
+        characterCDao.addEquipmentToCharacterC(equipment, characterC);
+        assertEquals(1, characterCDao.getAllEquipmentForACharacter(characterC.getId()).size());
+        assertTrue(characterCDao.getAllEquipmentForACharacter(characterC.getId()).contains(equipment));
+    }
+
+    @Test
     public void findByIdFindsCharacterCorrectly() throws Exception {
         CharacterC characterC = setupNewCharacterC();
         CharacterC characterC1 = setupNewCharacterC1();
@@ -68,6 +90,23 @@ public class Sql2oCharacterCDaoTest {
         assertEquals(2, characterCDao.getAll().size());
         assertTrue(characterCDao.getAll().contains(testCharacterC));
         assertTrue(characterCDao.getAll().contains(testCharacterC1));
+    }
+
+    @Test
+    public void getAllEquipmentForACharacterGetsAll() throws Exception {
+        CharacterC characterC = setupNewCharacterC();
+        CharacterC characterC1 = setupNewCharacterC1();
+        Equipment equipment = setupNewEquipment();
+        Equipment equipment1 = setupNewEquipment1();
+        characterCDao.add(characterC);
+        characterCDao.add(characterC1);
+        equipmentDao.add(equipment);
+        equipmentDao.add(equipment1);
+        characterCDao.addEquipmentToCharacterC(equipment, characterC);
+
+        assertEquals(2, characterCDao.getAll().size());
+        assertEquals(1, characterCDao.getAllEquipmentForACharacter(characterC.getId()).size());
+        assertFalse(characterCDao.getAllEquipmentForACharacter(characterC.getId()).contains(equipment1));
     }
 
     @Test

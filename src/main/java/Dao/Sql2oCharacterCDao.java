@@ -8,6 +8,7 @@ import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 import org.sql2o.Sql2oException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Sql2oCharacterCDao implements CharacterCDao {
@@ -32,6 +33,29 @@ public class Sql2oCharacterCDao implements CharacterCDao {
     }
 
     @Override
+    public void addEquipmentToCharacterC(Equipment equipment, CharacterC characterC){
+        String sql = "INSERT INTO characters_equipment (equipmentid, characterid) VALUES (:equipmentId, :sId)";
+        try (Connection connection = sql2o.open()) {
+            connection.createQuery(sql)
+                    .addParameter("equipmentId", equipment.getId())
+                    .addParameter("characterId", characterC.getId())
+                    .executeUpdate();
+        } catch (Sql2oException ex) {
+            System.out.println(ex);
+        }
+    }
+
+    @Override
+    public void addSpellToCharacterC(Spell spell, CharacterC characterC){
+
+    }
+
+    @Override
+    public void addEffectToCharacterC(Effect effect, CharacterC characterC){
+
+    }
+
+    @Override
     public CharacterC findById(int id) {
         String sql = "SELECT * FROM characters WHERE id = :id";
         try (Connection connection = sql2o.open()) {
@@ -47,7 +71,31 @@ public class Sql2oCharacterCDao implements CharacterCDao {
         try (Connection connection = sql2o.open()) {
             return connection.createQuery(sql)
                     .executeAndFetch(CharacterC.class);
-        }    }
+        }
+    }
+
+    @Override
+    public List<Equipment> getAllEquipmentForACharacter(int id) {
+        List<Equipment> equipment = new ArrayList<>();
+        String sql = "SELECT equipmentId FROM characters_equipment WHERE characterId = :characterId";
+
+        try (Connection fred = sql2o.open()) {
+            List<Integer> allEquipmentIds = fred.createQuery(sql)
+                    .addParameter("characterId", id)
+                    .executeAndFetch(Integer.class);
+            for (Integer equipmentId : allEquipmentIds) {
+                String query2 = "SELECT * FROM equipment WHERE id = :equipmentId";
+                equipment.add(
+                        fred.createQuery(query2)
+                                .addParameter("equipmentId", equipmentId)
+                                .executeAndFetchFirst(Equipment.class)
+                );
+            }
+        } catch (Sql2oException ex) {
+            System.out.println(ex);
+        }
+        return equipment;
+    }
 
     @Override
     public void update(int id, String name, String description, int level, int experience, int HP, int currentHP, int defense, int magicDefense, int strength, int MP, int currentMP, int magic, int dexterity, String spells, String equipment, String effects) {
