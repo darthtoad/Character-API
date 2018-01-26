@@ -40,7 +40,11 @@ public class Sql2oEquipmentDao implements EquipmentDao {
 
     @Override
     public List<Equipment> getAll() {
-        return null;
+        String sql = "SELECT * FROM equipment";
+        try (Connection connection = sql2o.open()) {
+            return connection.createQuery(sql)
+                    .executeAndFetch(Equipment.class);
+        }
     }
 
     @Override
