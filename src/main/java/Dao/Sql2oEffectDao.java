@@ -29,7 +29,12 @@ public class Sql2oEffectDao implements EffectDao{
 
     @Override
     public Effect findById(int id) {
-        return null;
+        String sql = "SELECT * FROM effects WHERE id = :id";
+        try (Connection connection = sql2o.open()) {
+            return connection.createQuery(sql)
+                    .addParameter("id", id)
+                    .executeAndFetchFirst(Effect.class);
+        }
     }
 
     @Override
