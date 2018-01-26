@@ -90,7 +90,7 @@ public class Sql2oEffectDaoTest {
     }
 
     @Test
-    public void deleteById() throws Exception {
+    public void deleteByIdDeletesCorrectly() throws Exception {
         Effect effect = setupNewEffect();
         Effect effect1 = setupNewEffect1();
         Effect effect2 = setupNewEffect2();

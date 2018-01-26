@@ -71,7 +71,14 @@ public class Sql2oEffectDao implements EffectDao{
 
     @Override
     public void deleteById(int id) {
-
+        String sql = "DELETE FROM effects WHERE id = :id";
+        try (Connection connection = sql2o.open()) {
+            connection.createQuery(sql)
+                    .addParameter("id", id)
+                    .executeUpdate();
+        } catch (Sql2oException ex) {
+            System.out.println(ex);
+        }
     }
 
     @Override
