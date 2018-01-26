@@ -88,7 +88,16 @@ public class Sql2oSpellDaoTest {
     }
 
     @Test
-    public void deleteById() throws Exception {
+    public void deleteByIdDeletesCorrectly() throws Exception {
+        Spell spell = setupNewSpell();
+        Spell spell1 = setupNewSpell1();
+        Spell spell2 = setupNewSpell2();
+        spellDao.add(spell);
+        spellDao.add(spell1);
+        spellDao.add(spell2);
+        spellDao.deleteById(spell1.getId());
+        assertFalse(spellDao.getAll().contains(spell1.getId()));
+        assertEquals(2, spellDao.getAll().size());
     }
 
     @Test
