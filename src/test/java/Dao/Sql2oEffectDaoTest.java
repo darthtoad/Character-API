@@ -50,7 +50,16 @@ public class Sql2oEffectDaoTest {
     }
 
     @Test
-    public void findById() throws Exception {
+    public void findByIdFindsEffectCorrectly() throws Exception {
+        Effect effect = setupNewEffect();
+        Effect effect1 = setupNewEffect1();
+        Effect effect2 = setupNewEffect2();
+        effectDao.add(effect);
+        effectDao.add(effect1);
+        effectDao.add(effect2);
+        assertEquals(effect, effectDao.findById(effect.getId()));
+        assertEquals(effect1, effectDao.findById(effect1.getId()));
+        assertEquals(effect2, effectDao.findById(effect2.getId()));
     }
 
     @Test
