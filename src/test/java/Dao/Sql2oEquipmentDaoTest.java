@@ -51,7 +51,16 @@ public class Sql2oEquipmentDaoTest {
     }
 
     @Test
-    public void findById() throws Exception {
+    public void findByIdFindsCorrectEquipment() throws Exception {
+        Equipment equipment = setupNewEquipment();
+        Equipment equipment1 = setupNewEquipment1();
+        Equipment equipment2 = setupNewEquipment2();
+        equipmentDao.add(equipment);
+        equipmentDao.add(equipment1);
+        equipmentDao.add(equipment2);
+        assertEquals(equipment, equipmentDao.findById(equipment.getId()));
+        assertEquals(equipment1, equipmentDao.findById(equipment1.getId()));
+        assertEquals(equipment2, equipmentDao.findById(equipment2.getId()));
     }
 
     @Test
