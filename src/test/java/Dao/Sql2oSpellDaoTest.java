@@ -61,7 +61,7 @@ public class Sql2oSpellDaoTest {
     }
 
     @Test
-    public void getAll() throws Exception {
+    public void getAllGetsAllSpells() throws Exception {
         Spell testSpell = setupNewSpell();
         spellDao.add(testSpell);
         assertEquals(1, spellDao.getAll().size());
@@ -73,14 +73,14 @@ public class Sql2oSpellDaoTest {
     }
 
     @Test
-    public void update() throws Exception {
+    public void updateSpellUpdatesSpellInfo() throws Exception {
         Spell testSpell = setupNewSpell();
         spellDao.add(testSpell);
         String originalName = spellDao.findById(testSpell.getId()).getName();
         String originalDescription = spellDao.findById(testSpell.getId()).getDescription();
         int originalDamage = spellDao.findById(testSpell.getId()).getDamage();
         String originalEffects = spellDao.findById(testSpell.getId()).getEffects();
-        spellDao.update(testSpell.getId(), "Fire", "Burn target character", 5, "4");
+        spellDao.update(testSpell.getId(), "Fire", "Burn target character", 7, "4");
         assertNotEquals(originalDamage, spellDao.findById(testSpell.getId()).getDamage());
         assertNotEquals(originalDescription, spellDao.findById(testSpell.getId()).getDescription());
         assertNotEquals(originalEffects, spellDao.findById(testSpell.getId()).getEffects());

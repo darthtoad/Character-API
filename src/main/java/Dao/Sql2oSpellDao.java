@@ -51,7 +51,18 @@ public class Sql2oSpellDao implements SpellDao{
 
     @Override
     public void update(int id, String name, String description, int damage, String effects) {
-
+        String sql = "UPDATE spells SET name = :name, description = :description, damage = :damage, effects = :effects WHERE id = :id";
+        try (Connection connection = sql2o.open()) {
+            connection.createQuery(sql)
+                    .addParameter("id", id)
+                    .addParameter("name", name)
+                    .addParameter("description", description)
+                    .addParameter("damage", damage)
+                    .addParameter("effects", effects)
+                    .executeUpdate();
+        } catch (Sql2oException ex) {
+            System.out.println(ex);
+        }
     }
 
     @Override
