@@ -68,14 +68,14 @@ public class Sql2oEquipmentDao implements EquipmentDao {
 
     @Override
     public void deleteById(int id) {
-//        String sql = "DELETE FROM equipment WHERE id = :id";
-//        try (Connection connection = sql2o.open()) {
-//            connection.createQuery(sql)
-//                    .addParameter("id", id)
-//                    .executeUpdate();
-//        } catch (Sql2oException ex) {
-//            System.out.println(ex);
-//        }
+        String sql = "DELETE FROM equipment WHERE id = :id";
+        try (Connection connection = sql2o.open()) {
+            connection.createQuery(sql)
+                    .addParameter("id", id)
+                    .executeUpdate();
+        } catch (Sql2oException ex) {
+            System.out.println(ex);
+        }
     }
 
     @Override
