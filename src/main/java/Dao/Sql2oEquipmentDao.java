@@ -80,6 +80,12 @@ public class Sql2oEquipmentDao implements EquipmentDao {
 
     @Override
     public void deleteAll() {
-
+        String sql = "DELETE FROM equipment";
+        try (Connection connection = sql2o.open()) {
+            connection.createQuery(sql)
+                    .executeUpdate();
+        } catch (Sql2oException ex) {
+            System.out.println(ex);
+        }
     }
 }
