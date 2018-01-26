@@ -30,7 +30,12 @@ public class Sql2oEquipmentDao implements EquipmentDao {
 
     @Override
     public Equipment findById(int id) {
-        return null;
+        String sql = "SELECT * FROM equipment WHERE id = :id";
+        try (Connection connection = sql2o.open()) {
+            return connection.createQuery(sql)
+                    .addParameter("id", id)
+                    .executeAndFetchFirst(Equipment.class);
+        }
     }
 
     @Override
