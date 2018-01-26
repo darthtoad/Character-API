@@ -102,6 +102,14 @@ public class Sql2oSpellDaoTest {
 
     @Test
     public void deleteAll() throws Exception {
+        Spell spell = setupNewSpell();
+        Spell spell1 = setupNewSpell1();
+        Spell spell2 = setupNewSpell2();
+        spellDao.add(spell);
+        spellDao.add(spell1);
+        spellDao.add(spell2);
+        spellDao.deleteAll();
+        assertEquals(0, spellDao.getAll().size());
     }
 
 }
