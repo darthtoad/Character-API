@@ -39,7 +39,11 @@ public class Sql2oEffectDao implements EffectDao{
 
     @Override
     public List<Effect> getAll() {
-        return null;
+        String sql = "SELECT * FROM effects";
+        try (Connection connection = sql2o.open()) {
+            return connection.createQuery(sql)
+                    .executeAndFetch(Effect.class);
+        }
     }
 
     @Override
