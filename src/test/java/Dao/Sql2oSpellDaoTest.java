@@ -49,7 +49,15 @@ public class Sql2oSpellDaoTest {
 
     @Test
     public void findByIdFindsSpellCorrectly() throws Exception {
-
+        Spell spell = setupNewSpell();
+        Spell spell1 = setupNewSpell1();
+        Spell spell2 = setupNewSpell2();
+        spellDao.add(spell);
+        spellDao.add(spell1);
+        spellDao.add(spell2);
+        assertEquals(spell, spellDao.findById(spell.getId()));
+        assertEquals(spell1, spellDao.findById(spell1.getId()));
+        assertEquals(spell2, spellDao.findById(spell2.getId()));
     }
 
     @Test
