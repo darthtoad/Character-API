@@ -48,7 +48,25 @@ public class Sql2oEffectDao implements EffectDao{
 
     @Override
     public void update(int id, String name, String description, int HP, int currentHP, int defense, int magicDefense, int strength, int MP, int currentMP, int magic, int dexterity, String other) {
-
+        String sql = "UPDATE effects SET name = :name, description = :description, HP = :HP, currentHP = :currentHP, magicDefense = :magicDefense, strength = :strength, MP = :MP, currentMP = :currentMP, magic = :magic, dexterity = :dexterity, other = :other WHERE id = :id";
+        try (Connection connection = sql2o.open()) {
+            connection.createQuery(sql)
+                    .addParameter("id", id)
+                    .addParameter("name", name)
+                    .addParameter("description", description)
+                    .addParameter("HP", HP)
+                    .addParameter("currentHP", currentHP)
+                    .addParameter("magicDefense", magicDefense)
+                    .addParameter("strength", strength)
+                    .addParameter("MP", MP)
+                    .addParameter("currentMP", currentMP)
+                    .addParameter("magic", magic)
+                    .addParameter("dexterity", dexterity)
+                    .addParameter("other", other)
+                    .executeUpdate();
+        } catch (Sql2oException ex) {
+            System.out.println(ex);
+        }
     }
 
     @Override
