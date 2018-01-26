@@ -49,7 +49,21 @@ public class Sql2oEquipmentDao implements EquipmentDao {
 
     @Override
     public void update(int id, String name, String description, int strength, int magic, int dexterity, int defense, int magicDefense) {
-
+        String sql = "UPDATE equipment SET name = :name, description = :description, strength = :strength, magic = :magic, dexterity = :dexterity, defense = :defense, magicDefense = :magicDefense WHERE id = :id";
+        try (Connection connection = sql2o.open()) {
+            connection.createQuery(sql)
+                    .addParameter("id", id)
+                    .addParameter("name", name)
+                    .addParameter("description", description)
+                    .addParameter("strength", strength)
+                    .addParameter("magic", magic)
+                    .addParameter("dexterity", dexterity)
+                    .addParameter("defense", defense)
+                    .addParameter("magicDefense", magicDefense)
+                    .executeUpdate();
+        } catch (Sql2oException ex) {
+            System.out.println(ex);
+        }
     }
 
     @Override
