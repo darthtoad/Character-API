@@ -33,13 +33,12 @@ public class Sql2oCharacterCDao implements CharacterCDao {
 
     @Override
     public CharacterC findById(int id) {
-//        String sql = "SELECT * FROM characters WHERE id = :id";
-//        try (Connection connection = sql2o.open()) {
-//            return connection.createQuery(sql)
-//                    .addParameter("id", id)
-//                    .executeAndFetchFirst(CharacterC.class);
-//        }
-        return null;
+        String sql = "SELECT * FROM characters WHERE id = :id";
+        try (Connection connection = sql2o.open()) {
+            return connection.createQuery(sql)
+                    .addParameter("id", id)
+                    .executeAndFetchFirst(CharacterC.class);
+        }
     }
 
     @Override
