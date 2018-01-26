@@ -104,6 +104,14 @@ public class Sql2oEffectDaoTest {
 
     @Test
     public void deleteAll() throws Exception {
+        Effect effect = setupNewEffect();
+        Effect effect1 = setupNewEffect1();
+        Effect effect2 = setupNewEffect2();
+        effectDao.add(effect);
+        effectDao.add(effect1);
+        effectDao.add(effect2);
+        effectDao.deleteAll();
+        assertEquals(0, effectDao.getAll().size());
     }
 
 }
