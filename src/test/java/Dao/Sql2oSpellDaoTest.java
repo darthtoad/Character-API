@@ -48,11 +48,20 @@ public class Sql2oSpellDaoTest {
     }
 
     @Test
-    public void findById() throws Exception {
+    public void findByIdFindsSpellCorrectly() throws Exception {
+
     }
 
     @Test
     public void getAll() throws Exception {
+        Spell testSpell = setupNewSpell();
+        spellDao.add(testSpell);
+        assertEquals(1, spellDao.getAll().size());
+        Spell testSpell1 = setupNewSpell1();
+        spellDao.add(testSpell1);
+        assertEquals(2, spellDao.getAll().size());
+        assertTrue(spellDao.getAll().contains(testSpell));
+        assertTrue(spellDao.getAll().contains(testSpell1));
     }
 
     @Test
