@@ -91,6 +91,15 @@ public class Sql2oEffectDaoTest {
 
     @Test
     public void deleteById() throws Exception {
+        Effect effect = setupNewEffect();
+        Effect effect1 = setupNewEffect1();
+        Effect effect2 = setupNewEffect2();
+        effectDao.add(effect);
+        effectDao.add(effect1);
+        effectDao.add(effect2);
+        effectDao.deleteById(effect1.getId());
+        assertFalse(effectDao.getAll().contains(effect1.getId()));
+        assertEquals(2, effectDao.getAll().size());
     }
 
     @Test
