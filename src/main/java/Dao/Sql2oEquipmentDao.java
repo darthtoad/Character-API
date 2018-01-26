@@ -1,7 +1,9 @@
 package Dao;
 
 import models.Equipment;
+import org.sql2o.Connection;
 import org.sql2o.Sql2o;
+import org.sql2o.Sql2oException;
 
 import java.util.List;
 
@@ -14,7 +16,16 @@ public class Sql2oEquipmentDao implements EquipmentDao {
 
     @Override
     public void add(Equipment equipment) {
-
+        String sql = "INSERT INTO equipment (name, description, strength, magic, dexterity, defense, magicDefense) VALUES (:name, :description, :strength, :magic, :dexterity, :defense, :magicDefense)";
+        try (Connection con = sql2o.open()) {
+            int id = (int) con.createQuery(sql)
+                    .bind(equipment)
+                    .executeUpdate()
+                    .getKey();
+            equipment.setId(id);
+        } catch (Sql2oException ex) {
+            System.out.println(ex);
+        }
     }
 
     @Override
