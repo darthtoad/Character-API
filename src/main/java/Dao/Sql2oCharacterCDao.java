@@ -34,7 +34,7 @@ public class Sql2oCharacterCDao implements CharacterCDao {
 
     @Override
     public void addEquipmentToCharacterC(Equipment equipment, CharacterC characterC){
-        String sql = "INSERT INTO characters_equipment (equipmentid, characterid) VALUES (:equipmentId, :sId)";
+        String sql = "INSERT INTO characters_equipment (equipmentid, characterid) VALUES (:equipmentId, :characterId)";
         try (Connection connection = sql2o.open()) {
             connection.createQuery(sql)
                     .addParameter("equipmentId", equipment.getId())

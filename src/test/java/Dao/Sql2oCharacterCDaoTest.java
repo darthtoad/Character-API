@@ -39,6 +39,7 @@ public class Sql2oCharacterCDaoTest {
         String connectionString  = "jdbc:h2:mem:testing;INIT=RUNSCRIPT from 'classpath:db/create.sql'";
         Sql2o sql2o = new Sql2o(connectionString, "", "");
         characterCDao = new Sql2oCharacterCDao(sql2o);
+        equipmentDao = new Sql2oEquipmentDao(sql2o);
         connection = sql2o.open();
     }
 

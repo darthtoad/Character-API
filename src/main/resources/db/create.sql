@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS characters_spells (
 CREATE TABLE IF NOT EXISTS characters_equipment (
     id int PRIMARY KEY auto_increment,
     characterId VARCHAR,
-    spellId VARCHAR
+    equipmentId VARCHAR
 );
 
 CREATE TABLE IF NOT EXISTS characters_effects (
