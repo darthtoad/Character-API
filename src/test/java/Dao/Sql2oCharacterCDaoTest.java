@@ -59,7 +59,15 @@ public class Sql2oCharacterCDaoTest {
     }
 
     @Test
-    public void getAll() throws Exception {
+    public void getAllGetsAllCharactersCorrectly() throws Exception {
+        CharacterC testCharacterC = setupNewCharacterC();
+        characterCDao.add(testCharacterC);
+        assertEquals(1, characterCDao.getAll().size());
+        CharacterC testCharacterC1 = setupNewCharacterC1();
+        characterCDao.add(testCharacterC1);
+        assertEquals(2, characterCDao.getAll().size());
+        assertTrue(characterCDao.getAll().contains(testCharacterC));
+        assertTrue(characterCDao.getAll().contains(testCharacterC1));
     }
 
     @Test
