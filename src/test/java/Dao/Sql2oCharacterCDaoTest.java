@@ -46,7 +46,16 @@ public class Sql2oCharacterCDaoTest {
     }
 
     @Test
-    public void findById() throws Exception {
+    public void findByIdFindsCharacterCorrectly() throws Exception {
+        CharacterC characterC = setupNewCharacterC();
+        CharacterC characterC1 = setupNewCharacterC1();
+        CharacterC characterC2 = setupNewCharacterC2();
+        characterCDao.add(characterC);
+        characterCDao.add(characterC1);
+        characterCDao.add(characterC2);
+        assertEquals(characterC, characterCDao.findById(characterC.getId()));
+        assertEquals(characterC1, characterCDao.findById(characterC1.getId()));
+        assertEquals(characterC2, characterCDao.findById(characterC2.getId()));
     }
 
     @Test
