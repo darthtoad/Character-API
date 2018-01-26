@@ -91,7 +91,16 @@ public class Sql2oEquipmentDaoTest {
     }
 
     @Test
-    public void deleteById() throws Exception {
+    public void deleteByIdDeletesCorrecctly() throws Exception {
+        Equipment equipment = setupNewEquipment();
+        Equipment equipment1 = setupNewEquipment1();
+        Equipment equipment2 = setupNewEquipment2();
+        equipmentDao.add(equipment);
+        equipmentDao.add(equipment1);
+        equipmentDao.add(equipment2);
+        equipmentDao.deleteById(equipment1.getId());
+        assertFalse(equipmentDao.getAll().contains(equipment1.getId()));
+        assertEquals(2, equipmentDao.getAll().size());
     }
 
     @Test
