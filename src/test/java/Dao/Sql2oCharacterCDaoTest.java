@@ -86,7 +86,16 @@ public class Sql2oCharacterCDaoTest {
     }
 
     @Test
-    public void deleteById() throws Exception {
+    public void deleteByIdDeletesCharacterCorrectly() throws Exception {
+        CharacterC characterC = setupNewCharacterC();
+        CharacterC characterC1 = setupNewCharacterC1();
+        CharacterC characterC2 = setupNewCharacterC2();
+        characterCDao.add(characterC);
+        characterCDao.add(characterC1);
+        characterCDao.add(characterC2);
+        characterCDao.deleteById(characterC1.getId());
+        assertFalse(characterCDao.getAll().contains(characterC1.getId()));
+        assertEquals(2, characterCDao.getAll().size());
     }
 
     @Test
