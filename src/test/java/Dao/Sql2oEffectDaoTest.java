@@ -1,22 +1,52 @@
 package Dao;
 
+import models.Effect;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.sql2o.Connection;
+import org.sql2o.Sql2o;
 
 import static org.junit.Assert.*;
 
 public class Sql2oEffectDaoTest {
+    private Connection connection;
+    private Sql2oEffectDao effectDao;
+
+    public Effect setupNewEffect() {
+        return new Effect("Poison", "lose HP every turn", 0, -2, 0, 0, 0, 0, 0, 0, 0, "increment");
+    }
+
+    public Effect setupNewEffect1() {
+        return new Effect("Regen", "Regenerate health every turn", 0, 2, 0, 0, 0, 0, 0, 0, 0, "increment");
+    }
+
+    public Effect setupNewEffect2() {
+        return new Effect("Shell", "Increases defense and magic defense", 0, 0, 2, 2, 0, 0, 0, 0, 0, "");
+    }
+
+    public Effect setupNewEffect3() {
+        return new Effect("Up All", "Increases all stats by 1", 1, 1, 1, 1, 1, 1, 1, 1, 1, "");
+    }
+
     @Before
     public void setUp() throws Exception {
+        String connectionString  = "jdbc:h2:mem:testing;INIT=RUNSCRIPT from 'classpath:db/create.sql'";
+        Sql2o sql2o = new Sql2o(connectionString, "", "");
+        effectDao = new Sql2oEffectDao(sql2o);
+        connection = sql2o.open();
     }
 
     @After
     public void tearDown() throws Exception {
+        connection.close();
     }
-
     @Test
-    public void add() throws Exception {
+    public void addAddsEffectCorrectly() throws Exception {
+        Effect testEffect = setupNewEffect();
+        int originalId = testEffect.getId();
+        effectDao.add(testEffect);
+        assertNotEquals(originalId, testEffect.getId());
     }
 
     @Test
