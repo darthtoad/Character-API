@@ -11,7 +11,7 @@ public interface SpellDao {
     Spell findById(int id);
     List<Spell> getAll();
 
-    void update(int id, String name, String description, int damage, List<Effect> effects);
+    void update(int id, String name, String description, int damage, String effects);
 
     void deleteById(int id);
     void deleteAll();

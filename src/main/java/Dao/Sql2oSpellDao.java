@@ -50,7 +50,7 @@ public class Sql2oSpellDao implements SpellDao{
     }
 
     @Override
-    public void update(int id, String name, String description, int damage, List<Effect> effects) {
+    public void update(int id, String name, String description, int damage, String effects) {
 
     }
 

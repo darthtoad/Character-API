@@ -15,11 +15,11 @@ public class Sql2oSpellDaoTest {
     private Sql2oSpellDao spellDao;
 
     public Spell setupNewSpell() {
-        return new Spell("Magic Missle", "A missle made of magic that stuns the targer", 5, "stun");
+        return new Spell("Magic Missle", "A missle made of magic that stuns the targer", 5, "1");
     }
 
     public Spell setupNewSpell1() {
-        return new Spell("Haste", "Makes user faster", "+5 dexterity");
+        return new Spell("Haste", "Makes user faster", "2, 3");
     }
 
     public Spell setupNewSpell2() {
@@ -74,6 +74,17 @@ public class Sql2oSpellDaoTest {
 
     @Test
     public void update() throws Exception {
+        Spell testSpell = setupNewSpell();
+        spellDao.add(testSpell);
+        String originalName = spellDao.findById(testSpell.getId()).getName();
+        String originalDescription = spellDao.findById(testSpell.getId()).getDescription();
+        int originalDamage = spellDao.findById(testSpell.getId()).getDamage();
+        String originalEffects = spellDao.findById(testSpell.getId()).getEffects();
+        spellDao.update(testSpell.getId(), "Fire", "Burn target character", 5, "4");
+        assertNotEquals(originalDamage, spellDao.findById(testSpell.getId()).getDamage());
+        assertNotEquals(originalDescription, spellDao.findById(testSpell.getId()).getDescription());
+        assertNotEquals(originalEffects, spellDao.findById(testSpell.getId()).getEffects());
+        assertNotEquals(originalName, spellDao.findById(testSpell.getId()).getName());
     }
 
     @Test
