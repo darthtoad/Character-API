@@ -64,7 +64,15 @@ public class Sql2oEquipmentDaoTest {
     }
 
     @Test
-    public void getAll() throws Exception {
+    public void getAllGetsAllEquipment() throws Exception {
+        Equipment testEquipment = setupNewEquipment();
+        equipmentDao.add(testEquipment);
+        assertEquals(1, equipmentDao.getAll().size());
+        Equipment testEquipment1 = setupNewEquipment1();
+        equipmentDao.add(testEquipment1);
+        assertEquals(2, equipmentDao.getAll().size());
+        assertTrue(equipmentDao.getAll().contains(testEquipment));
+        assertTrue(equipmentDao.getAll().contains(testEquipment1));
     }
 
     @Test
