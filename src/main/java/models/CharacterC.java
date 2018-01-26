@@ -3,7 +3,7 @@ package models;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Character {
+public class CharacterC {
     private int id;
     private String name;
     private String description;
@@ -22,12 +22,12 @@ public class Character {
     private String equipment;
     private String effects;
 
-    public Character(String name, String description) {
+    public CharacterC(String name, String description) {
         this.name = name;
         this.description = description;
     }
 
-    public Character(String name, String description, int level, int experience, int HP, int currentHP, int defense, int magicDefense, int strength, int MP, int currentMP, int magic, int dexterity, String spells, String equipment, String effects) {
+    public CharacterC(String name, String description, int level, int experience, int HP, int currentHP, int defense, int magicDefense, int strength, int MP, int currentMP, int magic, int dexterity, String spells, String equipment, String effects) {
         this.name = name;
         this.description = description;
         this.level = level;
@@ -179,25 +179,25 @@ public class Character {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Character character = (Character) o;
+        CharacterC that = (CharacterC) o;
 
-        if (id != character.id) return false;
-        if (level != character.level) return false;
-        if (experience != character.experience) return false;
-        if (HP != character.HP) return false;
-        if (currentHP != character.currentHP) return false;
-        if (defense != character.defense) return false;
-        if (magicDefense != character.magicDefense) return false;
-        if (strength != character.strength) return false;
-        if (MP != character.MP) return false;
-        if (currentMP != character.currentMP) return false;
-        if (magic != character.magic) return false;
-        if (dexterity != character.dexterity) return false;
-        if (!name.equals(character.name)) return false;
-        if (!description.equals(character.description)) return false;
-        if (spells != null ? !spells.equals(character.spells) : character.spells != null) return false;
-        if (equipment != null ? !equipment.equals(character.equipment) : character.equipment != null) return false;
-        return effects != null ? effects.equals(character.effects) : character.effects == null;
+        if (id != that.id) return false;
+        if (level != that.level) return false;
+        if (experience != that.experience) return false;
+        if (HP != that.HP) return false;
+        if (currentHP != that.currentHP) return false;
+        if (defense != that.defense) return false;
+        if (magicDefense != that.magicDefense) return false;
+        if (strength != that.strength) return false;
+        if (MP != that.MP) return false;
+        if (currentMP != that.currentMP) return false;
+        if (magic != that.magic) return false;
+        if (dexterity != that.dexterity) return false;
+        if (!name.equals(that.name)) return false;
+        if (!description.equals(that.description)) return false;
+        if (spells != null ? !spells.equals(that.spells) : that.spells != null) return false;
+        if (equipment != null ? !equipment.equals(that.equipment) : that.equipment != null) return false;
+        return effects != null ? effects.equals(that.effects) : that.effects == null;
     }
 
     @Override
