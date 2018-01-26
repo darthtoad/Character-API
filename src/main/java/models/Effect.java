@@ -20,8 +20,7 @@ public class Effect {
         this.description = description;
     }
 
-    public Effect(int id, String name, String description, int HP, int currentHP, int defense, int magicDefense, int strength, int MP, int currentMP, int magic, int dexterity, String other) {
-        this.id = id;
+    public Effect(String name, String description, int HP, int currentHP, int defense, int magicDefense, int strength, int MP, int currentMP, int magic, int dexterity, String other) {
         this.name = name;
         this.description = description;
         this.HP = HP;
