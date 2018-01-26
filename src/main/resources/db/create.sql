@@ -1,7 +1,7 @@
 SET MODE PostgreSQL;
 
 CREATE TABLE IF NOT EXISTS characters (
-    int id PRIMARY KEY auto_increment,
+    id int PRIMARY KEY auto_increment,
     name VARCHAR,
     description VARCHAR,
     level INTEGER,
@@ -21,25 +21,25 @@ CREATE TABLE IF NOT EXISTS characters (
 );
 
 CREATE TABLE IF NOT EXISTS characters_spells (
-    int id PRIMARY KEY auto_increment,
+    id int PRIMARY KEY auto_increment,
     characterId VARCHAR,
     spellId VARCHAR
 );
 
 CREATE TABLE IF NOT EXISTS characters_equipment (
-    int id PRIMARY KEY auto_increment,
+    id int PRIMARY KEY auto_increment,
     characterId VARCHAR,
     spellId VARCHAR
-)
+);
 
 CREATE TABLE IF NOT EXISTS characters_effects (
-    int id PRIMARY KEY auto_increment,
+    id int PRIMARY KEY auto_increment,
     characterId VARCHAR,
     effectId VARCHAR
-)
+);
 
 CREATE TABLE IF NOT EXISTS spells (
-    int id PRIMARY KEY auto_increment,
+    id int PRIMARY KEY auto_increment,
     name VARCHAR,
     description VARCHAR,
     damage INTEGER,
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS spells (
 );
 
 CREATE TABLE IF NOT EXISTS equipment (
-    int id PRIMARY KEY auto_increment,
+    id int PRIMARY KEY auto_increment,
     name VARCHAR,
     description VARCHAR,
     strength INTEGER,
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS equipment (
 );
 
 CREATE TABLE IF NOT EXISTS effects (
-    int id PRIMARY KEY auto_increment,
+    id int PRIMARY KEY auto_increment,
     name VARCHAR,
     description VARCHAR,
     HP INTEGER,

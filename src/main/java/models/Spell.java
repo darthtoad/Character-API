@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Spell {
+    private int id;
     private String name;
     private String description;
     private int damage;
@@ -14,6 +15,12 @@ public class Spell {
         this.name = name;
         this.description = description;
         this.damage = damage;
+    }
+
+    public Spell(String name, String description, String effects) {
+        this.name = name;
+        this.description = description;
+        this.effects = effects;
     }
 
     public Spell(String name, String description, int damage, String effects) {
@@ -30,6 +37,14 @@ public class Spell {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getDescription() {
