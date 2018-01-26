@@ -7,7 +7,7 @@ public class Spell {
     private String name;
     private String description;
     private int damage;
-    private List<Effect> effects = new ArrayList<>();
+    private String effects;
 
     public Spell(String name, String description, int damage) {
 
@@ -16,7 +16,7 @@ public class Spell {
         this.damage = damage;
     }
 
-    public Spell(String name, String description, int damage, List<Effect> effects) {
+    public Spell(String name, String description, int damage, String effects) {
         this.name = name;
         this.description = description;
         this.damage = damage;
@@ -48,11 +48,11 @@ public class Spell {
         this.damage = damage;
     }
 
-    public List<Effect> getEffects() {
+    public String getEffects() {
         return effects;
     }
 
-    public void setEffects(List<Effect> effects) {
+    public void setEffects(String effects) {
         this.effects = effects;
     }
 
@@ -65,14 +65,14 @@ public class Spell {
 
         if (damage != spell.damage) return false;
         if (!name.equals(spell.name)) return false;
-        if (!description.equals(spell.description)) return false;
+        if (description != null ? !description.equals(spell.description) : spell.description != null) return false;
         return effects != null ? effects.equals(spell.effects) : spell.effects == null;
     }
 
     @Override
     public int hashCode() {
         int result = name.hashCode();
-        result = 31 * result + description.hashCode();
+        result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + damage;
         result = 31 * result + (effects != null ? effects.hashCode() : 0);
         return result;

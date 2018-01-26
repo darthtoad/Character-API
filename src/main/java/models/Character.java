@@ -18,16 +18,16 @@ public class Character {
     private int currentMP;
     private int magic;
     private int dexterity;
-    private List<Spell> spells = new ArrayList<>();
-    private List<Equipment> equipment = new ArrayList<>();
-    private List<Effect> effects = new ArrayList<>();
+    private String spells;
+    private String equipment;
+    private String effects;
 
     public Character(String name, String description) {
         this.name = name;
         this.description = description;
     }
 
-    public Character(String name, String description, int level, int experience, int HP, int currentHP, int defense, int magicDefense, int strength, int MP, int currentMP, int magic, int dexterity, List<Spell> spells, List<Equipment> equipment, List<Effect> effects) {
+    public Character(String name, String description, int level, int experience, int HP, int currentHP, int defense, int magicDefense, int strength, int MP, int currentMP, int magic, int dexterity, String spells, String equipment, String effects) {
         this.name = name;
         this.description = description;
         this.level = level;
@@ -158,28 +158,20 @@ public class Character {
         this.dexterity = dexterity;
     }
 
-    public List<Spell> getSpells() {
+    public String getSpells() {
         return spells;
     }
 
-    public void setSpells(List<Spell> spells) {
+    public void setSpells(String spells) {
         this.spells = spells;
     }
 
-    public List<Equipment> getEquipment() {
+    public String getEquipment() {
         return equipment;
     }
 
-    public void setEquipment(List<Equipment> equipment) {
+    public void setEquipment(String equipment) {
         this.equipment = equipment;
-    }
-
-    public List<Effect> getEffects() {
-        return effects;
-    }
-
-    public void setEffects(List<Effect> effects) {
-        this.effects = effects;
     }
 
     @Override
@@ -228,6 +220,14 @@ public class Character {
         result = 31 * result + (equipment != null ? equipment.hashCode() : 0);
         result = 31 * result + (effects != null ? effects.hashCode() : 0);
         return result;
+    }
+
+    public String getEffects() {
+        return effects;
+    }
+
+    public void setEffects(String effects) {
+        this.effects = effects;
     }
 
 }
