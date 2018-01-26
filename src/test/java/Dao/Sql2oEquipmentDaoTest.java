@@ -76,7 +76,18 @@ public class Sql2oEquipmentDaoTest {
     }
 
     @Test
-    public void update() throws Exception {
+    public void updateUpdatesEquipmentInfo() throws Exception {
+        Equipment testEquipment = setupNewEquipment3();
+        equipmentDao.add(testEquipment);
+        String originalName = equipmentDao.findById(testEquipment.getId()).getName();
+        String originalDescription = equipmentDao.findById(testEquipment.getId()).getDescription();
+        int originalStrength = equipmentDao.findById(testEquipment.getId()).getStrength();
+        int originalMagic = equipmentDao.findById(testEquipment.getId()).getMagic();
+        equipmentDao.update(testEquipment.getId(), "Thing", "It's a thing", 0, 0, 0, 0, 0);
+        assertNotEquals(originalStrength, equipmentDao.findById(testEquipment.getId()).getStrength());
+        assertNotEquals(originalDescription, equipmentDao.findById(testEquipment.getId()).getDescription());
+        assertNotEquals(originalMagic, equipmentDao.findById(testEquipment.getId()).getMagic());
+        assertNotEquals(originalName, equipmentDao.findById(testEquipment.getId()).getName());
     }
 
     @Test
