@@ -75,7 +75,18 @@ public class Sql2oEffectDaoTest {
     }
 
     @Test
-    public void update() throws Exception {
+    public void updateUpdatesEffectInformation() throws Exception {
+        Effect testEffect = setupNewEffect();
+        effectDao.add(testEffect);
+        String originalName = effectDao.findById(testEffect.getId()).getName();
+        String originalDescription = effectDao.findById(testEffect.getId()).getDescription();
+        int originalCurrentHP = effectDao.findById(testEffect.getId()).getCurrentHP();
+        String originalOther = effectDao.findById(testEffect.getId()).getOther();
+        effectDao.update(testEffect.getId(), "Slow", "Slows target character down", 0, 0, 0, 0, 0, 0, 0, 0, -5, "");
+        assertNotEquals(originalName, effectDao.findById(testEffect.getId()).getName());
+        assertNotEquals(originalDescription, effectDao.findById(testEffect.getId()).getDescription());
+        assertNotEquals(originalOther, effectDao.findById(testEffect.getId()).getOther());
+        assertNotEquals(originalName, effectDao.findById(testEffect.getId()).getName());
     }
 
     @Test
