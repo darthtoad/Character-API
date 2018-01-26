@@ -16,7 +16,9 @@ public interface CharacterCDao {
 
     CharacterC findById(int id);
     List<CharacterC> getAll();
-    public List<Equipment> getAllEquipmentForACharacter(int id);
+    List<Equipment> getAllEquipmentForACharacter(int id);
+    List<Spell> getAllSpellsForACharacter(int id);
+    List<Effect> getAllEffectsForACharacter(int id);
 
     void update(int id, String name, String description, int level, int experience, int HP, int currentHP, int defense, int magicDefense, int strength, int MP, int currentMP, int magic, int dexterity, String spells, String equipment, String effects);
 

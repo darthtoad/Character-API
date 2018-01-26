@@ -13,6 +13,8 @@ public class Sql2oCharacterCDaoTest {
     private Connection connection;
     private Sql2oCharacterCDao characterCDao;
     private Sql2oEquipmentDao equipmentDao;
+    private Sql2oSpellDao spellDao;
+    private Sql2oEffectDao effectDao;
 
     public Equipment setupNewEquipment() {
         return new Equipment("Sword of Awesome", "Sword", 4, 0, 0, 0, 0);
@@ -20,6 +22,22 @@ public class Sql2oCharacterCDaoTest {
 
     public Equipment setupNewEquipment1() {
         return new Equipment("Shield of Awesome", "Sheild", 0, 0, -1, 4, 2);
+    }
+
+    public Spell setupNewSpell() {
+        return new Spell("Magic Missle", "A missle made of magic that stuns the targer", 5, "1");
+    }
+
+    public Spell setupNewSpell1() {
+        return new Spell("Haste", "Makes user faster", "2, 3");
+    }
+
+    public Effect setupNewEffect() {
+        return new Effect("Poison", "lose HP every turn", 0, -2, 0, 0, 0, 0, 0, 0, 0, "increment");
+    }
+
+    public Effect setupNewEffect1() {
+        return new Effect("Regen", "Regenerate health every turn", 0, 2, 0, 0, 0, 0, 0, 0, 0, "increment");
     }
 
     public CharacterC setupNewCharacterC() {
@@ -40,6 +58,8 @@ public class Sql2oCharacterCDaoTest {
         Sql2o sql2o = new Sql2o(connectionString, "", "");
         characterCDao = new Sql2oCharacterCDao(sql2o);
         equipmentDao = new Sql2oEquipmentDao(sql2o);
+        spellDao = new Sql2oSpellDao(sql2o);
+        effectDao = new Sql2oEffectDao(sql2o);
         connection = sql2o.open();
     }
 
@@ -66,6 +86,19 @@ public class Sql2oCharacterCDaoTest {
         characterCDao.addEquipmentToCharacterC(equipment, characterC);
         assertEquals(1, characterCDao.getAllEquipmentForACharacter(characterC.getId()).size());
         assertTrue(characterCDao.getAllEquipmentForACharacter(characterC.getId()).contains(equipment));
+    }
+
+    @Test
+    public void addSpellToCharacterAssociatesCorrectly() throws Exception {
+        CharacterC characterC = setupNewCharacterC();
+        CharacterC characterC1 = setupNewCharacterC1();
+        Spell spell = setupNewSpell();
+        characterCDao.add(characterC);
+        characterCDao.add(characterC1);
+        spellDao.add(spell);
+        characterCDao.addSpellToCharacterC(spell, characterC);
+        assertEquals(1, characterCDao.getAllSpellsForACharacter(characterC.getId()).size());
+        assertTrue(characterCDao.getAllSpellsForACharacter(characterC.getId()).contains(spell));
     }
 
     @Test
