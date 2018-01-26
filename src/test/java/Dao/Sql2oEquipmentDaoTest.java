@@ -104,7 +104,15 @@ public class Sql2oEquipmentDaoTest {
     }
 
     @Test
-    public void deleteAll() throws Exception {
+    public void deleteAllDeletesAllEquipment() throws Exception {
+        Equipment equipment = setupNewEquipment();
+        Equipment equipment1 = setupNewEquipment1();
+        Equipment equipment2 = setupNewEquipment2();
+        equipmentDao.add(equipment);
+        equipmentDao.add(equipment1);
+        equipmentDao.add(equipment2);
+        equipmentDao.deleteAll();
+        assertEquals(0, equipmentDao.getAll().size());
     }
 
 }
