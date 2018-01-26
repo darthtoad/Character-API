@@ -63,7 +63,15 @@ public class Sql2oEffectDaoTest {
     }
 
     @Test
-    public void getAll() throws Exception {
+    public void getAllGetsAllEffects() throws Exception {
+        Effect testEffect = setupNewEffect();
+        effectDao.add(testEffect);
+        assertEquals(1, effectDao.getAll().size());
+        Effect testEffect1 = setupNewEffect1();
+        effectDao.add(testEffect1);
+        assertEquals(2, effectDao.getAll().size());
+        assertTrue(effectDao.getAll().contains(testEffect));
+        assertTrue(effectDao.getAll().contains(testEffect1));
     }
 
     @Test
