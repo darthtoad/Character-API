@@ -99,7 +99,15 @@ public class Sql2oCharacterCDaoTest {
     }
 
     @Test
-    public void deleteAll() throws Exception {
+    public void deleteAllDeletesAllCharacters() throws Exception {
+        CharacterC characterC = setupNewCharacterC();
+        CharacterC characterC1 = setupNewCharacterC1();
+        CharacterC characterC2 = setupNewCharacterC2();
+        characterCDao.add(characterC);
+        characterCDao.add(characterC1);
+        characterCDao.add(characterC2);
+        characterCDao.deleteAll();
+        assertEquals(0, characterCDao.getAll().size());
     }
 
 }
