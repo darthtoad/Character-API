@@ -47,7 +47,15 @@ public class Sql2oCharacterCDao implements CharacterCDao {
 
     @Override
     public void addSpellToCharacterC(Spell spell, CharacterC characterC){
-
+        String sql = "INSERT INTO characters_spells (spellid, characterid) VALUES (:spellId, :characterId)";
+        try (Connection connection = sql2o.open()) {
+            connection.createQuery(sql)
+                    .addParameter("spellId", spell.getId())
+                    .addParameter("characterId", characterC.getId())
+                    .executeUpdate();
+        } catch (Sql2oException ex) {
+            System.out.println(ex);
+        }
     }
 
     @Override
@@ -100,7 +108,22 @@ public class Sql2oCharacterCDao implements CharacterCDao {
     @Override
     public List<Spell> getAllSpellsForACharacter(int id) {
         List<Spell> spells = new ArrayList<>();
-        return spells;
+        String sql = "SELECT spellId FROM characters_spells WHERE characterId = :characterId";
+        try (Connection fred = sql2o.open()) {
+            List<Integer> allSpellIds = fred.createQuery(sql)
+                    .addParameter("characterId", id)
+                    .executeAndFetch(Integer.class);
+            for (Integer spellId : allSpellIds) {
+                String query2 = "SELECT * FROM spells WHERE id = :spellId";
+                spells.add(
+                        fred.createQuery(query2)
+                                .addParameter("spellId", spellId)
+                                .executeAndFetchFirst(Spell.class)
+                );
+            }
+        } catch (Sql2oException ex) {
+            System.out.println(ex);
+        }        return spells;
     }
 
     @Override
