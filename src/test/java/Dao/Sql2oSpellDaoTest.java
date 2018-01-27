@@ -1,5 +1,6 @@
 package Dao;
 
+import models.Effect;
 import models.Spell;
 import org.junit.After;
 import org.junit.Before;
@@ -13,6 +14,7 @@ import org.sql2o.Sql2o;
 public class Sql2oSpellDaoTest {
     private Connection connection;
     private Sql2oSpellDao spellDao;
+    private Sql2oEffectDao effectDao;
 
     public Spell setupNewSpell() {
         return new Spell("Magic Missle", "A missle made of magic that stuns the targer", 5, "1");
@@ -26,11 +28,20 @@ public class Sql2oSpellDaoTest {
         return new Spell("Magic Rock", "Throws a magic rock at a target", 10);
     }
 
+    public Effect setupNewEffect() {
+        return new Effect("Poison", "lose HP every turn", 0, -2, 0, 0, 0, 0, 0, 0, 0, "increment");
+    }
+
+    public Effect setupNewEffect1() {
+        return new Effect("Regen", "Regenerate health every turn", 0, 2, 0, 0, 0, 0, 0, 0, 0, "increment");
+    }
+
     @Before
     public void setUp() throws Exception {
         String connectionString  = "jdbc:h2:mem:testing;INIT=RUNSCRIPT from 'classpath:db/create.sql'";
         Sql2o sql2o = new Sql2o(connectionString, "", "");
         spellDao = new Sql2oSpellDao(sql2o);
+        effectDao = new Sql2oEffectDao(sql2o);
         connection = sql2o.open();
     }
 
@@ -45,6 +56,22 @@ public class Sql2oSpellDaoTest {
         int originalId = testSpell.getId();
         spellDao.add(testSpell);
         assertNotEquals(originalId, testSpell.getId());
+    }
+
+    @Test
+    public void addEffectToSpellAddsCorrectly() throws Exception {
+        Spell spell = setupNewSpell();
+        Spell spell1 = setupNewSpell1();
+        Effect effect = setupNewEffect();
+        Effect effect1 = setupNewEffect1();
+        effectDao.add(effect);
+        effectDao.add(effect1);
+        spellDao.add(spell);
+        spellDao.add(spell1);
+        spellDao.addEffectToSpell(effect, spell);
+
+        assertEquals(1, spellDao.getAllEffectsForSpell(spell.getId()).size());
+        assertTrue(spellDao.getAllEffectsForSpell(spell.getId()).contains(spell));
     }
 
     @Test
@@ -70,6 +97,23 @@ public class Sql2oSpellDaoTest {
         assertEquals(2, spellDao.getAll().size());
         assertTrue(spellDao.getAll().contains(testSpell));
         assertTrue(spellDao.getAll().contains(testSpell1));
+    }
+
+    @Test
+    public void getAllEffectsForSpellGetsAllEffectsForSpell() throws Exception {
+        Spell spell = setupNewSpell();
+        Spell spell1 = setupNewSpell1();
+        Effect effect = setupNewEffect();
+        Effect effect1 = setupNewEffect1();
+        effectDao.add(effect);
+        effectDao.add(effect1);
+        spellDao.add(spell);
+        spellDao.add(spell1);
+        spellDao.addEffectToSpell(effect, spell);
+
+        assertEquals(2, spellDao.getAll().size());
+        assertEquals(1, spellDao.getAllEffectsForSpell(spell.getId()).size());
+        assertFalse(spellDao.getAllEffectsForSpell(effect.getId()).contains(spell1));
     }
 
     @Test

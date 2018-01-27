@@ -6,6 +6,7 @@ import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 import org.sql2o.Sql2oException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Sql2oSpellDao implements SpellDao{
@@ -30,6 +31,12 @@ public class Sql2oSpellDao implements SpellDao{
     }
 
     @Override
+    public void addEffectToSpell(Effect effect, Spell spell){
+
+    };
+
+
+    @Override
     public Spell findById(int id) {
         String sql = "SELECT * FROM spells WHERE id = :id";
         try (Connection connection = sql2o.open()) {
@@ -48,6 +55,13 @@ public class Sql2oSpellDao implements SpellDao{
                     .executeAndFetch(Spell.class);
         }
     }
+
+    @Override
+    public List<Effect> getAllEffectsForSpell(int id){
+        List<Effect> effects = new ArrayList<>();
+        return effects;
+    }
+
 
     @Override
     public void update(int id, String name, String description, int damage, String effects) {

@@ -7,9 +7,11 @@ import java.util.List;
 
 public interface SpellDao {
     void add(Spell spell);
+    void addEffectToSpell(Effect effect, Spell spell);
 
     Spell findById(int id);
     List<Spell> getAll();
+    List<Effect> getAllEffectsForSpell(int id);
 
     void update(int id, String name, String description, int damage, String effects);
 
