@@ -144,6 +144,23 @@ public class Sql2oCharacterCDaoTest {
     }
 
     @Test
+    public void getAllSpellsForACharacterGetsAll() throws Exception {
+        CharacterC characterC = setupNewCharacterC();
+        CharacterC characterC1 = setupNewCharacterC1();
+        Spell spell = setupNewSpell();
+        Spell spell1 = setupNewSpell1();
+        characterCDao.add(characterC);
+        characterCDao.add(characterC1);
+        spellDao.add(spell);
+        spellDao.add(spell1);
+        characterCDao.addSpellToCharacterC(spell, characterC);
+
+        assertEquals(2, characterCDao.getAll().size());
+        assertEquals(1, characterCDao.getAllEquipmentForACharacter(characterC.getId()).size());
+        assertFalse(characterCDao.getAllEquipmentForACharacter(characterC.getId()).contains(spell1));
+    }
+
+    @Test
     public void updateUpdatesCharacterInfoCorrectly() throws Exception {
         CharacterC testCharacterC = setupNewCharacterC();
         characterCDao.add(testCharacterC);
