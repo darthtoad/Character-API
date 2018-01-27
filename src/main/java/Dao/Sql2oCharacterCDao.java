@@ -60,7 +60,15 @@ public class Sql2oCharacterCDao implements CharacterCDao {
 
     @Override
     public void addEffectToCharacterC(Effect effect, CharacterC characterC){
-
+        String sql = "INSERT INTO characters_effects (effectid, characterid) VALUES (:effectId, :characterId)";
+        try (Connection connection = sql2o.open()) {
+            connection.createQuery(sql)
+                    .addParameter("effectId", effect.getId())
+                    .addParameter("characterId", characterC.getId())
+                    .executeUpdate();
+        } catch (Sql2oException ex) {
+            System.out.println(ex);
+        }
     }
 
     @Override
@@ -129,6 +137,22 @@ public class Sql2oCharacterCDao implements CharacterCDao {
     @Override
     public List<Effect> getAllEffectsForACharacter(int id) {
         List<Effect> effects = new ArrayList<>();
+        String sql = "SELECT effectId FROM characters_effects WHERE characterId = :characterId";
+        try (Connection fred = sql2o.open()) {
+            List<Integer> allEffectIds = fred.createQuery(sql)
+                    .addParameter("characterId", id)
+                    .executeAndFetch(Integer.class);
+            for (Integer effectId : allEffectIds) {
+                String query2 = "SELECT * FROM effects WHERE id = :effectId";
+                effects.add(
+                        fred.createQuery(query2)
+                                .addParameter("effectId", effectId)
+                                .executeAndFetchFirst(Effect.class)
+                );
+            }
+        } catch (Sql2oException ex) {
+            System.out.println(ex);
+        }
         return effects;
     }
 

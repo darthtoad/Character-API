@@ -102,7 +102,7 @@ public class Sql2oCharacterCDaoTest {
     }
 
     @Test
-    public void addEffetToCharacterAssociatesCorrectly() throws Exception {
+    public void addEffectToCharacterAssociatesCorrectly() throws Exception {
         CharacterC characterC = setupNewCharacterC();
         CharacterC characterC1 = setupNewCharacterC1();
         Effect effect = setupNewEffect();
