@@ -156,8 +156,8 @@ public class Sql2oCharacterCDaoTest {
         characterCDao.addSpellToCharacterC(spell, characterC);
 
         assertEquals(2, characterCDao.getAll().size());
-        assertEquals(1, characterCDao.getAllEquipmentForACharacter(characterC.getId()).size());
-        assertFalse(characterCDao.getAllEquipmentForACharacter(characterC.getId()).contains(spell1));
+        assertEquals(1, characterCDao.getAllSpellsForACharacter(characterC.getId()).size());
+        assertFalse(characterCDao.getAllSpellsForACharacter(characterC.getId()).contains(spell1));
     }
 
     @Test
