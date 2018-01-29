@@ -352,24 +352,24 @@ public class Sql2oCharacterCDao implements CharacterCDao {
         } catch (Sql2oException ex) {
             System.out.println(ex);
         }
-//        characterC.setDefense(characterC.getDefense() - equipment.getDefense());
-//        characterC.setMagicDefense(characterC.getMagicDefense() - equipment.getMagicDefense());
-//        characterC.setMagic(characterC.getMagic() - equipment.getMagic());
-//        characterC.setStrength(characterC.getStrength() - equipment.getStrength());
-//        characterC.setDexterity(characterC.getDexterity() - equipment.getDexterity());
-//        String sql1 = "UPDATE characters SET defense = :defense, magicDefense = :magicDefense, strength = :strength, magic = :magic, dexterity = :dexterity WHERE id = :id";
-//        try (Connection connection = sql2o.open()) {
-//            connection.createQuery(sql1)
-//                    .addParameter("defense", characterC.getDefense())
-//                    .addParameter("magicDefense", characterC.getMagicDefense())
-//                    .addParameter("strength", characterC.getStrength())
-//                    .addParameter("magic", characterC.getMagic())
-//                    .addParameter("dexterity", characterC.getDexterity())
-//                    .addParameter("id", characterC.getId())
-//                    .executeUpdate();
-//        } catch (Sql2oException ex) {
-//            System.out.println(ex);
-//        }
+        characterC.setDefense(characterC.getDefense() - equipment.getDefense());
+        characterC.setMagicDefense(characterC.getMagicDefense() - equipment.getMagicDefense());
+        characterC.setMagic(characterC.getMagic() - equipment.getMagic());
+        characterC.setStrength(characterC.getStrength() - equipment.getStrength());
+        characterC.setDexterity(characterC.getDexterity() - equipment.getDexterity());
+        String sql1 = "UPDATE characters SET defense = :defense, magicDefense = :magicDefense, strength = :strength, magic = :magic, dexterity = :dexterity WHERE id = :id";
+        try (Connection connection = sql2o.open()) {
+            connection.createQuery(sql1)
+                    .addParameter("defense", characterC.getDefense())
+                    .addParameter("magicDefense", characterC.getMagicDefense())
+                    .addParameter("strength", characterC.getStrength())
+                    .addParameter("magic", characterC.getMagic())
+                    .addParameter("dexterity", characterC.getDexterity())
+                    .addParameter("id", characterC.getId())
+                    .executeUpdate();
+        } catch (Sql2oException ex) {
+            System.out.println(ex);
+        }
     }
 
     public void removeSpellFromCharacterC(Spell spell, CharacterC characterC){
