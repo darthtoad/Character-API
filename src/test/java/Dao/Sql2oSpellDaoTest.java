@@ -69,9 +69,9 @@ public class Sql2oSpellDaoTest {
         spellDao.add(spell);
         spellDao.add(spell1);
         spellDao.addEffectToSpell(effect, spell);
-
-        assertEquals(1, spellDao.getAllEffectsForSpell(spell.getId()).size());
-        assertTrue(spellDao.getAllEffectsForSpell(spell.getId()).contains(spell));
+        spellDao.addEffectToSpell(effect1, spell);
+        assertEquals(2, spellDao.getAllEffectsForSpell(spell.getId()).size());
+        assertTrue(spellDao.getAllEffectsForSpell(spell.getId()).contains(effect));
     }
 
     @Test

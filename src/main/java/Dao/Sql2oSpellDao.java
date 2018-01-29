@@ -67,6 +67,22 @@ public class Sql2oSpellDao implements SpellDao{
     @Override
     public List<Effect> getAllEffectsForSpell(int id){
         List<Effect> effects = new ArrayList<>();
+        String sql = "SELECT effectId FROM effects_spells WHERE spellId = :spellId";
+        try (Connection fred = sql2o.open()) {
+            List<Integer> allEffectIds = fred.createQuery(sql)
+                    .addParameter("spellId", id)
+                    .executeAndFetch(Integer.class);
+            for (Integer effectId : allEffectIds) {
+                String query2 = "SELECT * FROM effects WHERE id = :effectId";
+                effects.add(
+                        fred.createQuery(query2)
+                                .addParameter("effectId", effectId)
+                                .executeAndFetchFirst(Effect.class)
+                );
+            }
+        } catch (Sql2oException ex) {
+            System.out.println(ex);
+        }
         return effects;
     }
 
