@@ -387,7 +387,7 @@ public class Sql2oCharacterCDaoTest {
         int originalStrength = characterCDao.findById(characterC.getId()).getStrength();
         int originalDefense = characterCDao.findById(characterC.getId()).getDefense();
         characterCDao.removeAllEquipmentFromCharacterC(characterC);
-        assertEquals(1, characterCDao.getAllEquipmentForACharacter(characterC.getId()).size());
+        assertEquals(0, characterCDao.getAllEquipmentForACharacter(characterC.getId()).size());
         assertFalse(characterCDao.getAllEquipmentForACharacter(characterC.getId()).contains(equipment));
         assertFalse(characterCDao.getAllEquipmentForACharacter(characterC.getId()).contains(equipment1));
         assertNotEquals(originalDefense, characterCDao.findById(characterC.getId()).getDefense());
