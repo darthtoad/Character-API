@@ -305,4 +305,26 @@ public class Sql2oCharacterCDaoTest {
         assertFalse(characterCDao.getAllEquipmentForACharacter(characterC.getId()).contains(equipment1));
     }
 
+    @Test
+    public void removeAllSpellsFromCharacterRemovesAssociationCorrectly() throws Exception {
+        CharacterC characterC = setupNewCharacterC();
+        CharacterC characterC1 = setupNewCharacterC1();
+        Spell spell = setupNewSpell();
+        Spell spell1 = setupNewSpell1();
+        characterCDao.add(characterC);
+        characterCDao.add(characterC1);
+        spellDao.add(spell);
+        spellDao.add(spell1);
+        characterCDao.addSpellToCharacterC(spell, characterC);
+        characterCDao.addSpellToCharacterC(spell1, characterC);
+        assertEquals(2, characterCDao.getAllSpellsForACharacter(characterC.getId()).size());
+        assertTrue(characterCDao.getAllSpellsForACharacter(characterC.getId()).contains(spell));
+        assertTrue(characterCDao.getAllSpellsForACharacter(characterC.getId()).contains(spell1));
+        characterCDao.removeAllSpellsFromCharacterC(spell, characterC);
+        assertEquals(0, characterCDao.getAllSpellsForACharacter(characterC.getId()).size());
+        assertFalse(characterCDao.getAllSpellsForACharacter(characterC.getId()).contains(spell));
+        assertFalse(characterCDao.getAllSpellsForACharacter(characterC.getId()).contains(spell1));
+    }
+
+
 }
