@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{#block "title"}}Ultimate Wish{{/block}}</title>
+    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'>
+    <link rel='stylesheet' href='/styles.css'>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<div class="container">
+    <div class="row headerRow">
+        <div class="col-md-12">
+            <div class="jumbotron">
+
+            </div>
+        </div>
+    </div>
+    <div class="row mainRow">
+        <div class="col-md-2">
+            <div class="panel panel-default sideNav">
+                <div class="panel-heading">
+                    <h4>Game Nav</h4>
+                </div>
+                <div class="char1">
+                    <img class="charPorts" src="/images/char1.png">
+                </div>
+                <hr>
+                <div class="char2">
+                    <img class="charPorts" src="/images/char2.png">
+                </div>
+                <hr>
+                <div class="char3">
+                    <img class="charPorts" src="/images/char3.png">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-10">
+            <div class="panel panel-default mainContent panel-transparent">
+                {{#block "content"}}
+                {{/block}}
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
