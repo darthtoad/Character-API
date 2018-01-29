@@ -9,11 +9,17 @@ import models.Equipment;
 import models.Spell;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
+import spark.ModelAndView;
+import spark.template.handlebars.HandlebarsTemplateEngine;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static spark.Spark.*;
 
 public class App {
     public static void main(String[] args) {
+        staticFileLocation("/public");
         Sql2oEffectDao effectDao;
         Sql2oSpellDao spellDao;
         Sql2oEquipmentDao equipmentDao;
@@ -30,6 +36,12 @@ public class App {
         characterCDao = new Sql2oCharacterCDao(sql2o);
 
         connection = sql2o.open();
+
+        get("/", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+
+            return new ModelAndView(model, "index.hbs");
+        }, new HandlebarsTemplateEngine());
 
         post("/characters/new", "application/json", (request, response) -> {
             CharacterC characterC = gson.fromJson(request.body(), CharacterC.class);
