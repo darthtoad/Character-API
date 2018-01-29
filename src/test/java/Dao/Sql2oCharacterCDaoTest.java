@@ -251,7 +251,7 @@ public class Sql2oCharacterCDaoTest {
     }
 
     @Test
-    public void removeSpellToCharacterRemovesAssociationCorrectly() throws Exception {
+    public void removeSpellFromCharacterRemovesAssociationCorrectly() throws Exception {
         CharacterC characterC = setupNewCharacterC();
         CharacterC characterC1 = setupNewCharacterC1();
         Spell spell = setupNewSpell();
@@ -264,6 +264,22 @@ public class Sql2oCharacterCDaoTest {
         characterCDao.removeSpellFromCharacterC(spell, characterC);
         assertEquals(0, characterCDao.getAllSpellsForACharacter(characterC.getId()).size());
         assertFalse(characterCDao.getAllSpellsForACharacter(characterC.getId()).contains(spell));
+    }
+
+    @Test
+    public void removeEffectFromCharacterRemovesAssociationCorrectly() throws Exception {
+        CharacterC characterC = setupNewCharacterC();
+        CharacterC characterC1 = setupNewCharacterC1();
+        Effect effect = setupNewEffect();
+        characterCDao.add(characterC);
+        characterCDao.add(characterC1);
+        effectDao.add(effect);
+        characterCDao.addEffectToCharacterC(effect, characterC);
+        assertEquals(1, characterCDao.getAllEffectsForACharacter(characterC.getId()).size());
+        assertTrue(characterCDao.getAllEffectsForACharacter(characterC.getId()).contains(effect));
+        characterCDao.removeEffectFromCharacterC(effect, characterC);
+        assertEquals(0, characterCDao.getAllEffectsForACharacter(characterC.getId()).size());
+        assertFalse(characterCDao.getAllEffectsForACharacter(characterC.getId()).contains(effect));
     }
 
 }
