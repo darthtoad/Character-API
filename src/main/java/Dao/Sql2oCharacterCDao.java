@@ -242,4 +242,40 @@ public class Sql2oCharacterCDao implements CharacterCDao {
             System.out.println(ex);
         }
     };
+
+    public void removeAllEquipmentFromCharacterC(Equipment equipment, CharacterC characterC) {
+        String sql = "DELETE FROM characters_equipment characterId = :characterId";
+        try (Connection connection = sql2o.open()) {
+            connection.createQuery(sql)
+                    .addParameter("equipmentId", equipment.getId())
+                    .addParameter("characterId", characterC.getId())
+                    .executeUpdate();
+        } catch (Sql2oException ex) {
+            System.out.println(ex);
+        }
+    };
+
+    public void removeAllSpellsFromCharacterC(Spell spell, CharacterC characterC){
+        String sql = "DELETE FROM characters_spells WHERE characterId = :characterId";
+        try (Connection connection = sql2o.open()) {
+            connection.createQuery(sql)
+                    .addParameter("spellId", spell.getId())
+                    .addParameter("characterId", characterC.getId())
+                    .executeUpdate();
+        } catch (Sql2oException ex) {
+            System.out.println(ex);
+        }
+    };
+
+    public void removeAllEffectsFromCharacterC(Effect effect, CharacterC characterC) {
+        String sql = "DELETE FROM characters_effects WHERE characterId = :characterId";
+        try (Connection connection = sql2o.open()) {
+            connection.createQuery(sql)
+                    .addParameter("effectId", effect.getId())
+                    .addParameter("characterId", characterC.getId())
+                    .executeUpdate();
+        } catch (Sql2oException ex) {
+            System.out.println(ex);
+        }
+    };
 }

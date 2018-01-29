@@ -282,4 +282,27 @@ public class Sql2oCharacterCDaoTest {
         assertFalse(characterCDao.getAllEffectsForACharacter(characterC.getId()).contains(effect));
     }
 
+    @Test
+    public void removeAllEquipmentFromCharacterRemovesAll() throws Exception {
+        CharacterC characterC = setupNewCharacterC();
+        CharacterC characterC1 = setupNewCharacterC1();
+        CharacterC characterC2 = setupNewCharacterC2();
+        characterCDao.add(characterC);
+        characterCDao.add(characterC1);
+        characterCDao.add(characterC2);
+        Equipment equipment = setupNewEquipment();
+        Equipment equipment1 = setupNewEquipment1();
+        equipmentDao.add(equipment);
+        equipmentDao.add(equipment1);
+        characterCDao.addEquipmentToCharacterC(equipment, characterC);
+        characterCDao.addEquipmentToCharacterC(equipment1, characterC);
+        assertEquals(2, characterCDao.getAllEquipmentForACharacter(characterC.getId()).size());
+        assertTrue(characterCDao.getAllEquipmentForACharacter(characterC.getId()).contains(equipment));
+        assertTrue(characterCDao.getAllEquipmentForACharacter(characterC.getId()).contains(equipment1));
+        characterCDao.removeAllEquipmentFromCharacterC(equipment, characterC);
+        assertEquals(0, characterCDao.getAllEquipmentForACharacter(characterC.getId()).size());
+        assertFalse(characterCDao.getAllEquipmentForACharacter(characterC.getId()).contains(equipment));
+        assertFalse(characterCDao.getAllEquipmentForACharacter(characterC.getId()).contains(equipment1));
+    }
+
 }
