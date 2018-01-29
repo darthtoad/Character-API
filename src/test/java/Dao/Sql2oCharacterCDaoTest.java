@@ -299,7 +299,7 @@ public class Sql2oCharacterCDaoTest {
         assertEquals(2, characterCDao.getAllEquipmentForACharacter(characterC.getId()).size());
         assertTrue(characterCDao.getAllEquipmentForACharacter(characterC.getId()).contains(equipment));
         assertTrue(characterCDao.getAllEquipmentForACharacter(characterC.getId()).contains(equipment1));
-        characterCDao.removeAllEquipmentFromCharacterC(equipment, characterC);
+        characterCDao.removeAllEquipmentFromCharacterC(characterC);
         assertEquals(0, characterCDao.getAllEquipmentForACharacter(characterC.getId()).size());
         assertFalse(characterCDao.getAllEquipmentForACharacter(characterC.getId()).contains(equipment));
         assertFalse(characterCDao.getAllEquipmentForACharacter(characterC.getId()).contains(equipment1));
@@ -320,10 +320,31 @@ public class Sql2oCharacterCDaoTest {
         assertEquals(2, characterCDao.getAllSpellsForACharacter(characterC.getId()).size());
         assertTrue(characterCDao.getAllSpellsForACharacter(characterC.getId()).contains(spell));
         assertTrue(characterCDao.getAllSpellsForACharacter(characterC.getId()).contains(spell1));
-        characterCDao.removeAllSpellsFromCharacterC(spell, characterC);
+        characterCDao.removeAllSpellsFromCharacterC(characterC);
         assertEquals(0, characterCDao.getAllSpellsForACharacter(characterC.getId()).size());
         assertFalse(characterCDao.getAllSpellsForACharacter(characterC.getId()).contains(spell));
         assertFalse(characterCDao.getAllSpellsForACharacter(characterC.getId()).contains(spell1));
+    }
+
+    @Test
+    public void removeAllEffectsFromCharacterRemovesAssociationCorrectly() throws Exception {
+        CharacterC characterC = setupNewCharacterC();
+        CharacterC characterC1 = setupNewCharacterC1();
+        Effect effect = setupNewEffect();
+        Effect effect1 = setupNewEffect1();
+        characterCDao.add(characterC);
+        characterCDao.add(characterC1);
+        effectDao.add(effect);
+        effectDao.add(effect1);
+        characterCDao.addEffectToCharacterC(effect, characterC);
+        characterCDao.addEffectToCharacterC(effect1, characterC);
+        assertEquals(2, characterCDao.getAllEffectsForACharacter(characterC.getId()).size());
+        assertTrue(characterCDao.getAllEffectsForACharacter(characterC.getId()).contains(effect));
+        assertTrue(characterCDao.getAllEffectsForACharacter(characterC.getId()).contains(effect1));
+        characterCDao.removeAllEffectsFromCharacterC(characterC);
+        assertEquals(1, characterCDao.getAllSpellsForACharacter(characterC.getId()).size());
+        assertFalse(characterCDao.getAllSpellsForACharacter(characterC.getId()).contains(effect));
+        assertFalse(characterCDao.getAllSpellsForACharacter(characterC.getId()).contains(effect1));
     }
 
 

@@ -243,7 +243,7 @@ public class Sql2oCharacterCDao implements CharacterCDao {
         }
     };
 
-    public void removeAllEquipmentFromCharacterC(Equipment equipment, CharacterC characterC) {
+    public void removeAllEquipmentFromCharacterC(CharacterC characterC) {
         String sql = "DELETE FROM characters_equipment WHERE characterId = :characterId";
         try (Connection connection = sql2o.open()) {
             connection.createQuery(sql)
@@ -254,7 +254,7 @@ public class Sql2oCharacterCDao implements CharacterCDao {
         }
     };
 
-    public void removeAllSpellsFromCharacterC(Spell spell, CharacterC characterC){
+    public void removeAllSpellsFromCharacterC(CharacterC characterC){
         String sql = "DELETE FROM characters_spells WHERE characterId = :characterId";
         try (Connection connection = sql2o.open()) {
             connection.createQuery(sql)
@@ -265,7 +265,7 @@ public class Sql2oCharacterCDao implements CharacterCDao {
         }
     };
 
-    public void removeAllEffectsFromCharacterC(Effect effect, CharacterC characterC) {
+    public void removeAllEffectsFromCharacterC(CharacterC characterC) {
         String sql = "DELETE FROM characters_effects WHERE characterId = :characterId";
         try (Connection connection = sql2o.open()) {
             connection.createQuery(sql)
