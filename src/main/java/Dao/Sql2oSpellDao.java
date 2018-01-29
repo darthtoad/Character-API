@@ -130,14 +130,14 @@ public class Sql2oSpellDao implements SpellDao{
 
     @Override
     public void removeAllEffectsFromSpell(Spell spell) {
-//        String sql = "DELETE FROM effects_spells WHERE spellId = :spellId";
-//        try (Connection connection = sql2o.open()) {
-//            connection.createQuery(sql)
-//                    .addParameter("spellId", spell.getId())
-//                    .executeUpdate();
-//        } catch (Sql2oException ex) {
-//            System.out.println(ex);
-//        }
+        String sql = "DELETE FROM effects_spells WHERE spellId = :spellId";
+        try (Connection connection = sql2o.open()) {
+            connection.createQuery(sql)
+                    .addParameter("spellId", spell.getId())
+                    .executeUpdate();
+        } catch (Sql2oException ex) {
+            System.out.println(ex);
+        }
     }
 
     @Override
