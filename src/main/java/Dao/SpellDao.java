@@ -15,6 +15,8 @@ public interface SpellDao {
 
     void update(int id, String name, String description, int damage, String effects);
 
+    void removeEffectFromSpell(Effect effect, Spell spell);
+    void removeAllEffectsFromSpell(Spell spell);
     void deleteById(int id);
     void deleteAll();
 }

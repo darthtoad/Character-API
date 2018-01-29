@@ -115,6 +115,7 @@ public class Sql2oSpellDao implements SpellDao{
         }
     }
 
+    @Override
     public void removeEffectFromSpell(Effect effect, Spell spell) {
         String sql = "DELETE FROM effects_spells WHERE effectId = :effectId AND spellId = :spellId";
         try (Connection connection = sql2o.open()) {
@@ -126,6 +127,18 @@ public class Sql2oSpellDao implements SpellDao{
             System.out.println(ex);
         }
     };
+
+    @Override
+    public void removeAllEffectsFromSpell(Spell spell) {
+//        String sql = "DELETE FROM effects_spells WHERE spellId = :spellId";
+//        try (Connection connection = sql2o.open()) {
+//            connection.createQuery(sql)
+//                    .addParameter("spellId", spell.getId())
+//                    .executeUpdate();
+//        } catch (Sql2oException ex) {
+//            System.out.println(ex);
+//        }
+    }
 
     @Override
     public void deleteAll() {
