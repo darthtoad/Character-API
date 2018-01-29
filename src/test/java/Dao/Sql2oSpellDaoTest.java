@@ -145,6 +145,23 @@ public class Sql2oSpellDaoTest {
     }
 
     @Test
+    public void removeEffectFromCharacterRemovesAssociationCorrectly() throws Exception {
+        Spell spell = setupNewSpell();
+        Spell spell1 = setupNewSpell1();
+        Effect effect = setupNewEffect();
+        spellDao.add(spell);
+        spellDao.add(spell1);
+        effectDao.add(effect);
+        spellDao.addEffectToSpell(effect, spell);
+        assertEquals(1, spellDao.getAllEffectsForSpell(spell.getId()).size());
+        assertTrue(spellDao.getAllEffectsForSpell(spell.getId()).contains(effect));
+        spellDao.removeEffectFromSpell(effect, spell);
+        assertEquals(0, spellDao.getAllEffectsForSpell(spell.getId()).size());
+        assertFalse(spellDao.getAllEffectsForSpell(spell.getId()).contains(effect));
+    }
+
+
+    @Test
     public void deleteAll() throws Exception {
         Spell spell = setupNewSpell();
         Spell spell1 = setupNewSpell1();
