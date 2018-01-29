@@ -72,3 +72,9 @@ CREATE TABLE IF NOT EXISTS effects (
     dexterity INTEGER,
     other VARCHAR
 );
+
+CREATE TABLE IF NOT EXISTS effects_spells (
+    id int PRIMARY KEY auto_increment,
+    effectId INTEGER,
+    spellId INTEGER
+);

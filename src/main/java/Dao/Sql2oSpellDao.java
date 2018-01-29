@@ -32,7 +32,15 @@ public class Sql2oSpellDao implements SpellDao{
 
     @Override
     public void addEffectToSpell(Effect effect, Spell spell){
-
+        String sql = "INSERT INTO effects_spells (effectId, spellId) VALUES (:effectId, :spellId)";
+        try (Connection con = sql2o.open()) {
+            con.createQuery(sql)
+                    .addParameter("effectId", effect.getId())
+                    .addParameter("spellId", spell.getId())
+                    .executeUpdate();
+        } catch (Sql2oException ex) {
+            System.out.println(ex);
+        }
     };
 
 
