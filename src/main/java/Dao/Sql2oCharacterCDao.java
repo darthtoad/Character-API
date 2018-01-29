@@ -244,10 +244,9 @@ public class Sql2oCharacterCDao implements CharacterCDao {
     };
 
     public void removeAllEquipmentFromCharacterC(Equipment equipment, CharacterC characterC) {
-        String sql = "DELETE FROM characters_equipment characterId = :characterId";
+        String sql = "DELETE FROM characters_equipment WHERE characterId = :characterId";
         try (Connection connection = sql2o.open()) {
             connection.createQuery(sql)
-                    .addParameter("equipmentId", equipment.getId())
                     .addParameter("characterId", characterC.getId())
                     .executeUpdate();
         } catch (Sql2oException ex) {
@@ -259,7 +258,6 @@ public class Sql2oCharacterCDao implements CharacterCDao {
         String sql = "DELETE FROM characters_spells WHERE characterId = :characterId";
         try (Connection connection = sql2o.open()) {
             connection.createQuery(sql)
-                    .addParameter("spellId", spell.getId())
                     .addParameter("characterId", characterC.getId())
                     .executeUpdate();
         } catch (Sql2oException ex) {
@@ -271,7 +269,6 @@ public class Sql2oCharacterCDao implements CharacterCDao {
         String sql = "DELETE FROM characters_effects WHERE characterId = :characterId";
         try (Connection connection = sql2o.open()) {
             connection.createQuery(sql)
-                    .addParameter("effectId", effect.getId())
                     .addParameter("characterId", characterC.getId())
                     .executeUpdate();
         } catch (Sql2oException ex) {
