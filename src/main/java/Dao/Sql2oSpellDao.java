@@ -116,7 +116,7 @@ public class Sql2oSpellDao implements SpellDao{
     }
 
     public void removeEffectFromSpell(Effect effect, Spell spell) {
-        String sql = "DELETE FROM characters_effects WHERE effectId = :effectId AND spellId = :spellId";
+        String sql = "DELETE FROM effects_spells WHERE effectId = :effectId AND spellId = :spellId";
         try (Connection connection = sql2o.open()) {
             connection.createQuery(sql)
                     .addParameter("effectId", effect.getId())

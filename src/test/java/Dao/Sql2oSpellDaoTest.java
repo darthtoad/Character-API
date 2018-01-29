@@ -145,7 +145,7 @@ public class Sql2oSpellDaoTest {
     }
 
     @Test
-    public void removeEffectFromCharacterRemovesAssociationCorrectly() throws Exception {
+    public void removeEffectFromSpellRemovesAssociationCorrectly() throws Exception {
         Spell spell = setupNewSpell();
         Spell spell1 = setupNewSpell1();
         Effect effect = setupNewEffect();
