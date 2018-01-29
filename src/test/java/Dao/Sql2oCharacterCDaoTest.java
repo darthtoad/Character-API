@@ -342,7 +342,7 @@ public class Sql2oCharacterCDaoTest {
         assertTrue(characterCDao.getAllEffectsForACharacter(characterC.getId()).contains(effect));
         assertTrue(characterCDao.getAllEffectsForACharacter(characterC.getId()).contains(effect1));
         characterCDao.removeAllEffectsFromCharacterC(characterC);
-        assertEquals(1, characterCDao.getAllSpellsForACharacter(characterC.getId()).size());
+        assertEquals(0, characterCDao.getAllSpellsForACharacter(characterC.getId()).size());
         assertFalse(characterCDao.getAllSpellsForACharacter(characterC.getId()).contains(effect));
         assertFalse(characterCDao.getAllSpellsForACharacter(characterC.getId()).contains(effect1));
     }
