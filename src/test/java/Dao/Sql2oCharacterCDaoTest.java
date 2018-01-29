@@ -7,6 +7,9 @@ import org.junit.Test;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 public class Sql2oCharacterCDaoTest {
@@ -86,6 +89,19 @@ public class Sql2oCharacterCDaoTest {
         characterCDao.addEquipmentToCharacterC(equipment, characterC);
         assertEquals(1, characterCDao.getAllEquipmentForACharacter(characterC.getId()).size());
         assertTrue(characterCDao.getAllEquipmentForACharacter(characterC.getId()).contains(equipment));
+    }
+
+    @Test
+    public void addEquipmentToCharacterChangesStats() throws Exception {
+        Equipment equipment = new Equipment("Sword of Awesome", "Sword", 4, 0, 0, 0, 0);
+        CharacterC characterC = setupNewCharacterC();
+        CharacterC characterC1 = setupNewCharacterC1();
+        characterCDao.add(characterC);
+        int originalStrength = characterC.getStrength();
+        equipmentDao.add(equipment);
+        characterCDao.addEquipmentToCharacterC(equipmentDao.findById(equipment.getId()), characterCDao.findById(characterC.getId()));
+        assertNotEquals(originalStrength, characterCDao.findById(characterC.getId()));
+        assertEquals(characterCDao.findById(characterC.getId()).getStrength(), originalStrength + equipment.getStrength());
     }
 
     @Test
@@ -214,6 +230,19 @@ public class Sql2oCharacterCDaoTest {
         characterCDao.checkForLevelUp(characterC);
         assertNotEquals(originalLevel, characterCDao.findById(characterC.getId()).getLevel());
         assertEquals(5, characterCDao.findById(characterC.getId()).getLevel());
+    }
+
+    @Test
+    public void castSpellChangesMP() throws Exception {
+        CharacterC characterC = setupNewCharacterC();
+        CharacterC characterC1 = setupNewCharacterC1();
+        List<CharacterC> charactersList = new ArrayList<>();
+        charactersList.add(characterC1);
+        Spell spell = setupNewSpell();
+        Spell spell1 = setupNewSpell1();
+        int originalMP = characterC.getCurrentMP();
+        characterCDao.castSpell(spell, characterC, charactersList);
+        assertNotEquals(originalMP, characterC.getCurrentMP());
     }
 
     @Test

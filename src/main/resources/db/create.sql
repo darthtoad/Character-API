@@ -43,6 +43,7 @@ CREATE TABLE IF NOT EXISTS spells (
     name VARCHAR,
     description VARCHAR,
     damage INTEGER,
+    MP INTEGER,
     effects VARCHAR
 );
 

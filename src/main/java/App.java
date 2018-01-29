@@ -243,7 +243,5 @@ public class App {
             response.status(201);
             return gson.toJson("Your spell has been deleted");
         });
-
-
     }
 }
