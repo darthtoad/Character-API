@@ -256,13 +256,13 @@ public class Sql2oCharacterCDao implements CharacterCDao {
 
     public void removeAllSpellsFromCharacterC(Spell spell, CharacterC characterC){
         String sql = "DELETE FROM characters_spells WHERE characterId = :characterId";
-//        try (Connection connection = sql2o.open()) {
-//            connection.createQuery(sql)
-//                    .addParameter("characterId", characterC.getId())
-//                    .executeUpdate();
-//        } catch (Sql2oException ex) {
-//            System.out.println(ex);
-//        }
+        try (Connection connection = sql2o.open()) {
+            connection.createQuery(sql)
+                    .addParameter("characterId", characterC.getId())
+                    .executeUpdate();
+        } catch (Sql2oException ex) {
+            System.out.println(ex);
+        }
     };
 
     public void removeAllEffectsFromCharacterC(Effect effect, CharacterC characterC) {
