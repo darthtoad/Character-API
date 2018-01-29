@@ -22,6 +22,9 @@ public interface CharacterCDao {
 
     void update(int id, String name, String description, int level, int experience, int HP, int currentHP, int defense, int magicDefense, int strength, int MP, int currentMP, int magic, int dexterity, String spells, String equipment, String effects);
 
+    void removeEquipmentFromCharacterC(Equipment equipment, CharacterC characterC);
+    void removeSpellFromCharacterC(Spell spell, CharacterC characterC);
+    void removeEffectFromCharacterC(Effect effect, CharacterC characterC);
     void deleteById(int id);
     void deleteAll();
 }

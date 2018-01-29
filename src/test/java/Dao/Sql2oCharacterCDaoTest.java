@@ -230,4 +230,23 @@ public class Sql2oCharacterCDaoTest {
         assertEquals(0, characterCDao.getAll().size());
     }
 
+    @Test
+    public void removeEquipmentFromCharacterRemovesAssociation() throws Exception {
+        CharacterC characterC = setupNewCharacterC();
+        CharacterC characterC1 = setupNewCharacterC1();
+        CharacterC characterC2 = setupNewCharacterC2();
+        characterCDao.add(characterC);
+        characterCDao.add(characterC1);
+        characterCDao.add(characterC2);
+        Equipment equipment = setupNewEquipment();
+        Equipment equipment1 = setupNewEquipment1();
+        equipmentDao.add(equipment);
+        equipmentDao.add(equipment1);
+        characterCDao.addEquipmentToCharacterC(equipment, characterC);
+        assertEquals(1, characterCDao.getAllEquipmentForACharacter(characterC.getId()).size());
+        assertTrue(characterCDao.getAllEquipmentForACharacter(characterC.getId()).contains(equipment));
+        characterCDao.removeEquipmentFromCharacterC(equipment, characterC);
+        assertEquals(0, characterCDao.getAllEquipmentForACharacter(characterC.getId()).size());
+        assertFalse(characterCDao.getAllEquipmentForACharacter(characterC.getId()).contains(equipment));
+    }
 }
