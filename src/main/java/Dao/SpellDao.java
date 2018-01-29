@@ -17,6 +17,7 @@ public interface SpellDao {
 
     void removeEffectFromSpell(Effect effect, Spell spell);
     void removeAllEffectsFromSpell(Spell spell);
+
     void deleteById(int id);
     void deleteAll();
 }

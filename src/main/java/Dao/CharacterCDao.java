@@ -21,6 +21,9 @@ public interface CharacterCDao {
     List<Effect> getAllEffectsForACharacter(int id);
 
     void update(int id, String name, String description, int level, int experience, int HP, int currentHP, int defense, int magicDefense, int strength, int MP, int currentMP, int magic, int dexterity, String spells, String equipment, String effects);
+    void attack(CharacterC attacker, CharacterC target);
+    void castSpell(Spell spell, CharacterC attacking, List<CharacterC> targets);
+    void checkForLevelUp(CharacterC characterC);
 
     void removeEquipmentFromCharacterC(Equipment equipment, CharacterC characterC);
     void removeSpellFromCharacterC(Spell spell, CharacterC characterC);

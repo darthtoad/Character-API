@@ -8,25 +8,29 @@ public class Spell {
     private String name;
     private String description;
     private int damage;
+    private int MP;
     private String effects;
 
-    public Spell(String name, String description, int damage) {
+    public Spell(String name, String description, int damage, int MP) {
 
         this.name = name;
         this.description = description;
         this.damage = damage;
+        this.MP = MP;
     }
 
-    public Spell(String name, String description, String effects) {
+    public Spell(String name, String description, int MP, String effects) {
         this.name = name;
         this.description = description;
+        this.MP = MP;
         this.effects = effects;
     }
 
-    public Spell(String name, String description, int damage, String effects) {
+    public Spell(String name, String description, int damage, int MP, String effects) {
         this.name = name;
         this.description = description;
         this.damage = damage;
+        this.MP = MP;
         this.effects = effects;
     }
 
@@ -71,6 +75,14 @@ public class Spell {
         this.effects = effects;
     }
 
+    public int getMP() {
+        return MP;
+    }
+
+    public void setMP(int MP) {
+        this.MP = MP;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -78,18 +90,16 @@ public class Spell {
 
         Spell spell = (Spell) o;
 
-        if (damage != spell.damage) return false;
+        if (id != spell.id) return false;
         if (!name.equals(spell.name)) return false;
-        if (description != null ? !description.equals(spell.description) : spell.description != null) return false;
-        return effects != null ? effects.equals(spell.effects) : spell.effects == null;
+        return description.equals(spell.description);
     }
 
     @Override
     public int hashCode() {
-        int result = name.hashCode();
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + damage;
-        result = 31 * result + (effects != null ? effects.hashCode() : 0);
+        int result = id;
+        result = 31 * result + name.hashCode();
+        result = 31 * result + description.hashCode();
         return result;
     }
 }

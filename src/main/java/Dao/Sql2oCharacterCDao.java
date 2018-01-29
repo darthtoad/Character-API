@@ -185,6 +185,85 @@ public class Sql2oCharacterCDao implements CharacterCDao {
     }
 
     @Override
+    public void attack(CharacterC attacker, CharacterC target) {
+        int damage = attacker.getStrength();
+        int accuracy = attacker.getDexterity();
+        int defense = target.getDefense();
+        int evasion = target.getDexterity();
+        int toHit = accuracy * (int) (Math.floor(Math.random()) + 1);
+        damage = damage * (int) (Math.floor(Math.random()) + 1);
+        if (toHit > evasion) {
+            if (damage - defense > 0) {
+                target.setCurrentHP(target.getCurrentHP() - (damage - defense));
+            }
+        }
+        String sql = "UPDATE characters SET currentHP = :currentHP WHERE id = :id";
+        try (Connection connection = sql2o.open()) {
+            connection.createQuery(sql)
+                    .addParameter("currentHP", target.getCurrentHP())
+                    .addParameter("id", target.getId())
+                    .executeUpdate();
+        } catch (Sql2oException ex) {
+            System.out.println(ex);
+        };
+    }
+
+    @Override
+    public void castSpell(Spell spell, CharacterC caster, List<CharacterC> targets) {
+        int damage = spell.getDamage();
+        int toHit = caster.getMagic();
+        for (CharacterC target : targets) {
+            int defense = target.getMagicDefense();
+            if (toHit > target.getDexterity()) {
+                if (damage - defense > 0) {
+                    target.setCurrentHP(target.getCurrentHP() - (damage - defense));
+                }
+            }
+            String sql = "UPDATE characters SET currentHP = :currentHP WHERE id = :id";
+            try (Connection connection = sql2o.open()) {
+                connection.createQuery(sql)
+                        .addParameter("currentHP", target.getCurrentHP())
+                        .addParameter("id", target.getId())
+                        .executeUpdate();
+            } catch (Sql2oException ex) {
+                System.out.println(ex);
+            };
+        }
+    }
+
+    @Override
+    public void checkForLevelUp(CharacterC characterC) {
+        if (characterC.getExperience() > 50 && characterC.getLevel() < 2) {
+            characterC.setLevel(2);
+        } else if (characterC.getExperience() > 100 && characterC.getLevel() < 3) {
+            characterC.setLevel(3);
+        } else if (characterC.getExperience() > 150 && characterC.getLevel() < 4) {
+            characterC.setLevel(4);
+        } else if (characterC.getExperience() > 250 && characterC.getLevel() < 5) {
+            characterC.setLevel(5);
+        } else if (characterC.getExperience() > 400 && characterC.getLevel() < 6) {
+            characterC.setLevel(6);
+        } else if (characterC.getExperience() > 600 && characterC.getLevel() < 7) {
+            characterC.setLevel(7);
+        } else if (characterC.getLevel() > 850 && characterC.getLevel() < 8) {
+            characterC.setLevel(8);
+        } else if (characterC.getLevel() > 1150 && characterC.getLevel() < 9) {
+            characterC.setLevel(9);
+        } else {
+            characterC.setLevel(1);
+        }
+        String sql = "UPDATE characters SET level = :level WHERE id = :id";
+        try (Connection connection = sql2o.open()) {
+            connection.createQuery(sql)
+                    .addParameter("level", characterC.getLevel())
+                    .addParameter("id", characterC.getId())
+                    .executeUpdate();
+        } catch (Sql2oException ex) {
+            System.out.println(ex);
+        }
+    }
+
+    @Override
     public void deleteById(int id) {
         String sql = "DELETE FROM characters WHERE id = :id";
         try (Connection connection = sql2o.open()) {

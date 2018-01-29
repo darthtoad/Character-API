@@ -25,11 +25,11 @@ public class Sql2oCharacterCDaoTest {
     }
 
     public Spell setupNewSpell() {
-        return new Spell("Magic Missle", "A missle made of magic that stuns the targer", 5, "1");
+        return new Spell("Magic Missle", "A missle made of magic that stuns the targer", 5, 1, "1");
     }
 
     public Spell setupNewSpell1() {
-        return new Spell("Haste", "Makes user faster", "2, 3");
+        return new Spell("Haste", "Makes user faster", 5, "2, 3");
     }
 
     public Effect setupNewEffect() {
@@ -98,7 +98,7 @@ public class Sql2oCharacterCDaoTest {
         spellDao.add(spell);
         characterCDao.addSpellToCharacterC(spell, characterC);
         assertEquals(1, characterCDao.getAllSpellsForACharacter(characterC.getId()).size());
-        assertTrue(characterCDao.getAllSpellsForACharacter(characterC.getId()).contains(spell));
+        assertTrue(characterCDao.getAllSpellsForACharacter(characterC.getId()).contains(spellDao.findById(spell.getId())));
     }
 
     @Test
@@ -206,6 +206,17 @@ public class Sql2oCharacterCDaoTest {
     }
 
     @Test
+    public void checkForLevelUpWorks() throws Exception {
+        CharacterC characterC = setupNewCharacterC();
+        CharacterC characterC1 = setupNewCharacterC1();
+        characterCDao.add(characterC);
+        int originalLevel = characterC.getLevel();
+        characterCDao.checkForLevelUp(characterC);
+        assertNotEquals(originalLevel, characterCDao.findById(characterC.getId()).getLevel());
+        assertEquals(5, characterCDao.findById(characterC.getId()).getLevel());
+    }
+
+    @Test
     public void deleteByIdDeletesCharacterCorrectly() throws Exception {
         CharacterC characterC = setupNewCharacterC();
         CharacterC characterC1 = setupNewCharacterC1();
@@ -260,7 +271,7 @@ public class Sql2oCharacterCDaoTest {
         spellDao.add(spell);
         characterCDao.addSpellToCharacterC(spell, characterC);
         assertEquals(1, characterCDao.getAllSpellsForACharacter(characterC.getId()).size());
-        assertTrue(characterCDao.getAllSpellsForACharacter(characterC.getId()).contains(spell));
+        assertTrue(characterCDao.getAllSpellsForACharacter(characterC.getId()).contains(spellDao.findById(spell.getId())));
         characterCDao.removeSpellFromCharacterC(spell, characterC);
         assertEquals(0, characterCDao.getAllSpellsForACharacter(characterC.getId()).size());
         assertFalse(characterCDao.getAllSpellsForACharacter(characterC.getId()).contains(spell));
@@ -318,8 +329,8 @@ public class Sql2oCharacterCDaoTest {
         characterCDao.addSpellToCharacterC(spell, characterC);
         characterCDao.addSpellToCharacterC(spell1, characterC);
         assertEquals(2, characterCDao.getAllSpellsForACharacter(characterC.getId()).size());
-        assertTrue(characterCDao.getAllSpellsForACharacter(characterC.getId()).contains(spell));
-        assertTrue(characterCDao.getAllSpellsForACharacter(characterC.getId()).contains(spell1));
+        assertTrue(characterCDao.getAllSpellsForACharacter(characterC.getId()).contains(spellDao.findById(spell.getId())));
+        assertTrue(characterCDao.getAllSpellsForACharacter(characterC.getId()).contains(spellDao.findById(spell1.getId())));
         characterCDao.removeAllSpellsFromCharacterC(characterC);
         assertEquals(0, characterCDao.getAllSpellsForACharacter(characterC.getId()).size());
         assertFalse(characterCDao.getAllSpellsForACharacter(characterC.getId()).contains(spell));

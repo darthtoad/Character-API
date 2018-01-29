@@ -17,15 +17,15 @@ public class Sql2oSpellDaoTest {
     private Sql2oEffectDao effectDao;
 
     public Spell setupNewSpell() {
-        return new Spell("Magic Missle", "A missle made of magic that stuns the targer", 5, "1");
+        return new Spell("Magic Missle", "A missle made of magic that stuns the targer", 5, 2, "1");
     }
 
     public Spell setupNewSpell1() {
-        return new Spell("Haste", "Makes user faster", "2, 3");
+        return new Spell("Haste", "Makes user faster", 3, "2, 3");
     }
 
     public Spell setupNewSpell2() {
-        return new Spell("Magic Rock", "Throws a magic rock at a target", 10);
+        return new Spell("Magic Rock", "Throws a magic rock at a target", 10, 5);
     }
 
     public Effect setupNewEffect() {
@@ -95,8 +95,8 @@ public class Sql2oSpellDaoTest {
         Spell testSpell1 = setupNewSpell1();
         spellDao.add(testSpell1);
         assertEquals(2, spellDao.getAll().size());
-        assertTrue(spellDao.getAll().contains(testSpell));
-        assertTrue(spellDao.getAll().contains(testSpell1));
+        assertTrue(spellDao.getAll().contains(spellDao.findById(1)));
+        assertTrue(spellDao.getAll().contains(spellDao.findById(2)));
     }
 
     @Test
