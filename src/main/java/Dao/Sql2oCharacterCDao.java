@@ -208,7 +208,7 @@ public class Sql2oCharacterCDao implements CharacterCDao {
     }
 
     public void removeEquipmentFromCharacterC(Equipment equipment, CharacterC characterC) {
-        String sql = "DELETE FROM characters_equipment WHERE equipmentId = :equipmentId, characterId = :characterId";
+        String sql = "DELETE FROM characters_equipment WHERE equipmentId = :equipmentId AND characterId = :characterId";
         try (Connection connection = sql2o.open()) {
             connection.createQuery(sql)
                     .addParameter("equipmentId", equipment.getId())
