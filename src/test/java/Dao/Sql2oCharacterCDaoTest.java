@@ -368,6 +368,33 @@ public class Sql2oCharacterCDaoTest {
     }
 
     @Test
+    public void removeAllEquipmentChangesStats() throws Exception {
+        CharacterC characterC = setupNewCharacterC();
+        CharacterC characterC1 = setupNewCharacterC1();
+        CharacterC characterC2 = setupNewCharacterC2();
+        characterCDao.add(characterC);
+        characterCDao.add(characterC1);
+        characterCDao.add(characterC2);
+        Equipment equipment = setupNewEquipment();
+        Equipment equipment1 = setupNewEquipment1();
+        equipmentDao.add(equipment);
+        equipmentDao.add(equipment1);
+        characterCDao.addEquipmentToCharacterC(equipment, characterC);
+        characterCDao.addEquipmentToCharacterC(equipment1, characterC);
+        assertEquals(2, characterCDao.getAllEquipmentForACharacter(characterC.getId()).size());
+        assertTrue(characterCDao.getAllEquipmentForACharacter(characterC.getId()).contains(equipment));
+        assertTrue(characterCDao.getAllEquipmentForACharacter(characterC.getId()).contains(equipment1));
+        int originalStrength = characterCDao.findById(characterC.getId()).getStrength();
+        int originalDefense = characterCDao.findById(characterC.getId()).getDefense();
+        characterCDao.removeAllEquipmentFromCharacterC(characterC);
+        assertEquals(1, characterCDao.getAllEquipmentForACharacter(characterC.getId()).size());
+        assertFalse(characterCDao.getAllEquipmentForACharacter(characterC.getId()).contains(equipment));
+        assertFalse(characterCDao.getAllEquipmentForACharacter(characterC.getId()).contains(equipment1));
+        assertNotEquals(originalDefense, characterCDao.findById(characterC.getId()).getDefense());
+        assertNotEquals(originalStrength, characterCDao.findById(characterC.getId()).getStrength());
+    }
+
+    @Test
     public void removeAllSpellsFromCharacterRemovesAssociationCorrectly() throws Exception {
         CharacterC characterC = setupNewCharacterC();
         CharacterC characterC1 = setupNewCharacterC1();
