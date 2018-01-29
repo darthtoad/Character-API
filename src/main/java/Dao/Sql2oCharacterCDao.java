@@ -232,14 +232,14 @@ public class Sql2oCharacterCDao implements CharacterCDao {
     };
 
     public void removeEffectFromCharacterC(Effect effect, CharacterC characterC) {
-//        String sql = "DELETE FROM characters_effects WHERE effectId = :effectId AND characterId = :characterId";
-//        try (Connection connection = sql2o.open()) {
-//            connection.createQuery(sql)
-//                    .addParameter("effectId", effect.getId())
-//                    .addParameter("characterId", characterC.getId())
-//                    .executeUpdate();
-//        } catch (Sql2oException ex) {
-//            System.out.println(ex);
-//        }
+        String sql = "DELETE FROM characters_effects WHERE effectId = :effectId AND characterId = :characterId";
+        try (Connection connection = sql2o.open()) {
+            connection.createQuery(sql)
+                    .addParameter("effectId", effect.getId())
+                    .addParameter("characterId", characterC.getId())
+                    .executeUpdate();
+        } catch (Sql2oException ex) {
+            System.out.println(ex);
+        }
     };
 }
