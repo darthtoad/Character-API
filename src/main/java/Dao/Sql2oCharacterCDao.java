@@ -220,7 +220,15 @@ public class Sql2oCharacterCDao implements CharacterCDao {
     };
 
     public void removeSpellFromCharacterC(Spell spell, CharacterC characterC){
-
+//        String sql = "DELETE FROM characters_spells WHERE spellId = :spellId AND characterId = :characterId";
+//        try (Connection connection = sql2o.open()) {
+//            connection.createQuery(sql)
+//                    .addParameter("spellId", spell.getId())
+//                    .addParameter("characterId", characterC.getId())
+//                    .executeUpdate();
+//        } catch (Sql2oException ex) {
+//            System.out.println(ex);
+//        }
     };
 
     public void removeEffectFromCharacterC(Effect effect, CharacterC characterC) {
