@@ -355,10 +355,18 @@ public class Sql2oCharacterCDao implements CharacterCDao {
 
     public List<Integer> findTurnOrder(List<CharacterC> characters) {
         List<Integer> turnOrder = new ArrayList<>();
-        for (CharacterC characterC : characters) {
-            if (characterC.getDexterity() > 1) {
-                turnOrder.add(characterC.getId());
+        int originalSize = characters.size();
+        for (int i = 0; i < originalSize; i++) {
+            int bestDex = 0;
+            int id = 0;
+            for (CharacterC characterC : characters) {
+                if (characterC.getDexterity() > 0 && bestDex < characterC.getDexterity()) {
+                    bestDex = characterC.getDexterity();
+                    id = characterC.getId();
+                }
             }
+            turnOrder.add(id);
+            characters.remove(this.findById(id));
         }
         return turnOrder;
     }
