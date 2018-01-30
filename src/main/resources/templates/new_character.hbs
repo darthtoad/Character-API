@@ -1,17 +1,17 @@
 {{#partial "content"}}
     <div class = "well">
     <h1>New Character</h1>
-    <form action="/newTeam" method="post">
+    <form action="/character/new" method="post">
         <label>Name: </label>
         <input name="name">
         <br>
         <h3>Select Class:</h3>
-        <label class="radio-inline"><input type="radio" name="class">Fighter</label>
-        <label class="radio-inline"><input type="radio" name="class">Red Mage</label>
+        <label class="radio-inline"><input type="radio" name="charClass">Fighter</label>
+        <label class="radio-inline"><input type="radio" name="charClass">Red Mage</label>
         <br>
         <h3>Select Gender:</h3>
-        <label class="radio-inline"><input type="radio" name="sex">Male</label>
-        <label class="radio-inline"><input type="radio" name="sex">Female</label>
+        <label class="radio-inline"><input type="radio" name="gender">Male</label>
+        <label class="radio-inline"><input type="radio" name="gender">Female</label>
         <br>
         <h3>Character Stats:</h3>
         <p>HP:</p> <p>MP:</p>

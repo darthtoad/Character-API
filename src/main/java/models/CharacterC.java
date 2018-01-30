@@ -22,10 +22,13 @@ public class CharacterC {
     private String equipment;
     private String effects;
     private String charClass;
+    private String gender;
 
-    public CharacterC(String name, String description) {
+    public CharacterC(String name, String description, String charClass, String gender) {
         this.name = name;
         this.description = description;
+        this.charClass = charClass;
+        this.gender = gender;
     }
 
     public CharacterC(String name, String description, int level, int experience, int HP, int currentHP, int defense, int magicDefense, int strength, int MP, int currentMP, int magic, int dexterity, String spells, String equipment, String effects) {
@@ -65,6 +68,14 @@ public class CharacterC {
         this.equipment = equipment;
         this.effects = effects;
         this.charClass = charClass;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public String getCharClass() {
@@ -222,19 +233,20 @@ public class CharacterC {
         if (currentMP != that.currentMP) return false;
         if (magic != that.magic) return false;
         if (dexterity != that.dexterity) return false;
-        if (!name.equals(that.name)) return false;
-        if (!description.equals(that.description)) return false;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (description != null ? !description.equals(that.description) : that.description != null) return false;
         if (spells != null ? !spells.equals(that.spells) : that.spells != null) return false;
         if (equipment != null ? !equipment.equals(that.equipment) : that.equipment != null) return false;
         if (effects != null ? !effects.equals(that.effects) : that.effects != null) return false;
-        return charClass != null ? charClass.equals(that.charClass) : that.charClass == null;
+        if (charClass != null ? !charClass.equals(that.charClass) : that.charClass != null) return false;
+        return gender != null ? gender.equals(that.gender) : that.gender == null;
     }
 
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + name.hashCode();
-        result = 31 * result + description.hashCode();
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + level;
         result = 31 * result + experience;
         result = 31 * result + HP;
@@ -250,6 +262,7 @@ public class CharacterC {
         result = 31 * result + (equipment != null ? equipment.hashCode() : 0);
         result = 31 * result + (effects != null ? effects.hashCode() : 0);
         result = 31 * result + (charClass != null ? charClass.hashCode() : 0);
+        result = 31 * result + (gender != null ? gender.hashCode() : 0);
         return result;
     }
 
