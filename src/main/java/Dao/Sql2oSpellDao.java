@@ -31,6 +31,19 @@ public class Sql2oSpellDao implements SpellDao{
         Spell curse = new Spell("Curse", "A terrifying curse", 2, 1);
 
         this.add(magicMissle);
+        this.add(fireBall);
+        this.add(blizzard);
+        this.add(magicMissle);
+        this.add(magicMissle);
+        this.add(magicMissle);
+        this.add(magicMissle);
+        this.add(magicMissle);
+        this.add(magicMissle);
+        this.add(magicMissle);
+        this.add(magicMissle);
+        this.add(magicMissle);
+        this.add(magicMissle);
+        this.add(magicMissle);
 
     }
 
@@ -169,8 +182,4 @@ public class Sql2oSpellDao implements SpellDao{
         }
     }
 
-    public void populateSpells() {
-        Spell magicMissle = new Spell("Magic Missle", "A missle of magic", 5, 1);
-        this.add(magicMissle);
-    }
 }
