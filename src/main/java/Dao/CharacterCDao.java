@@ -20,6 +20,7 @@ public interface CharacterCDao {
     List<Spell> getAllSpellsForACharacter(int id);
     List<Effect> getAllEffectsForACharacter(int id);
 
+  
     void update(int id, String name, String description, int level, int experience, int HP, int currentHP, int defense, int magicDefense, int strength, int MP, int currentMP, int magic, int dexterity);
     void attack(CharacterC attacker, CharacterC target);
     void castSpell(Spell spell, CharacterC attacking, List<CharacterC> targets);

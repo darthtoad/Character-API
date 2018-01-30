@@ -1,5 +1,6 @@
 package Dao;
 
+//import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
 import models.CharacterC;
 import models.Effect;
 import models.Equipment;
@@ -13,13 +14,36 @@ import java.util.List;
 
 public class Sql2oCharacterCDao implements CharacterCDao {
     private final Sql2o sql2o;
+    private Sql2oSpellDao spellDao;
 
     public Sql2oCharacterCDao(Sql2o sql2o) {
         this.sql2o = sql2o;
+        this.spellDao = new Sql2oSpellDao(sql2o);
     }
 
     @Override
     public void add(CharacterC characterC) {
+        if (characterC.getCharClass() != null && characterC.getCharClass() != "") {
+            if (characterC.getCharClass().toLowerCase().equals("fighter")) {
+                characterC.setLevel(1);
+                characterC.setHP(15);
+                characterC.setCurrentHP(15);
+                characterC.setDefense(4);
+                characterC.setMagicDefense(2);
+                characterC.setStrength(6);
+                characterC.setDexterity(4);
+            }
+            if (characterC.getCharClass().toLowerCase().equals("red mage")) {
+                characterC.setLevel(1);
+                characterC.setHP(12);
+                characterC.setCurrentHP(12);
+                characterC.setDefense(3);
+                characterC.setMagicDefense(4);
+                characterC.setMagic(5);
+                characterC.setDexterity(4);
+            }
+        }
+
         String sql = "INSERT INTO characters (name, description, level, experience, HP, currentHP, defense, magicDefense, strength, MP, currentMP, magic, dexterity) VALUES (:name, :description, :level, :experience, :HP, :currentHP, :defense, :magicDefense, :strength, :MP, :currentMP, :magic, :dexterity)";
         try (Connection con = sql2o.open()) {
             int id = (int) con.createQuery(sql)
@@ -39,6 +63,24 @@ public class Sql2oCharacterCDao implements CharacterCDao {
             connection.createQuery(sql)
                     .addParameter("equipmentId", equipment.getId())
                     .addParameter("characterId", characterC.getId())
+                    .executeUpdate();
+        } catch (Sql2oException ex) {
+            System.out.println(ex);
+        }
+        characterC.setDefense(characterC.getDefense() + equipment.getDefense());
+        characterC.setMagicDefense(characterC.getMagicDefense() + equipment.getMagicDefense());
+        characterC.setMagic(characterC.getMagic() + equipment.getMagic());
+        characterC.setStrength(characterC.getStrength() + equipment.getStrength());
+        characterC.setDexterity(characterC.getDexterity() + equipment.getDexterity());
+        String sql1 = "UPDATE characters SET defense = :defense, magicDefense = :magicDefense, strength = :strength, magic = :magic, dexterity = :dexterity WHERE id = :id";
+        try (Connection connection = sql2o.open()) {
+            connection.createQuery(sql1)
+                    .addParameter("defense", characterC.getDefense())
+                    .addParameter("magicDefense", characterC.getMagicDefense())
+                    .addParameter("strength", characterC.getStrength())
+                    .addParameter("magic", characterC.getMagic())
+                    .addParameter("dexterity", characterC.getDexterity())
+                    .addParameter("id", characterC.getId())
                     .executeUpdate();
         } catch (Sql2oException ex) {
             System.out.println(ex);
@@ -69,6 +111,35 @@ public class Sql2oCharacterCDao implements CharacterCDao {
         } catch (Sql2oException ex) {
             System.out.println(ex);
         }
+
+        characterC.setHP(characterC.getHP() + effect.getHP());
+        characterC.setCurrentHP(characterC.getCurrentHP() + effect.getCurrentHP());
+        characterC.setDefense(characterC.getDefense() + effect.getDefense());
+        characterC.setMagicDefense(characterC.getMagicDefense() + effect.getMagicDefense());
+        characterC.setStrength(characterC.getStrength() + effect.getStrength());
+        characterC.setMP(characterC.getMP() + effect.getMP());
+        characterC.setCurrentMP(characterC.getCurrentMP() + effect.getCurrentMP());
+        characterC.setMagic(characterC.getMagic() + effect.getMagic());
+        characterC.setDexterity(characterC.getDexterity() + effect.getDexterity());
+
+        String sql1 = "UPDATE characters SET HP = :HP, currentHP = :currentHP, defense = :defense, magicDefense = :magicDefense, strength = :strength, MP = :MP, currentMP = :currentMP, magic = :magic, dexterity = :dexterity WHERE id = :id";
+        try (Connection connection = sql2o.open()) {
+            connection.createQuery(sql1)
+                    .addParameter("HP", characterC.getHP())
+                    .addParameter("currentHP", characterC.getCurrentHP())
+                    .addParameter("defense", characterC.getDefense())
+                    .addParameter("magicDefense", characterC.getMagicDefense())
+                    .addParameter("strength", characterC.getStrength())
+                    .addParameter("MP", characterC.getMP())
+                    .addParameter("currentMP", characterC.getCurrentMP())
+                    .addParameter("magic", characterC.getMagic())
+                    .addParameter("dexterity", characterC.getDexterity())
+                    .addParameter("id", characterC.getId())
+                    .executeUpdate();
+        } catch (Sql2oException ex) {
+            System.out.println(ex);
+        }
+
     }
 
     @Override
@@ -202,13 +273,37 @@ public class Sql2oCharacterCDao implements CharacterCDao {
                     .executeUpdate();
         } catch (Sql2oException ex) {
             System.out.println(ex);
-        };
+        }
+        if (target.getCurrentHP() <= 0) {
+            attacker.setExperience(attacker.getExperience() + (int) (.25 * target.getExperience()));
+            String sql1 = "UPDATE characters SET experience = :experience WHERE id = :id";
+            try (Connection connection = sql2o.open()) {
+                connection.createQuery(sql1)
+                        .addParameter("experience", attacker.getExperience())
+                        .addParameter("id", attacker.getId())
+                        .executeUpdate();
+            } catch (Sql2oException ex) {
+                System.out.println(ex);
+            }
+            this.checkForLevelUp(attacker);
+        }
     }
 
     @Override
     public void castSpell(Spell spell, CharacterC caster, List<CharacterC> targets) {
         int damage = spell.getDamage();
+        damage = damage * (int) (Math.floor(Math.random()) + 1);
         int toHit = caster.getMagic();
+        caster.setCurrentMP(caster.getCurrentHP() - spell.getMP());
+        String sql1 = "UPDATE characters SET currentMP = :currentMP WHERE id = :id";
+        try (Connection connection = sql2o.open()) {
+            connection.createQuery(sql1)
+                    .addParameter("currentMP", caster.getCurrentMP())
+                    .addParameter("id", caster.getId())
+                    .executeUpdate();
+        } catch (Sql2oException ex) {
+            System.out.println(ex);
+        }
         for (CharacterC target : targets) {
             int defense = target.getMagicDefense();
             if (toHit > target.getDexterity()) {
@@ -225,34 +320,158 @@ public class Sql2oCharacterCDao implements CharacterCDao {
             } catch (Sql2oException ex) {
                 System.out.println(ex);
             };
+            if (target.getCurrentHP() <= 0) {
+                caster.setExperience(caster.getExperience() + (int) (.25 * target.getExperience()));
+                String sql2 = "UPDATE characters SET experience = :experience WHERE id = :id";
+                try (Connection connection = sql2o.open()) {
+                    connection.createQuery(sql2)
+                            .addParameter("experience", caster.getExperience())
+                            .addParameter("id", caster.getId())
+                            .executeUpdate();
+                } catch (Sql2oException ex) {
+                    System.out.println(ex);
+                }
+                this.checkForLevelUp(caster);
+            }
         }
     }
 
     @Override
     public void checkForLevelUp(CharacterC characterC) {
         if (characterC.getExperience() > 50 && characterC.getLevel() < 2) {
+            characterC.setCurrentHP(characterC.getHP());
+            characterC.setCurrentMP(characterC.getMP());
             characterC.setLevel(2);
-        } else if (characterC.getExperience() > 100 && characterC.getLevel() < 3) {
-            characterC.setLevel(3);
-        } else if (characterC.getExperience() > 150 && characterC.getLevel() < 4) {
-            characterC.setLevel(4);
-        } else if (characterC.getExperience() > 250 && characterC.getLevel() < 5) {
-            characterC.setLevel(5);
-        } else if (characterC.getExperience() > 400 && characterC.getLevel() < 6) {
-            characterC.setLevel(6);
-        } else if (characterC.getExperience() > 600 && characterC.getLevel() < 7) {
-            characterC.setLevel(7);
-        } else if (characterC.getLevel() > 850 && characterC.getLevel() < 8) {
-            characterC.setLevel(8);
-        } else if (characterC.getLevel() > 1150 && characterC.getLevel() < 9) {
-            characterC.setLevel(9);
-        } else {
-            characterC.setLevel(1);
+            if (characterC.getCharClass() != null) {
+                if (characterC.getCharClass().toLowerCase().equals("fighter")) {
+                    characterC.setHP(characterC.getHP() + 5);
+                    if (characterC.getCharClass().toLowerCase().equals("red mage")) {
+                        characterC.setMagic(characterC.getMagic() + 3);
+                    }
+                }
+            } else {
+                characterC.setDefense(characterC.getDefense() + 2);
+            }
         }
-        String sql = "UPDATE characters SET level = :level WHERE id = :id";
+        if (characterC.getExperience() > 100 && characterC.getLevel() < 3) {
+            characterC.setCurrentHP(characterC.getHP());
+            characterC.setCurrentMP(characterC.getMP());
+            characterC.setLevel(3);
+            if (characterC.getCharClass() != null) {
+                if (characterC.getCharClass().toLowerCase().equals("fighter")) {
+                    characterC.setStrength(characterC.getStrength() + 3);
+                }
+                if (characterC.getCharClass().toLowerCase().equals("red mage")) {
+                    characterC.setMagicDefense(characterC.getMagicDefense() + 3);
+                    this.addSpellToCharacterC(spellDao.findById(3), characterC);
+                }
+            } else {
+                characterC.setMagicDefense(characterC.getMagicDefense() + 2);
+            }
+        }
+        if (characterC.getExperience() > 150 && characterC.getLevel() < 4) {
+            characterC.setCurrentHP(characterC.getHP());
+            characterC.setCurrentMP(characterC.getMP());
+            characterC.setLevel(4);
+            if (characterC.getCharClass() != null) {
+                if (characterC.getCharClass().toLowerCase().equals("fighter")) {
+                    characterC.setDexterity(characterC.getDexterity() + 3);
+                }
+                if (characterC.getCharClass().toLowerCase().equals("red mage")) {
+                    characterC.setMP(characterC.getMP() + 5);
+                }
+            } else {
+                characterC.setDexterity(characterC.getDexterity() + 3);
+            }
+        }
+        if (characterC.getExperience() > 250 && characterC.getLevel() < 5) {
+            characterC.setCurrentHP(characterC.getHP());
+            characterC.setCurrentMP(characterC.getMP());
+            characterC.setLevel(5);
+            if (characterC.getCharClass() != null) {
+                if (characterC.getCharClass().toLowerCase().equals("fighter")) {
+                    characterC.setMagicDefense(characterC.getMagicDefense() + 3);
+                }
+                if (characterC.getCharClass().toLowerCase().equals("red mage")) {
+                    characterC.setDexterity(characterC.getDexterity() + 3);
+                }
+            } else {
+                characterC.setMagic(characterC.getMagic() + 3);
+            }
+        }
+        if (characterC.getExperience() > 400 && characterC.getLevel() < 6) {
+            characterC.setCurrentHP(characterC.getHP());
+            characterC.setCurrentMP(characterC.getMP());
+            characterC.setLevel(6);
+            if (characterC.getCharClass() != null) {
+                if (characterC.getCharClass().toLowerCase().equals("fighter")) {
+                    characterC.setStrength(characterC.getStrength() + 7);
+                }
+                if (characterC.getCharClass().toLowerCase().equals("red mage")) {
+                    characterC.setMagic(characterC.getMagic() + 7);
+                }
+            } else {
+                characterC.setStrength(characterC.getStrength() + 3);
+            }
+        }
+        if (characterC.getExperience() > 600 && characterC.getLevel() < 7) {
+            characterC.setCurrentHP(characterC.getHP());
+            characterC.setCurrentMP(characterC.getMP());
+            characterC.setLevel(7);
+            characterC.setHP(characterC.getHP() + 10);
+        }
+        if (characterC.getLevel() > 850 && characterC.getLevel() < 8) {
+            characterC.setCurrentHP(characterC.getHP());
+            characterC.setCurrentMP(characterC.getMP());
+            characterC.setLevel(8);
+            if (characterC.getCharClass() != null) {
+                if (characterC.getCharClass().toLowerCase().equals("fighter")) {
+                    characterC.setMagicDefense(characterC.getDefense() + 5);
+                }
+                if (characterC.getCharClass().toLowerCase().equals("red mage")) {
+                    characterC.setStrength(characterC.getStrength() + 7);
+                    this.addSpellToCharacterC(spellDao.findById(6), characterC);
+                }
+            } else {
+                characterC.setDefense(characterC.getDefense() + 3);
+            }
+        }
+        if (characterC.getLevel() > 1150 && characterC.getLevel() < 9) {
+            characterC.setCurrentHP(characterC.getHP());
+            characterC.setCurrentMP(characterC.getMP());
+            characterC.setLevel(9);
+            if (characterC.getCharClass() != null) {
+                if (characterC.getCharClass().toLowerCase().equals("fighter")) {
+                    characterC.setStrength(characterC.getStrength() + 10);
+                    characterC.setHP(characterC.getHP() + 10);
+                }
+                if (characterC.getCharClass().toLowerCase().equals("red mage")) {
+                    characterC.setMagic(characterC.getMagic() + 7);
+                    characterC.setStrength(characterC.getStrength() + 4);
+                    characterC.setHP(characterC.getHP() + 10);
+                    this.addSpellToCharacterC(spellDao.findById(7), characterC);
+                }
+            } else {
+                characterC.setMagic(characterC.getMagic() + 5);
+                characterC.setStrength(characterC.getStrength() + 5);
+                characterC.setHP(characterC.getHP() + 10);
+                characterC.setDexterity(characterC.getDexterity() + 5);
+            }
+        }
+        String sql = "UPDATE characters SET level = :level, experience = :experience, HP = :HP, currentHP = :currentHP, defense = :defense, magicDefense = :magicDefense, strength = :strength, MP = :MP, currentMP = :currentMP, magic = :magic, dexterity = :dexterity WHERE id = :id";
         try (Connection connection = sql2o.open()) {
             connection.createQuery(sql)
                     .addParameter("level", characterC.getLevel())
+                    .addParameter("experience", characterC.getExperience())
+                    .addParameter("HP", characterC.getHP())
+                    .addParameter("currentHP", characterC.getCurrentHP())
+                    .addParameter("defense", characterC.getDefense())
+                    .addParameter("magicDefense", characterC.getMagicDefense())
+                    .addParameter("strength", characterC.getStrength())
+                    .addParameter("MP", characterC.getMP())
+                    .addParameter("currentMP", characterC.getCurrentMP())
+                    .addParameter("magic", characterC.getMagic())
+                    .addParameter("dexterity", characterC.getDexterity())
                     .addParameter("id", characterC.getId())
                     .executeUpdate();
         } catch (Sql2oException ex) {
@@ -293,7 +512,25 @@ public class Sql2oCharacterCDao implements CharacterCDao {
         } catch (Sql2oException ex) {
             System.out.println(ex);
         }
-    };
+        characterC.setDefense(characterC.getDefense() - equipment.getDefense());
+        characterC.setMagicDefense(characterC.getMagicDefense() - equipment.getMagicDefense());
+        characterC.setMagic(characterC.getMagic() - equipment.getMagic());
+        characterC.setStrength(characterC.getStrength() - equipment.getStrength());
+        characterC.setDexterity(characterC.getDexterity() - equipment.getDexterity());
+        String sql1 = "UPDATE characters SET defense = :defense, magicDefense = :magicDefense, strength = :strength, magic = :magic, dexterity = :dexterity WHERE id = :id";
+        try (Connection connection = sql2o.open()) {
+            connection.createQuery(sql1)
+                    .addParameter("defense", characterC.getDefense())
+                    .addParameter("magicDefense", characterC.getMagicDefense())
+                    .addParameter("strength", characterC.getStrength())
+                    .addParameter("magic", characterC.getMagic())
+                    .addParameter("dexterity", characterC.getDexterity())
+                    .addParameter("id", characterC.getId())
+                    .executeUpdate();
+        } catch (Sql2oException ex) {
+            System.out.println(ex);
+        }
+    }
 
     public void removeSpellFromCharacterC(Spell spell, CharacterC characterC){
         String sql = "DELETE FROM characters_spells WHERE spellId = :spellId AND characterId = :characterId";
@@ -305,7 +542,7 @@ public class Sql2oCharacterCDao implements CharacterCDao {
         } catch (Sql2oException ex) {
             System.out.println(ex);
         }
-    };
+    }
 
     public void removeEffectFromCharacterC(Effect effect, CharacterC characterC) {
         String sql = "DELETE FROM characters_effects WHERE effectId = :effectId AND characterId = :characterId";
@@ -317,9 +554,10 @@ public class Sql2oCharacterCDao implements CharacterCDao {
         } catch (Sql2oException ex) {
             System.out.println(ex);
         }
-    };
+    }
 
     public void removeAllEquipmentFromCharacterC(CharacterC characterC) {
+        List<Equipment> allEquipment = this.getAllEquipmentForACharacter(characterC.getId());
         String sql = "DELETE FROM characters_equipment WHERE characterId = :characterId";
         try (Connection connection = sql2o.open()) {
             connection.createQuery(sql)
@@ -328,7 +566,28 @@ public class Sql2oCharacterCDao implements CharacterCDao {
         } catch (Sql2oException ex) {
             System.out.println(ex);
         }
-    };
+
+        for(Equipment equipment : allEquipment) {
+            characterC.setDefense(characterC.getDefense() - equipment.getDefense());
+            characterC.setMagicDefense(characterC.getMagicDefense() - equipment.getMagicDefense());
+            characterC.setMagic(characterC.getMagic() - equipment.getMagic());
+            characterC.setStrength(characterC.getStrength() - equipment.getStrength());
+            characterC.setDexterity(characterC.getDexterity() - equipment.getDexterity());
+            String sql1 = "UPDATE characters SET defense = :defense, magicDefense = :magicDefense, strength = :strength, magic = :magic, dexterity = :dexterity WHERE id = :id";
+            try (Connection connection = sql2o.open()) {
+                connection.createQuery(sql1)
+                        .addParameter("defense", characterC.getDefense())
+                        .addParameter("magicDefense", characterC.getMagicDefense())
+                        .addParameter("strength", characterC.getStrength())
+                        .addParameter("magic", characterC.getMagic())
+                        .addParameter("dexterity", characterC.getDexterity())
+                        .addParameter("id", characterC.getId())
+                        .executeUpdate();
+            } catch (Sql2oException ex) {
+                System.out.println(ex);
+            }
+        }
+    }
 
     public void removeAllSpellsFromCharacterC(CharacterC characterC){
         String sql = "DELETE FROM characters_spells WHERE characterId = :characterId";
@@ -339,7 +598,7 @@ public class Sql2oCharacterCDao implements CharacterCDao {
         } catch (Sql2oException ex) {
             System.out.println(ex);
         }
-    };
+    }
 
     public void removeAllEffectsFromCharacterC(CharacterC characterC) {
         String sql = "DELETE FROM characters_effects WHERE characterId = :characterId";
@@ -350,5 +609,10 @@ public class Sql2oCharacterCDao implements CharacterCDao {
         } catch (Sql2oException ex) {
             System.out.println(ex);
         }
-    };
+    }
+//
+//    public void populateCharacters() {
+//        CharacterC goblin = new CharacterC("Goblin", "Goblin", 1, 0, 5, 5, 1, 1, 1, 0, 0, 0, 4, "", "", "");
+//        this.add(goblin);
+//    }
 }

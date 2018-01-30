@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS characters (
     currentMP INTEGER,
     magic INTEGER,
     dexterity INTEGER,
+    charClass VARCHAR
 );
 
 CREATE TABLE IF NOT EXISTS characters_spells (
@@ -40,6 +41,7 @@ CREATE TABLE IF NOT EXISTS spells (
     name VARCHAR,
     description VARCHAR,
     damage INTEGER,
+    MP INTEGER,
     effects VARCHAR
 );
 
