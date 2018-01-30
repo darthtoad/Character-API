@@ -256,7 +256,7 @@ public class Sql2oCharacterCDaoTest {
 
     @Test
     public void checkForLevelUpWorksWithClass() throws Exception {
-        CharacterC characterC = new CharacterC("Mr Poopy-Poop", "A big piece of poop", 1, 1000, 1, 1, 1, 1, 1, 1, 1, 1, 1,"Fighter");
+        CharacterC characterC = new CharacterC("Mr Poopy-Poop", "A big piece of poop", 1, 1000, 1, 1, 1, 1, 1, 1, 1, 1, 1, "Fighter");
         CharacterC characterC1 = setupNewCharacterC1();
         characterCDao.add(characterC);
         int originalLevel = characterC.getLevel();

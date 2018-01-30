@@ -14,4 +14,5 @@ public interface EquipmentDao {
 
     void deleteById(int id);
     void deleteAll();
+    void populateEquipments();
 }
