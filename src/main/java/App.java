@@ -183,7 +183,7 @@ public class App {
         post("/characters/:id/update", "application/json", (request, response) -> {
             int characterId = Integer.parseInt(request.params("id"));
             CharacterC characterC = gson.fromJson(request.body(), CharacterC.class);
-            characterCDao.update(characterId, characterC.getName(), characterC.getDescription(), characterC.getLevel(), characterC.getExperience(), characterC.getHP(), characterC.getCurrentHP(), characterC.getDefense(), characterC.getMagicDefense(), characterC.getStrength(), characterC.getMP(), characterC.getCurrentMP(), characterC.getMagic(), characterC.getDexterity(), characterC.getSpells(), characterC.getEquipment(), characterC.getEffects());
+            characterCDao.update(characterId, characterC.getName(), characterC.getDescription(), characterC.getLevel(), characterC.getExperience(), characterC.getHP(), characterC.getCurrentHP(), characterC.getDefense(), characterC.getMagicDefense(), characterC.getStrength(), characterC.getMP(), characterC.getCurrentMP(), characterC.getMagic(), characterC.getDexterity());
             response.status(201);
             return gson.toJson(characterCDao.findById(characterId));
         });
