@@ -16,6 +16,24 @@ public class Sql2oSpellDao implements SpellDao{
         this.sql2o = sql2o;
     }
 
+    public void populateSpells() {
+        Spell magicMissle = new Spell("Magic Missle", "A basic Magic Missle", 3, 2);
+        Spell fireBall = new Spell("Fire Ball", "A ball of fire", 5, 4);
+        Spell blizzard = new Spell("Blizzard", "A deadly winter storm", 4, 3);
+        Spell thunderWave = new Spell("Thunder Wave", "A thunderous wave of thunder", 4, 3);
+        Spell bloodSplash = new Spell("Blood Splash", "A splash of dangerous blood", 3, 2);
+        Spell waterStrike = new Spell("Water Strike", "A sharp strike of water", 2, 1);
+        Spell quake = new Spell("Quake", "A destructive earth quake", 5, 5);
+        Spell drown = new Spell("Drown", "A curse that causes the sensation of drowning", 3, 2);
+        Spell choke = new Spell("Choke", "A powerful spell that causes the sensation of being unable to breath", 4, 3);
+        Spell burst = new Spell("Burst", "An explosive burst of energy", 5, 4);
+        Spell frostBolt = new Spell("Frost Bolt", "A chilling bolt of frost", 4, 3);
+        Spell curse = new Spell("Curse", "A terrifying curse", 2, 1);
+
+        this.add(magicMissle);
+
+    }
+
     @Override
     public void add(Spell spell) {
         String sql = "INSERT INTO spells (name, description, damage, effects) VALUES (:name, :description, :damage, :effects)";

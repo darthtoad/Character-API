@@ -20,9 +20,10 @@ public class CharacterC {
     private int dexterity;
     private String charClass;
 
-    public CharacterC(String name, String description) {
+    public CharacterC(String name, String description, String charClass) {
         this.name = name;
         this.description = description;
+        this.charClass = charClass;
     }
 
     public CharacterC(String name, String description, int level, int experience, int HP, int currentHP, int defense, int magicDefense, int strength, int MP, int currentMP, int magic, int dexterity) {
@@ -42,7 +43,7 @@ public class CharacterC {
 
     }
 
-    public CharacterC(String name, String description, int level, int experience, int HP, int currentHP, int defense, int magicDefense, int strength, int MP, int currentMP, int magic, int dexterity, String spells, String equipment, String effects, String charClass) {
+    public CharacterC(String name, String description, int level, int experience, int HP, int currentHP, int defense, int magicDefense, int strength, int MP, int currentMP, int magic, int dexterity, String charClass) {
         this.name = name;
         this.description = description;
         this.level = level;
@@ -56,9 +57,6 @@ public class CharacterC {
         this.currentMP = currentMP;
         this.magic = magic;
         this.dexterity = dexterity;
-        this.spells = spells;
-        this.equipment = equipment;
-        this.effects = effects;
         this.charClass = charClass;
     }
 
@@ -208,8 +206,8 @@ public class CharacterC {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + name.hashCode();
-        result = 31 * result + description.hashCode();
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + level;
         result = 31 * result + experience;
         result = 31 * result + HP;

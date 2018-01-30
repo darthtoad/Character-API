@@ -266,6 +266,8 @@ public class App {
 
         //FRONTEND ROUTING
 
+        //---------------------------------------new character----------------------------------------------------------
+
         get("/character/new", (req, res) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             return new ModelAndView(model, "new_character.hbs");
@@ -273,11 +275,22 @@ public class App {
 
         post("/character/new", (req, res) -> {
             Map<String, Object> model = new HashMap<String, Object>();
-            CharacterC character = new CharacterC(req.queryParams("name"), req.queryParams("description"));
+            CharacterC character = new CharacterC(req.queryParams("name"), req.queryParams("description"), req.queryParams("charClass"), req.queryParams("gender"));
             characterCDao.add(character);
             model.put("character", character);
             return new ModelAndView(model, "success.hbs");
         }, new HandlebarsTemplateEngine());
+
+        //----------------------------------------view character--------------------------------------------------------
+
+        get("/character/:id", (req, res) -> {
+            Map<String, Object> model = new HashMap<String, Object>();
+            int characterId = Integer.parseInt(req.params("id"));
+            model.put("character", characterCDao.findById(characterId));
+            return new ModelAndView(model, "character.hbs");
+        }, new HandlebarsTemplateEngine());
+
+
 
 
     }
