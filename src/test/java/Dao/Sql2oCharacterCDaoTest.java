@@ -281,6 +281,28 @@ public class Sql2oCharacterCDaoTest {
     }
 
     @Test
+    public void findTurnOrderFindsTurnOrder() throws Exception {
+        CharacterC characterC = setupNewCharacterC();
+        CharacterC characterC1 = setupNewCharacterC1();
+        CharacterC characterC2 = setupNewCharacterC2();
+        CharacterC characterC3 = new CharacterC("Paul", "A guy named Paul", 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+        characterCDao.add(characterC);
+        characterCDao.add(characterC1);
+        characterCDao.add(characterC2);
+        characterCDao.add(characterC3);
+        List<CharacterC> characterCList = new ArrayList<>();
+        characterCList.add(characterC);
+        characterCList.add(characterC1);
+        characterCList.add(characterC2);
+        characterCList.add(characterC3);
+        List<Integer> turnOrder = characterCDao.findTurnOrder(characterCList);
+        assertTrue(turnOrder.get(0) == 1);
+        assertTrue(turnOrder.get(1) == 5);
+        assertTrue(turnOrder.get(2) == 8);
+        assertTrue(turnOrder.get(3) == 9);
+    }
+
+    @Test
     public void deleteByIdDeletesCharacterCorrectly() throws Exception {
         CharacterC characterC = setupNewCharacterC();
         CharacterC characterC1 = setupNewCharacterC1();

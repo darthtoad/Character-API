@@ -353,6 +353,36 @@ public class Sql2oCharacterCDao implements CharacterCDao {
         }
     }
 
+    public List<Integer> findTurnOrder(List<CharacterC> characters) {
+        List<Integer> turnOrder = new ArrayList<>();
+        for (CharacterC characterC : characters) {
+            if (characterC.getDexterity() > 1) {
+                turnOrder.add(characterC.getId());
+            }
+        }
+        return turnOrder;
+    }
+
+    public boolean runAway(List<CharacterC> PCs, List<CharacterC> enemies) {
+        int bestPC = 0;
+        for (CharacterC characterC : PCs) {
+            if (characterC.getDexterity() > bestPC) {
+                bestPC = characterC.getDexterity();
+            }
+        }
+        int bestEnemy = 0;
+        for (CharacterC characterC : enemies) {
+            if (characterC.getDexterity() > bestEnemy) {
+                bestEnemy = characterC.getDexterity();
+            }
+        }
+        if (bestPC > bestEnemy) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     @Override
     public void checkForLevelUp(CharacterC characterC) {
         if (characterC.getExperience() > 50 && characterC.getLevel() < 2) {
