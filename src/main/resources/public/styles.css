@@ -1,7 +1,7 @@
 body {
     background-image: url("/images/background2.jpg");
     background-repeat: no-repeat;
-    background-size: 100% 100%;
+    background-size: 2550px 100%;
     font-family: 'Share Tech Mono', monospace;
 }
 
@@ -33,6 +33,10 @@ body {
     background: rgba(161, 165, 173, 0.5);
 }
 
+.panel {
+    background: rgba(161, 165, 173, 0.5);
+}
+
 .charPorts {
     height: 160px;
     width: 120px;
@@ -50,8 +54,9 @@ body {
     padding-bottom: 20px;
 }
 
-.detailsWell {
+.detailsPanel {
     margin: auto;
+    padding-bottom: 300px;
 }
 
 .gamelogWell {
