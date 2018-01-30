@@ -44,15 +44,15 @@ public class Sql2oCharacterCDaoTest {
     }
 
     public CharacterC setupNewCharacterC() {
-        return new CharacterC("Fog", "A blonde hero who is not name Cloud", 4, 588, 49, 38, 5, 4, 7, 3, 2, 5, 8, "1, 3, 4", "2, 5, 7", "3");
+        return new CharacterC("Fog", "A blonde hero who is not name Cloud", 4, 588, 49, 38, 5, 4, 7, 3, 2, 5, 8);
     }
 
     public CharacterC setupNewCharacterC1() {
-        return new CharacterC("Erin", "A red haired girl who is not Aeris", 3, 495, 35, 30, 4, 6, 5, 6, 4, 10, 9, "5, 6, 7, 10, 15", "1, 9, 17", "");
+        return new CharacterC("Erin", "A red haired girl who is not Aeris", 3, 495, 35, 30, 4, 6, 5, 6, 4, 10, 9);
     }
 
     public CharacterC setupNewCharacterC2() {
-        return new CharacterC("Barretaccus", "Not Mr. T or Barret", 5, 600, 66, 44, 5, 2, 10, 1, 0, 3, 5, "2", "10, 15, 20, 25", "1");
+        return new CharacterC("Barretaccus", "Not Mr. T or Barret", 5, 600, 66, 44, 5, 2, 10, 1, 0, 3, 5);
     }
 
     @Before
@@ -235,11 +235,9 @@ public class Sql2oCharacterCDaoTest {
         String originalName = characterCDao.findById(testCharacterC.getId()).getName();
         String originalDescription = characterCDao.findById(testCharacterC.getId()).getDescription();
         int originalLevel = characterCDao.findById(testCharacterC.getId()).getLevel();
-        String originalEffects = characterCDao.findById(testCharacterC.getId()).getEffects();
-        characterCDao.update(testCharacterC.getId(), "Fire", "He likes to burn things", 3, 50, 5, 5, 5, 5, 5, 5, 5, 5, 5, "1, 4, 5", "", "144", "");
+        characterCDao.update(testCharacterC.getId(), "Fire", "He likes to burn things", 3, 50, 5, 5, 5, 5, 5, 5, 5, 5, 5);
         assertNotEquals(originalLevel, characterCDao.findById(testCharacterC.getId()).getLevel());
         assertNotEquals(originalDescription, characterCDao.findById(testCharacterC.getId()).getDescription());
-        assertNotEquals(originalEffects, characterCDao.findById(testCharacterC.getId()).getEffects());
         assertNotEquals(originalName, characterCDao.findById(testCharacterC.getId()).getName());
     }
 
@@ -258,7 +256,7 @@ public class Sql2oCharacterCDaoTest {
 
     @Test
     public void checkForLevelUpWorksWithClass() throws Exception {
-        CharacterC characterC = new CharacterC("Mr Poopy-Poop", "A big piece of poop", 1, 1000, 1, 1, 1, 1, 1, 1, 1, 1, 1, "1", "", "", "Fighter");
+        CharacterC characterC = new CharacterC("Mr Poopy-Poop", "A big piece of poop", 1, 1000, 1, 1, 1, 1, 1, 1, 1, 1, 1,"Fighter");
         CharacterC characterC1 = setupNewCharacterC1();
         characterCDao.add(characterC);
         int originalLevel = characterC.getLevel();
