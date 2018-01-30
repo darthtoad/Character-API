@@ -28,6 +28,12 @@ public class CharacterC {
         this.description = description;
     }
 
+    public CharacterC(String name, String description, String charClass) {
+        this.name = name;
+        this.description = description;
+        this.charClass = charClass;
+    }
+
     public CharacterC(String name, String description, int level, int experience, int HP, int currentHP, int defense, int magicDefense, int strength, int MP, int currentMP, int magic, int dexterity, String spells, String equipment, String effects) {
         this.name = name;
         this.description = description;

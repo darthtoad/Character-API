@@ -79,6 +79,13 @@ public class Sql2oCharacterCDaoTest {
     }
 
     @Test
+    public void addCharacterWithClassAddsCorrectly() throws Exception {
+        CharacterC fighter = new CharacterC("Fighter", "A fighter", "fighter");
+        characterCDao.add(fighter);
+        assertEquals(6, fighter.getStrength());
+    }
+
+    @Test
     public void addEquipmentToCharacterAssociatesCorrectly() throws Exception {
         CharacterC characterC = setupNewCharacterC();
         CharacterC characterC1 = setupNewCharacterC1();

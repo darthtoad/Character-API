@@ -22,26 +22,30 @@ public class Sql2oCharacterCDao implements CharacterCDao {
     @Override
     public void add(CharacterC characterC) {
         String sql = "INSERT INTO characters (name, description, level, experience, HP, currentHP, defense, magicDefense, strength, MP, currentMP, magic, dexterity, spells, equipment, effects) VALUES (:name, :description, :level, :experience, :HP, :currentHP, :defense, :magicDefense, :strength, :MP, :currentMP, :magic, :dexterity, :spells, :equipment, :effects)";
-//        if (characterC.getCharClass() != null && characterC.getCharClass() != "") {
+        if (characterC.getCharClass() != null && characterC.getCharClass() != "") {
 //            if (characterC.getCharClass().toLowerCase().equals("fighter")) {
-//                try (Connection connection = sql2o.open()){
-//                    int id = (int) connection.createQuery(sql)
-//                            .addParameter("name", characterC.getName())
-//                            .addParameter("description", characterC.getDescription())
-//                            .addParameter("level", 1)
-//                            .addParameter("experience", 0)
-//                            .addParameter("HP", 15)
-//                            .addParameter("currentHP", 15)
-//                            .addParameter("defense", 4)
-//                            .addParameter("magicDefense", 2)
-//                            .addParameter("strength", 6)
-//                            .addParameter("MP", 0)
-//                            .addParameter("currentMP", 5)
-//                            .addParameter("magic", 0)
-//                            .addParameter("dexterity", 4)
-//                            .addParameter("spells", "")
-//                            .addParameter("equipment", "1, 2, 3")
-//                            .addParameter("effects", "")
+//                characterC.setLevel(1);
+//                characterC.setHP(15);
+//                characterC.setCurrentHP(15);
+//                characterC.setDefense(4);
+//                characterC.setMagicDefense(2);
+//                characterC.setStrength(6);
+//                characterC.setDexterity(4);
+//                characterC.setEquipment("1, 2, 3");
+//            }
+//            if (characterC.getCharClass().toLowerCase().equals("red mage")) {
+//                characterC.setLevel(1);
+//                characterC.setHP(12);
+//                characterC.setCurrentHP(12);
+//                characterC.setDefense(3);
+//                characterC.setMagicDefense(4);
+//                characterC.setMagic(5);
+//                characterC.setDexterity(4);
+//                characterC.setSpells("1, 2");
+//                characterC.setEquipment("1, 2, 3");
+//
+//            }
+
 //                            .addColumnMapping("NAME", "name")
 //                            .addColumnMapping("DESCRIPTION", "description")
 //                            .addColumnMapping("LEVEL", "level")
@@ -58,14 +62,6 @@ public class Sql2oCharacterCDao implements CharacterCDao {
 //                            .addColumnMapping("SPELLS", "spells")
 //                            .addColumnMapping("EQUIPMENT", "equipment")
 //                            .addColumnMapping("EFFECTS", "effects")
-//                            .executeUpdate();
-//                }
-//            }
-//
-//            if (characterC.getCharClass().toLowerCase().equals("wizard")) {
-//
-//            }
-//        } else {
             try (Connection con = sql2o.open()) {
                 int id = (int) con.createQuery(sql)
                         .bind(characterC)
@@ -76,7 +72,7 @@ public class Sql2oCharacterCDao implements CharacterCDao {
                 System.out.println(ex);
             }
         }
-//    }
+    }
 
     @Override
     public void addEquipmentToCharacterC(Equipment equipment, CharacterC characterC){
