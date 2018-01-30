@@ -18,14 +18,12 @@ public class CharacterC {
     private int currentMP;
     private int magic;
     private int dexterity;
-    private String spells;
-    private String equipment;
-    private String effects;
     private String charClass;
 
-    public CharacterC(String name, String description) {
+    public CharacterC(String name, String description, String charClass) {
         this.name = name;
         this.description = description;
+        this.charClass = charClass;
     }
 
     public CharacterC(String name, String description, String charClass) {
@@ -34,7 +32,7 @@ public class CharacterC {
         this.charClass = charClass;
     }
 
-    public CharacterC(String name, String description, int level, int experience, int HP, int currentHP, int defense, int magicDefense, int strength, int MP, int currentMP, int magic, int dexterity, String spells, String equipment, String effects) {
+    public CharacterC(String name, String description, int level, int experience, int HP, int currentHP, int defense, int magicDefense, int strength, int MP, int currentMP, int magic, int dexterity) {
         this.name = name;
         this.description = description;
         this.level = level;
@@ -48,12 +46,10 @@ public class CharacterC {
         this.currentMP = currentMP;
         this.magic = magic;
         this.dexterity = dexterity;
-        this.spells = spells;
-        this.equipment = equipment;
-        this.effects = effects;
+
     }
 
-    public CharacterC(String name, String description, int level, int experience, int HP, int currentHP, int defense, int magicDefense, int strength, int MP, int currentMP, int magic, int dexterity, String spells, String equipment, String effects, String charClass) {
+    public CharacterC(String name, String description, int level, int experience, int HP, int currentHP, int defense, int magicDefense, int strength, int MP, int currentMP, int magic, int dexterity, String charClass) {
         this.name = name;
         this.description = description;
         this.level = level;
@@ -67,9 +63,6 @@ public class CharacterC {
         this.currentMP = currentMP;
         this.magic = magic;
         this.dexterity = dexterity;
-        this.spells = spells;
-        this.equipment = equipment;
-        this.effects = effects;
         this.charClass = charClass;
     }
 
@@ -193,22 +186,6 @@ public class CharacterC {
         this.dexterity = dexterity;
     }
 
-    public String getSpells() {
-        return spells;
-    }
-
-    public void setSpells(String spells) {
-        this.spells = spells;
-    }
-
-    public String getEquipment() {
-        return equipment;
-    }
-
-    public void setEquipment(String equipment) {
-        this.equipment = equipment;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -228,19 +205,15 @@ public class CharacterC {
         if (currentMP != that.currentMP) return false;
         if (magic != that.magic) return false;
         if (dexterity != that.dexterity) return false;
-        if (!name.equals(that.name)) return false;
         if (!description.equals(that.description)) return false;
-        if (spells != null ? !spells.equals(that.spells) : that.spells != null) return false;
-        if (equipment != null ? !equipment.equals(that.equipment) : that.equipment != null) return false;
-        if (effects != null ? !effects.equals(that.effects) : that.effects != null) return false;
-        return charClass != null ? charClass.equals(that.charClass) : that.charClass == null;
+        return name != null ? name.equals(that.name) : that.name == null;
     }
 
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + name.hashCode();
-        result = 31 * result + description.hashCode();
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + level;
         result = 31 * result + experience;
         result = 31 * result + HP;
@@ -252,19 +225,8 @@ public class CharacterC {
         result = 31 * result + currentMP;
         result = 31 * result + magic;
         result = 31 * result + dexterity;
-        result = 31 * result + (spells != null ? spells.hashCode() : 0);
-        result = 31 * result + (equipment != null ? equipment.hashCode() : 0);
-        result = 31 * result + (effects != null ? effects.hashCode() : 0);
-        result = 31 * result + (charClass != null ? charClass.hashCode() : 0);
         return result;
     }
 
-    public String getEffects() {
-        return effects;
-    }
-
-    public void setEffects(String effects) {
-        this.effects = effects;
-    }
 
 }

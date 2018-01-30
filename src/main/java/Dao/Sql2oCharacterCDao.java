@@ -23,7 +23,6 @@ public class Sql2oCharacterCDao implements CharacterCDao {
 
     @Override
     public void add(CharacterC characterC) {
-        String sql = "INSERT INTO characters (name, description, level, experience, HP, currentHP, defense, magicDefense, strength, MP, currentMP, magic, dexterity, spells, equipment, effects, charClass) VALUES (:name, :description, :level, :experience, :HP, :currentHP, :defense, :magicDefense, :strength, :MP, :currentMP, :magic, :dexterity, :spells, :equipment, :effects, :charClass)";
         if (characterC.getCharClass() != null && characterC.getCharClass() != "") {
             if (characterC.getCharClass().toLowerCase().equals("fighter")) {
                 characterC.setLevel(1);
@@ -33,7 +32,6 @@ public class Sql2oCharacterCDao implements CharacterCDao {
                 characterC.setMagicDefense(2);
                 characterC.setStrength(6);
                 characterC.setDexterity(4);
-                characterC.setEquipment("1, 2, 3");
             }
             if (characterC.getCharClass().toLowerCase().equals("red mage")) {
                 characterC.setLevel(1);
@@ -43,28 +41,10 @@ public class Sql2oCharacterCDao implements CharacterCDao {
                 characterC.setMagicDefense(4);
                 characterC.setMagic(5);
                 characterC.setDexterity(4);
-                characterC.setSpells("1, 2");
-                characterC.setEquipment("1, 2, 3");
-
             }
         }
 
-//                            .addColumnMapping("NAME", "name")
-//                            .addColumnMapping("DESCRIPTION", "description")
-//                            .addColumnMapping("LEVEL", "level")
-//                            .addColumnMapping("EXPERIENCE", "experience")
-//                            .addColumnMapping("HP", "HP")
-//                            .addColumnMapping("CURRENTHP", "currentHP")
-//                            .addColumnMapping("DEFENSE", "defense")
-//                            .addColumnMapping("MAGICDEFENSE", "magicDefense")
-//                            .addColumnMapping("STRENGTH", "strength")
-//                            .addColumnMapping("MP", "MP")
-//                            .addColumnMapping("CURRENTMP", "currentMP")
-//                            .addColumnMapping("MAGIC", "magic")
-//                            .addColumnMapping("DEXTERITY", "dexterity")
-//                            .addColumnMapping("SPELLS", "spells")
-//                            .addColumnMapping("EQUIPMENT", "equipment")
-//                            .addColumnMapping("EFFECTS", "effects")
+        String sql = "INSERT INTO characters (name, description, level, experience, HP, currentHP, defense, magicDefense, strength, MP, currentMP, magic, dexterity) VALUES (:name, :description, :level, :experience, :HP, :currentHP, :defense, :magicDefense, :strength, :MP, :currentMP, :magic, :dexterity)";
         try (Connection con = sql2o.open()) {
             int id = (int) con.createQuery(sql)
                     .bind(characterC)
@@ -248,8 +228,8 @@ public class Sql2oCharacterCDao implements CharacterCDao {
     }
 
     @Override
-    public void update(int id, String name, String description, int level, int experience, int HP, int currentHP, int defense, int magicDefense, int strength, int MP, int currentMP, int magic, int dexterity, String spells, String equipment, String effects, String charClass) {
-        String sql = "UPDATE characters SET name = :name, description = :description, level = :level, experience = :experience, HP = :HP, currentHP = :currentHP, defense = :defense, magicDefense = :magicDefense, strength = :strength, MP = :MP, currentMP = :currentMP, magic = :magic, dexterity = :dexterity, spells = :spells, equipment = :equipment, effects = :effects, charClass = :charClass WHERE id = :id";
+    public void update(int id, String name, String description, int level, int experience, int HP, int currentHP, int defense, int magicDefense, int strength, int MP, int currentMP, int magic, int dexterity) {
+        String sql = "UPDATE characters SET name = :name, description = :description, level = :level, experience = :experience, HP = :HP, currentHP = :currentHP, defense = :defense, magicDefense = :magicDefense, strength = :strength, MP = :MP, currentMP = :currentMP, magic = :magic, dexterity = :dexterity  WHERE id = :id";
         try (Connection connection = sql2o.open()) {
             connection.createQuery(sql)
                     .addParameter("id", id)
@@ -266,10 +246,6 @@ public class Sql2oCharacterCDao implements CharacterCDao {
                     .addParameter("currentMP", currentMP)
                     .addParameter("magic", magic)
                     .addParameter("dexterity", dexterity)
-                    .addParameter("spells", spells)
-                    .addParameter("equipment", equipment)
-                    .addParameter("effects", effects)
-                    .addParameter("charClass", charClass)
                     .executeUpdate();
         } catch (Sql2oException ex) {
             System.out.println(ex);
