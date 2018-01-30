@@ -242,6 +242,19 @@ public class Sql2oCharacterCDaoTest {
     }
 
     @Test
+    public void checkForLevelUpWorksWithClass() throws Exception {
+        CharacterC characterC = new CharacterC("Mr Poopy-Poop", "A big piece of poop", 1, 1000, 1, 1, 1, 1, 1, 1, 1, 1, 1, "1", "", "", "Fighter");
+        CharacterC characterC1 = setupNewCharacterC1();
+        characterCDao.add(characterC);
+        int originalLevel = characterC.getLevel();
+        int originalStrength = characterC.getStrength();
+        characterCDao.checkForLevelUp(characterC);
+        assertNotEquals(originalLevel, characterCDao.findById(characterC.getId()).getLevel());
+        assertEquals(7, characterCDao.findById(characterC.getId()).getLevel());
+        assertNotEquals(originalStrength, characterCDao.findById(characterC.getId()).getStrength());
+    }
+
+    @Test
     public void castSpellChangesMP() throws Exception {
         CharacterC characterC = setupNewCharacterC();
         CharacterC characterC1 = setupNewCharacterC1();

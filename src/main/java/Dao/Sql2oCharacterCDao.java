@@ -340,11 +340,12 @@ public class Sql2oCharacterCDao implements CharacterCDao {
             if (characterC.getCharClass() != null) {
                 if (characterC.getCharClass().toLowerCase().equals("fighter")) {
                     characterC.setHP(characterC.getHP() + 5);
-                } else if (characterC.getCharClass().toLowerCase().equals("red mage")) {
-                    characterC.setMagic(characterC.getMagic() + 3);
-                } else {
-                    characterC.setDefense(characterC.getDefense() + 2);
+                    if (characterC.getCharClass().toLowerCase().equals("red mage")) {
+                        characterC.setMagic(characterC.getMagic() + 3);
+                    }
                 }
+            } else {
+                characterC.setDefense(characterC.getDefense() + 2);
             }
         }
         if (characterC.getExperience() > 100 && characterC.getLevel() < 3) {
@@ -354,12 +355,13 @@ public class Sql2oCharacterCDao implements CharacterCDao {
             if (characterC.getCharClass() != null) {
                 if (characterC.getCharClass().toLowerCase().equals("fighter")) {
                     characterC.setStrength(characterC.getStrength() + 3);
-                } else if (characterC.getCharClass().toLowerCase().equals("red mage")) {
+                }
+                if (characterC.getCharClass().toLowerCase().equals("red mage")) {
                     characterC.setMagicDefense(characterC.getMagicDefense() + 3);
                     this.addSpellToCharacterC(spellDao.findById(3), characterC);
-                } else {
-                    characterC.setMagicDefense(characterC.getMagicDefense() + 2);
                 }
+            } else {
+                characterC.setMagicDefense(characterC.getMagicDefense() + 2);
             }
         }
         if (characterC.getExperience() > 150 && characterC.getLevel() < 4) {
@@ -369,11 +371,12 @@ public class Sql2oCharacterCDao implements CharacterCDao {
             if (characterC.getCharClass() != null) {
                 if (characterC.getCharClass().toLowerCase().equals("fighter")) {
                     characterC.setDexterity(characterC.getDexterity() + 3);
-                } else if (characterC.getCharClass().toLowerCase().equals("red mage")) {
-                    characterC.setMP(characterC.getMP() + 5);
-                } else {
-                    characterC.setDexterity(characterC.getDexterity() + 3);
                 }
+                if (characterC.getCharClass().toLowerCase().equals("red mage")) {
+                    characterC.setMP(characterC.getMP() + 5);
+                }
+            } else {
+                characterC.setDexterity(characterC.getDexterity() + 3);
             }
         }
         if (characterC.getExperience() > 250 && characterC.getLevel() < 5) {
@@ -383,11 +386,12 @@ public class Sql2oCharacterCDao implements CharacterCDao {
             if (characterC.getCharClass() != null) {
                 if (characterC.getCharClass().toLowerCase().equals("fighter")) {
                     characterC.setMagicDefense(characterC.getMagicDefense() + 3);
-                } else if (characterC.getCharClass().toLowerCase().equals("red mage")) {
-                    characterC.setDexterity(characterC.getDexterity() + 3);
-                } else {
-                    characterC.setMagic(characterC.getMagic() + 3);
                 }
+                if (characterC.getCharClass().toLowerCase().equals("red mage")) {
+                    characterC.setDexterity(characterC.getDexterity() + 3);
+                }
+            } else {
+                characterC.setMagic(characterC.getMagic() + 3);
             }
         }
         if (characterC.getExperience() > 400 && characterC.getLevel() < 6) {
@@ -397,11 +401,12 @@ public class Sql2oCharacterCDao implements CharacterCDao {
             if (characterC.getCharClass() != null) {
                 if (characterC.getCharClass().toLowerCase().equals("fighter")) {
                     characterC.setStrength(characterC.getStrength() + 7);
-                } else if (characterC.getCharClass().toLowerCase().equals("red mage")) {
-                    characterC.setMagic(characterC.getMagic() + 7);
-                } else {
-                    characterC.setStrength(characterC.getStrength() + 3);
                 }
+                if (characterC.getCharClass().toLowerCase().equals("red mage")) {
+                    characterC.setMagic(characterC.getMagic() + 7);
+                }
+            } else {
+                characterC.setStrength(characterC.getStrength() + 3);
             }
         }
         if (characterC.getExperience() > 600 && characterC.getLevel() < 7) {
@@ -417,12 +422,13 @@ public class Sql2oCharacterCDao implements CharacterCDao {
             if (characterC.getCharClass() != null) {
                 if (characterC.getCharClass().toLowerCase().equals("fighter")) {
                     characterC.setMagicDefense(characterC.getDefense() + 5);
-                } else if (characterC.getCharClass().toLowerCase().equals("red mage")) {
+                }
+                if (characterC.getCharClass().toLowerCase().equals("red mage")) {
                     characterC.setStrength(characterC.getStrength() + 7);
                     this.addSpellToCharacterC(spellDao.findById(6), characterC);
-                } else {
-                    characterC.setDefense(characterC.getDefense() + 3);
                 }
+            } else {
+                characterC.setDefense(characterC.getDefense() + 3);
             }
         }
         if (characterC.getLevel() > 1150 && characterC.getLevel() < 9) {
@@ -433,17 +439,18 @@ public class Sql2oCharacterCDao implements CharacterCDao {
                 if (characterC.getCharClass().toLowerCase().equals("fighter")) {
                     characterC.setStrength(characterC.getStrength() + 10);
                     characterC.setHP(characterC.getHP() + 10);
-                } else if (characterC.getCharClass().toLowerCase().equals("red mage")) {
+                }
+                if (characterC.getCharClass().toLowerCase().equals("red mage")) {
                     characterC.setMagic(characterC.getMagic() + 7);
                     characterC.setStrength(characterC.getStrength() + 4);
                     characterC.setHP(characterC.getHP() + 10);
                     this.addSpellToCharacterC(spellDao.findById(7), characterC);
-                } else {
-                    characterC.setMagic(characterC.getMagic() + 5);
-                    characterC.setStrength(characterC.getStrength() + 5);
-                    characterC.setHP(characterC.getHP() + 10);
-                    characterC.setDexterity(characterC.getDexterity() + 5);
                 }
+            } else {
+                characterC.setMagic(characterC.getMagic() + 5);
+                characterC.setStrength(characterC.getStrength() + 5);
+                characterC.setHP(characterC.getHP() + 10);
+                characterC.setDexterity(characterC.getDexterity() + 5);
             }
         }
         String sql = "UPDATE characters SET level = :level, experience = :experience, HP = :HP, currentHP = :currentHP, defense = :defense, magicDefense = :magicDefense, strength = :strength, MP = :MP, currentMP = :currentMP, magic = :magic, dexterity = :dexterity WHERE id = :id";
