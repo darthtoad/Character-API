@@ -133,15 +133,33 @@ public class Sql2oCharacterCDao implements CharacterCDao {
         }
 
 //        characterC.setHP(characterC.getHP() + effect.getHP());
-//        private int currentHP;
-//        private int defense;
-//        private int magicDefense;
-//        private int strength;
-//        private int MP;
-//        private int currentMP;
-//        private int magic;
-//        private int dexterity;
-//        private String other;
+//        characterC.setCurrentHP(characterC.getCurrentHP() + effect.getCurrentHP());
+//        characterC.setDefense(characterC.getDefense() + effect.getDefense());
+//        characterC.setMagicDefense(characterC.getMagicDefense() + effect.getMagicDefense());
+//        characterC.setStrength(characterC.getStrength() + effect.getStrength());
+//        characterC.setMP(characterC.getMP() + effect.getMP());
+//        characterC.setCurrentMP(characterC.getCurrentMP() + effect.getCurrentMP());
+//        characterC.setMagic(characterC.getMagic() + effect.getMagic());
+//        characterC.setDexterity(characterC.getDexterity() + effect.getDexterity());
+//
+//        String sql1 = "UPDATE characters SET HP = :HP, currentHP = :currentHP, defense = :defense, magicDefense = :magicDefense, strength = :strength, MP = :MP, currentMP = :currentMP, magic = :magic, dexterity = :dexterity WHERE id = :id";
+//        try (Connection connection = sql2o.open()) {
+//            connection.createQuery(sql1)
+//                    .addParameter("HP", characterC.getHP())
+//                    .addParameter("currentHP", characterC.getCurrentHP())
+//                    .addParameter("defense", characterC.getDefense())
+//                    .addParameter("magicDefense", characterC.getMagicDefense())
+//                    .addParameter("strength", characterC.getStrength())
+//                    .addParameter("MP", characterC.getMP())
+//                    .addParameter("currentMP", characterC.getCurrentMP())
+//                    .addParameter("magic", characterC.getMagic())
+//                    .addParameter("dexterity", characterC.getDexterity())
+//                    .addParameter("id", characterC.getId())
+//                    .executeUpdate();
+//        } catch (Sql2oException ex) {
+//            System.out.println(ex);
+//        }
+
     }
 
     @Override

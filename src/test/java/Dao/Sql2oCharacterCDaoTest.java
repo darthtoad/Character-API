@@ -138,6 +138,21 @@ public class Sql2oCharacterCDaoTest {
     }
 
     @Test
+    public void addEffectChangesStats() throws Exception {
+        CharacterC characterC = setupNewCharacterC();
+        CharacterC characterC1 = setupNewCharacterC1();
+        Effect effect = setupNewEffect();
+        characterCDao.add(characterC);
+        characterCDao.add(characterC1);
+        effectDao.add(effect);
+        int originalCurrentHP = characterCDao.findById(characterC.getId()).getCurrentHP();
+        characterCDao.addEffectToCharacterC(effect, characterC);
+        assertNotEquals(originalCurrentHP, characterC.getCurrentHP());
+        assertEquals(1, characterCDao.getAllEffectsForACharacter(characterC.getId()).size());
+        assertTrue(characterCDao.getAllEffectsForACharacter(characterC.getId()).contains(effect));
+    }
+
+    @Test
     public void findByIdFindsCharacterCorrectly() throws Exception {
         CharacterC characterC = setupNewCharacterC();
         CharacterC characterC1 = setupNewCharacterC1();
