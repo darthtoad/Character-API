@@ -37,6 +37,8 @@ public class App {
 
         connection = sql2o.open();
 
+        //API
+
         get("/", (req, res) -> {
             Map<String, Object> model = new HashMap<>();
 
@@ -261,5 +263,22 @@ public class App {
             response.status(201);
             return gson.toJson("Your spell has been deleted");
         });
+
+        //FRONTEND ROUTING
+
+        get("/character/new", (req, res) -> {
+            Map<String, Object> model = new HashMap<String, Object>();
+            return new ModelAndView(model, "new_character.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        post("/character/new", (req, res) -> {
+            Map<String, Object> model = new HashMap<String, Object>();
+            CharacterC character = new CharacterC(req.queryParams("name"), req.queryParams("description"));
+            characterCDao.add(character);
+            model.put("character", character);
+            return new ModelAndView(model, "success.hbs");
+        }, new HandlebarsTemplateEngine());
+
+
     }
 }
