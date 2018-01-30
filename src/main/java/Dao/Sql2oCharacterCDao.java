@@ -336,6 +336,44 @@ public class Sql2oCharacterCDao implements CharacterCDao {
         }
     }
 
+    public List<Integer> findTurnOrder(List<CharacterC> characters) {
+        List<Integer> turnOrder = new ArrayList<>();
+        int originalSize = characters.size();
+        for (int i = 0; i < originalSize; i++) {
+            int bestDex = 0;
+            int id = 0;
+            for (CharacterC characterC : characters) {
+                if (characterC.getDexterity() > 0 && bestDex < characterC.getDexterity()) {
+                    bestDex = characterC.getDexterity();
+                    id = characterC.getId();
+                }
+            }
+            turnOrder.add(id);
+            characters.remove(this.findById(id));
+        }
+        return turnOrder;
+    }
+
+    public boolean runAway(List<CharacterC> PCs, List<CharacterC> enemies) {
+        int bestPC = 0;
+        for (CharacterC characterC : PCs) {
+            if (characterC.getDexterity() > bestPC) {
+                bestPC = characterC.getDexterity();
+            }
+        }
+        int bestEnemy = 0;
+        for (CharacterC characterC : enemies) {
+            if (characterC.getDexterity() > bestEnemy) {
+                bestEnemy = characterC.getDexterity();
+            }
+        }
+        if (bestPC > bestEnemy) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     @Override
     public void checkForLevelUp(CharacterC characterC) {
         if (characterC.getExperience() > 50 && characterC.getLevel() < 2) {
@@ -610,9 +648,3 @@ public class Sql2oCharacterCDao implements CharacterCDao {
             System.out.println(ex);
         }
     }
-//
-//    public void populateCharacters() {
-//        CharacterC goblin = new CharacterC("Goblin", "Goblin", 1, 0, 5, 5, 1, 1, 1, 0, 0, 0, 4, "", "", "");
-//        this.add(goblin);
-//    }
-}

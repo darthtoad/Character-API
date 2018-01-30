@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS characters (
     magic INTEGER,
     dexterity INTEGER,
     charClass VARCHAR
+
 );
 
 CREATE TABLE IF NOT EXISTS characters_spells (

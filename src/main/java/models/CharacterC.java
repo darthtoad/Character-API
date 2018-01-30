@@ -221,6 +221,4 @@ public class CharacterC {
         result = 31 * result + dexterity;
         return result;
     }
-
-
 }
