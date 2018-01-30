@@ -131,6 +131,17 @@ public class Sql2oCharacterCDao implements CharacterCDao {
         } catch (Sql2oException ex) {
             System.out.println(ex);
         }
+
+//        characterC.setHP(characterC.getHP() + effect.getHP());
+//        private int currentHP;
+//        private int defense;
+//        private int magicDefense;
+//        private int strength;
+//        private int MP;
+//        private int currentMP;
+//        private int magic;
+//        private int dexterity;
+//        private String other;
     }
 
     @Override
