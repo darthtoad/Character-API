@@ -53,3 +53,9 @@ body {
 .detailsWell {
     margin: auto;
 }
+
+.gamelogWell {
+    background: rgba(161, 165, 173, 0.5);
+    font-size: 18px;
+}
+
