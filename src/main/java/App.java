@@ -9,11 +9,17 @@ import models.Equipment;
 import models.Spell;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
+import spark.ModelAndView;
+import spark.template.handlebars.HandlebarsTemplateEngine;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static spark.Spark.*;
 
 public class App {
     public static void main(String[] args) {
+        staticFileLocation("/public");
         Sql2oEffectDao effectDao;
         Sql2oSpellDao spellDao;
         Sql2oEquipmentDao equipmentDao;
@@ -30,6 +36,20 @@ public class App {
         characterCDao = new Sql2oCharacterCDao(sql2o);
 
         connection = sql2o.open();
+
+        //API
+
+        get("/", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+
+            return new ModelAndView(model, "index.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        get("/game", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+
+            return new ModelAndView(model, "hud.hbs");
+        }, new HandlebarsTemplateEngine());
 
         post("/characters/new", "application/json", (request, response) -> {
             CharacterC characterC = gson.fromJson(request.body(), CharacterC.class);
@@ -243,6 +263,21 @@ public class App {
             response.status(201);
             return gson.toJson("Your spell has been deleted");
         });
+
+        //FRONTEND ROUTING
+
+        get("/character/new", (req, res) -> {
+            Map<String, Object> model = new HashMap<String, Object>();
+            return new ModelAndView(model, "new_character.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        post("/character/new", (req, res) -> {
+            Map<String, Object> model = new HashMap<String, Object>();
+            CharacterC character = new CharacterC(req.queryParams("name"), req.queryParams("description"));
+            characterCDao.add(character);
+            model.put("character", character);
+            return new ModelAndView(model, "success.hbs");
+        }, new HandlebarsTemplateEngine());
 
 
     }

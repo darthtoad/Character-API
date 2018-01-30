@@ -18,6 +18,7 @@ public class CharacterC {
     private int currentMP;
     private int magic;
     private int dexterity;
+    private String charClass;
 
     public CharacterC(String name, String description) {
         this.name = name;
@@ -39,6 +40,34 @@ public class CharacterC {
         this.magic = magic;
         this.dexterity = dexterity;
 
+    }
+
+    public CharacterC(String name, String description, int level, int experience, int HP, int currentHP, int defense, int magicDefense, int strength, int MP, int currentMP, int magic, int dexterity, String spells, String equipment, String effects, String charClass) {
+        this.name = name;
+        this.description = description;
+        this.level = level;
+        this.experience = experience;
+        this.HP = HP;
+        this.currentHP = currentHP;
+        this.defense = defense;
+        this.magicDefense = magicDefense;
+        this.strength = strength;
+        this.MP = MP;
+        this.currentMP = currentMP;
+        this.magic = magic;
+        this.dexterity = dexterity;
+        this.spells = spells;
+        this.equipment = equipment;
+        this.effects = effects;
+        this.charClass = charClass;
+    }
+
+    public String getCharClass() {
+        return charClass;
+    }
+
+    public void setCharClass(String charClass) {
+        this.charClass = charClass;
     }
 
     public int getId() {

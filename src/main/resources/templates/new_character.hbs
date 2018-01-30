@@ -1,0 +1,32 @@
+{{#partial "content"}}
+    <div class = "well">
+    <h1>New Character</h1>
+    <form action="/newTeam" method="post">
+        <label>Name: </label>
+        <input name="name">
+        <br>
+        <h3>Select Class:</h3>
+        <label class="radio-inline"><input type="radio" name="class">Fighter</label>
+        <label class="radio-inline"><input type="radio" name="class">Red Mage</label>
+        <br>
+        <h3>Select Gender:</h3>
+        <label class="radio-inline"><input type="radio" name="sex">Male</label>
+        <label class="radio-inline"><input type="radio" name="sex">Female</label>
+        <br>
+        <h3>Character Stats:</h3>
+        <p>HP:</p> <p>MP:</p>
+        <p>Strength:</p>
+        <p>Magic:</p>
+        <p>Dexterity:</p>
+        <p>Defense:</p>
+        <p>Magic Defense:</p>
+        <p>Level:</p>
+        <p>Experience:</p>
+
+        <label>Character Description: </label>
+        <input name="description">
+
+        <button type="submit">submit</button>
+    </form>
+{{/partial}}
+{{>layout.hbs}}
