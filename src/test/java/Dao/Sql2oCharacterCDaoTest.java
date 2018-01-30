@@ -79,6 +79,13 @@ public class Sql2oCharacterCDaoTest {
     }
 
     @Test
+    public void addCharacterWithClassAddsCorrectly() throws Exception {
+        CharacterC fighter = new CharacterC("Fighter", "A fighter", "fighter");
+        characterCDao.add(fighter);
+        assertEquals(6, fighter.getStrength());
+    }
+
+    @Test
     public void addEquipmentToCharacterAssociatesCorrectly() throws Exception {
         CharacterC characterC = setupNewCharacterC();
         CharacterC characterC1 = setupNewCharacterC1();
@@ -126,6 +133,21 @@ public class Sql2oCharacterCDaoTest {
         characterCDao.add(characterC1);
         effectDao.add(effect);
         characterCDao.addEffectToCharacterC(effect, characterC);
+        assertEquals(1, characterCDao.getAllEffectsForACharacter(characterC.getId()).size());
+        assertTrue(characterCDao.getAllEffectsForACharacter(characterC.getId()).contains(effect));
+    }
+
+    @Test
+    public void addEffectChangesStats() throws Exception {
+        CharacterC characterC = setupNewCharacterC();
+        CharacterC characterC1 = setupNewCharacterC1();
+        Effect effect = setupNewEffect();
+        characterCDao.add(characterC);
+        characterCDao.add(characterC1);
+        effectDao.add(effect);
+        int originalCurrentHP = characterCDao.findById(characterC.getId()).getCurrentHP();
+        characterCDao.addEffectToCharacterC(effect, characterC);
+        assertNotEquals(originalCurrentHP, characterC.getCurrentHP());
         assertEquals(1, characterCDao.getAllEffectsForACharacter(characterC.getId()).size());
         assertTrue(characterCDao.getAllEffectsForACharacter(characterC.getId()).contains(effect));
     }
@@ -225,9 +247,24 @@ public class Sql2oCharacterCDaoTest {
         CharacterC characterC1 = setupNewCharacterC1();
         characterCDao.add(characterC);
         int originalLevel = characterC.getLevel();
+        int originalStrength = characterC.getStrength();
         characterCDao.checkForLevelUp(characterC);
         assertNotEquals(originalLevel, characterCDao.findById(characterC.getId()).getLevel());
-        assertEquals(5, characterCDao.findById(characterC.getId()).getLevel());
+        assertEquals(6, characterCDao.findById(characterC.getId()).getLevel());
+        assertNotEquals(originalStrength, characterCDao.findById(characterC.getId()).getStrength());
+    }
+
+    @Test
+    public void checkForLevelUpWorksWithClass() throws Exception {
+        CharacterC characterC = new CharacterC("Mr Poopy-Poop", "A big piece of poop", 1, 1000, 1, 1, 1, 1, 1, 1, 1, 1, 1, "Fighter");
+        CharacterC characterC1 = setupNewCharacterC1();
+        characterCDao.add(characterC);
+        int originalLevel = characterC.getLevel();
+        int originalStrength = characterC.getStrength();
+        characterCDao.checkForLevelUp(characterC);
+        assertNotEquals(originalLevel, characterCDao.findById(characterC.getId()).getLevel());
+        assertEquals(7, characterCDao.findById(characterC.getId()).getLevel());
+        assertNotEquals(originalStrength, characterCDao.findById(characterC.getId()).getStrength());
     }
 
     @Test

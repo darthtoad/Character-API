@@ -168,4 +168,9 @@ public class Sql2oSpellDao implements SpellDao{
             System.out.println(ex);
         }
     }
+
+    public void populateSpells() {
+        Spell magicMissle = new Spell("Magic Missle", "A missle of magic", 5, 1);
+        this.add(magicMissle);
+    }
 }

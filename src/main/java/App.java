@@ -265,9 +265,6 @@ public class App {
         });
 
         //FRONTEND ROUTING
-
-        //---------------------------------------new character----------------------------------------------------------
-
         get("/character/new", (req, res) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             return new ModelAndView(model, "new_character.hbs");
@@ -280,8 +277,6 @@ public class App {
             model.put("character", character);
             return new ModelAndView(model, "success.hbs");
         }, new HandlebarsTemplateEngine());
-
-        //----------------------------------------view character--------------------------------------------------------
 
         get("/character/:id", (req, res) -> {
             Map<String, Object> model = new HashMap<String, Object>();
