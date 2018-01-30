@@ -1,32 +1,26 @@
-#bg {
-  position: fixed;
-  /*top: 0;
-  left: 0;*/
-
-  /* Preserve aspet ratio */
-   width: 100%;
-   max-height: 100%;
-   /*height: auto;
-   min-height: 100%;*/
-}
-
 body {
     font-family: 'Share Tech Mono', monospace;
+    background-image: url("/images/background3.png");
+    background-position; center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
 }
 
 .container {
     /*padding-bottom: 380px;*/
-    margin-right: 120px;
+    margin-right: 175px;
 }
 
 .headerRow {
-    padding-top: 50px;
+    padding-top: 100px;
 }
 
-.jumbotron {
+.headerlogo {
     height: 100px;
     background-size: 100% 100%;
-    background-image: url("/images/ultimateWish2.png");
+    background-image: url("/images/ultimateWish1.png");
+    margin-bottom: 30px;
 }
 
 .mainContent {
