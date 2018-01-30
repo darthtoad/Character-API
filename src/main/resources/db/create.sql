@@ -17,7 +17,8 @@ CREATE TABLE IF NOT EXISTS characters (
     dexterity INTEGER,
     spells VARCHAR,
     equipment VARCHAR,
-    effects VARCHAR
+    effects VARCHAR,
+    charClass VARCHAR
 );
 
 CREATE TABLE IF NOT EXISTS characters_spells (

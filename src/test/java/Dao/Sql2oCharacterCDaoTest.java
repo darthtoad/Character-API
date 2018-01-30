@@ -221,7 +221,7 @@ public class Sql2oCharacterCDaoTest {
         String originalDescription = characterCDao.findById(testCharacterC.getId()).getDescription();
         int originalLevel = characterCDao.findById(testCharacterC.getId()).getLevel();
         String originalEffects = characterCDao.findById(testCharacterC.getId()).getEffects();
-        characterCDao.update(testCharacterC.getId(), "Fire", "He likes to burn things", 3, 50, 5, 5, 5, 5, 5, 5, 5, 5, 5, "1, 4, 5", "", "144");
+        characterCDao.update(testCharacterC.getId(), "Fire", "He likes to burn things", 3, 50, 5, 5, 5, 5, 5, 5, 5, 5, 5, "1, 4, 5", "", "144", "");
         assertNotEquals(originalLevel, characterCDao.findById(testCharacterC.getId()).getLevel());
         assertNotEquals(originalDescription, characterCDao.findById(testCharacterC.getId()).getDescription());
         assertNotEquals(originalEffects, characterCDao.findById(testCharacterC.getId()).getEffects());
@@ -234,9 +234,11 @@ public class Sql2oCharacterCDaoTest {
         CharacterC characterC1 = setupNewCharacterC1();
         characterCDao.add(characterC);
         int originalLevel = characterC.getLevel();
+        int originalStrength = characterC.getStrength();
         characterCDao.checkForLevelUp(characterC);
         assertNotEquals(originalLevel, characterCDao.findById(characterC.getId()).getLevel());
-        assertEquals(5, characterCDao.findById(characterC.getId()).getLevel());
+        assertEquals(6, characterCDao.findById(characterC.getId()).getLevel());
+        assertNotEquals(originalStrength, characterCDao.findById(characterC.getId()).getStrength());
     }
 
     @Test
