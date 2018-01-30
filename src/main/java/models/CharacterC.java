@@ -21,6 +21,7 @@ public class CharacterC {
     private String spells;
     private String equipment;
     private String effects;
+    private String charClass;
 
     public CharacterC(String name, String description) {
         this.name = name;
@@ -44,6 +45,34 @@ public class CharacterC {
         this.spells = spells;
         this.equipment = equipment;
         this.effects = effects;
+    }
+
+    public CharacterC(String name, String description, int level, int experience, int HP, int currentHP, int defense, int magicDefense, int strength, int MP, int currentMP, int magic, int dexterity, String spells, String equipment, String effects, String charClass) {
+        this.name = name;
+        this.description = description;
+        this.level = level;
+        this.experience = experience;
+        this.HP = HP;
+        this.currentHP = currentHP;
+        this.defense = defense;
+        this.magicDefense = magicDefense;
+        this.strength = strength;
+        this.MP = MP;
+        this.currentMP = currentMP;
+        this.magic = magic;
+        this.dexterity = dexterity;
+        this.spells = spells;
+        this.equipment = equipment;
+        this.effects = effects;
+        this.charClass = charClass;
+    }
+
+    public String getCharClass() {
+        return charClass;
+    }
+
+    public void setCharClass(String charClass) {
+        this.charClass = charClass;
     }
 
     public int getId() {
@@ -197,7 +226,8 @@ public class CharacterC {
         if (!description.equals(that.description)) return false;
         if (spells != null ? !spells.equals(that.spells) : that.spells != null) return false;
         if (equipment != null ? !equipment.equals(that.equipment) : that.equipment != null) return false;
-        return effects != null ? effects.equals(that.effects) : that.effects == null;
+        if (effects != null ? !effects.equals(that.effects) : that.effects != null) return false;
+        return charClass != null ? charClass.equals(that.charClass) : that.charClass == null;
     }
 
     @Override
@@ -219,6 +249,7 @@ public class CharacterC {
         result = 31 * result + (spells != null ? spells.hashCode() : 0);
         result = 31 * result + (equipment != null ? equipment.hashCode() : 0);
         result = 31 * result + (effects != null ? effects.hashCode() : 0);
+        result = 31 * result + (charClass != null ? charClass.hashCode() : 0);
         return result;
     }
 
