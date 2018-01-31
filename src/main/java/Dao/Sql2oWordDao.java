@@ -1,49 +1,49 @@
 package Dao;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import models.Word;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 import org.sql2o.Sql2oException;
-import models.Location;
-import com.google.gson.*;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.*;
+import java.util.List;
 
 /**
  * Created by Guest on 1/31/18.
  */
-public class Sql2oLocationDao implements LocationDao {
+public class Sql2oWordDao implements WordDao {
     private final Sql2o sql2o;
 
-    public Sql2oLocationDao(Sql2o sql2o) {
+    public Sql2oWordDao(Sql2o sql2o) {
         this.sql2o = sql2o;
     }
 
     @Override
-    public void add(Location location) {
-        String sql = "INSERT INTO locations (name, description) VALUES (:name, :description)";
+    public void add(Word word) {
+        String sql = "INSERT INTO words (name) VALUES (:name)";
         try (Connection con = sql2o.open()) {
             int id = (int) con.createQuery(sql)
-                    .bind(location)
+                    .bind(word)
                     .executeUpdate()
                     .getKey();
-            location.setId(id);
+            word.setId(id);
         } catch (Sql2oException ex) {
             System.out.println(ex);
         }
     }
 
-    public void createRandomLocation(String nationality) {
-        String locationName = "Place";
-        Location location = new Location(locationName);
-        String url = "https://randomuser.me/api/?inc=location";
-        String country = "&nat=" + nationality; //choices: AU, BR, CA, CH, DE, DK, ES, FI, FR, GB, IE, IR, NL, NZ, TR, US
-        if (!country.equals("&nat=")) {
-            url = url + country;
-        }
+    public void createRandomWord() {
+        String wordName = "Place";
+        Word word = new Word(wordName);
+        String url = "http://api.wordnik.com/v4/words.json/randomWord?includePartOfSpeech=noun&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5";
         String charset = "UTF=8";
 
         try {
@@ -54,23 +54,18 @@ public class Sql2oLocationDao implements LocationDao {
 
             JsonElement json = parser.parse(new InputStreamReader((InputStream) request.getContent()));
 
-            JsonArray apiResponse = json.getAsJsonObject()
-                    .getAsJsonArray("results");
+            JsonObject apiResponse = json.getAsJsonObject();
             if (apiResponse != null) {
-                String jsonLocation = json.getAsJsonObject()
-                        .getAsJsonArray("results")
-                        .get(0)
-                        .getAsJsonObject()
-                        .getAsJsonObject("location")
-                        .get("city")
+                String jsonWord = json.getAsJsonObject()
+                        .get("word")
                         .getAsString();
-                Location random = new Location(jsonLocation);
+                Word random = new Word(jsonWord);
                 this.add(random);
             }
-        }catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
-//        Object newLocation = new Object();
+//        Object newWord = new Object();
 //        try (Connection con = sql2o.open()){
 
 //
@@ -79,7 +74,7 @@ public class Sql2oLocationDao implements LocationDao {
 //                connection.setRequestProperty("Accept-Charset", charset);
 //                InputStream response = connection.getInputStream();
 //                try (Scanner scanner = new Scanner(response)) {
-//                    newLocation = scanner.useDelimiter("//A").next();
+//                    newWord = scanner.useDelimiter("//A").next();
 //                }
 //            } catch (IOException e) {
 //                e.printStackTrace();
@@ -87,37 +82,36 @@ public class Sql2oLocationDao implements LocationDao {
 //        } catch (Sql2oException ex) {
 //            System.out.println(ex);
 //        }
-//        System.out.println(newLocation);
-//        return newLocation;
+//        System.out.println(newWord);
+//        return newWord;
     }
 
     @Override
-    public Location findById(int id) {
-        String sql = "SELECT * FROM locations WHERE id = :id";
+    public Word findById(int id) {
+        String sql = "SELECT * FROM words WHERE id = :id";
         try (Connection connection = sql2o.open()) {
             return connection.createQuery(sql)
                     .addParameter("id", id)
-                    .executeAndFetchFirst(Location.class);
+                    .executeAndFetchFirst(Word.class);
         }
     }
 
     @Override
-    public List<Location> getAll() {
-        String sql = "SELECT * FROM locations";
+    public List<Word> getAll() {
+        String sql = "SELECT * FROM words";
         try (Connection connection = sql2o.open()) {
             return connection.createQuery(sql)
-                    .executeAndFetch(Location.class);
+                    .executeAndFetch(Word.class);
         }
     }
 
     @Override
-    public void update(int id, String name, String description) {
-        String sql = "UPDATE locations SET name = :name, description = :description WHERE id = :id";
+    public void update(int id, String name) {
+        String sql = "UPDATE words SET name = :name WHERE id = :id";
         try (Connection connection = sql2o.open()) {
             connection.createQuery(sql)
                     .addParameter("id", id)
                     .addParameter("name", name)
-                    .addParameter("description", description)
                     .executeUpdate();
         } catch (Sql2oException ex) {
             System.out.println(ex);
@@ -126,7 +120,7 @@ public class Sql2oLocationDao implements LocationDao {
 
     @Override
     public void deleteById(int id) {
-        String sql = "DELETE FROM locations WHERE id = :id";
+        String sql = "DELETE FROM words WHERE id = :id";
         try (Connection connection = sql2o.open()) {
             connection.createQuery(sql)
                     .addParameter("id", id)
@@ -138,7 +132,7 @@ public class Sql2oLocationDao implements LocationDao {
 
     @Override
     public void deleteAll() {
-        String sql = "DELETE FROM locations";
+        String sql = "DELETE FROM words";
         try (Connection connection = sql2o.open()) {
             connection.createQuery(sql)
                     .executeUpdate();

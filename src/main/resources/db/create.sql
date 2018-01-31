@@ -84,10 +84,15 @@ CREATE TABLE IF NOT EXISTS locations (
     description VARCHAR
 );
 
+CREATE TABLE IF NOT EXISTS words (
+    id int PRIMARY KEY auto_increment,
+    name VARCHAR
+);
+
 CREATE TABLE IF NOT EXISTS items (
     id int PRIMARY KEY auto_increment,
     currentHP INTEGER,
-    currentMP INTEGER,
+    currentMP INTEGER
 );
   
 CREATE TABLE IF NOT EXISTS characters_items (
