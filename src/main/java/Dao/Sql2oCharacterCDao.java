@@ -707,7 +707,7 @@ public class Sql2oCharacterCDao implements CharacterCDao {
         CharacterC troll = new CharacterC("Troll", "Looks a bit like Danny Devito", 3, 400, 50, 50, 4, 2, 3, 0, 0, 0, 1);
         CharacterC werewolf = new CharacterC("Werewolf", "What wolf?", 3, 160, 30, 30, 1, 1, 4, 5, 5, 1, 5);
         CharacterC scorpion = new CharacterC("Scorpion", "Sub-Zero's mortal enemy", 1, 40, 15, 15, 3, 1, 3, 10, 10, 3, 4);
-        CharacterC reaper = new CharacterC("Reaper", "'It's time...'", 6, 600, 30, 30, 3, 6, 3, 30, 30, 6, 3);
+        CharacterC reaper = new CharacterC("Reaper", "'Die, Dieee, DIIIEEEE'", 6, 600, 30, 30, 3, 6, 3, 30, 30, 6, 3);
         CharacterC pirate = new CharacterC("Pirate", "Why couldn't Samantha take her kid with her to see a pirate movie? Because it was rated RRRRRRR", 2, 40, 20, 20, 3, 1, 4, 0, 0, 0, 4);
         CharacterC ogre = new CharacterC("Ogre", "Ogre? I hardly know her!", 4, 400, 40, 40, 6, 4, 5, 0, 0, 0, 1);
         CharacterC killerShark = new CharacterC("Killer Shark", "A land shark. How did it grow legs?", 2, 40, 20, 20, 1, 0, 3, 0, 0, 0, 7);

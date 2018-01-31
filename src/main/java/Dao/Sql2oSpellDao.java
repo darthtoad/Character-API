@@ -33,17 +33,15 @@ public class Sql2oSpellDao implements SpellDao{
         this.add(magicMissle);
         this.add(fireBall);
         this.add(blizzard);
-        this.add(magicMissle);
-        this.add(magicMissle);
-        this.add(magicMissle);
-        this.add(magicMissle);
-        this.add(magicMissle);
-        this.add(magicMissle);
-        this.add(magicMissle);
-        this.add(magicMissle);
-        this.add(magicMissle);
-        this.add(magicMissle);
-        this.add(magicMissle);
+        this.add(thunderWave);
+        this.add(bloodSplash);
+        this.add(waterStrike);
+        this.add(quake);
+        this.add(drown);
+        this.add(choke);
+        this.add(burst);
+        this.add(frostBolt);
+        this.add(curse);
 
     }
 

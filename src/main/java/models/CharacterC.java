@@ -43,6 +43,7 @@ public class CharacterC {
         this.charClass = charClass;
     }
 
+
     public CharacterC(String name, String description, int level, int experience, int HP, int currentHP, int defense, int magicDefense, int strength, int MP, int currentMP, int magic, int dexterity) {
         this.name = name;
         this.description = description;
