@@ -336,6 +336,44 @@ public class Sql2oCharacterCDao implements CharacterCDao {
         }
     }
 
+    public List<Integer> findTurnOrder(List<CharacterC> characters) {
+        List<Integer> turnOrder = new ArrayList<>();
+        int originalSize = characters.size();
+        for (int i = 0; i < originalSize; i++) {
+            int bestDex = 0;
+            int id = 0;
+            for (CharacterC characterC : characters) {
+                if (characterC.getDexterity() > 0 && bestDex < characterC.getDexterity()) {
+                    bestDex = characterC.getDexterity();
+                    id = characterC.getId();
+                }
+            }
+            turnOrder.add(id);
+            characters.remove(this.findById(id));
+        }
+        return turnOrder;
+    }
+
+    public boolean runAway(List<CharacterC> PCs, List<CharacterC> enemies) {
+        int bestPC = 0;
+        for (CharacterC characterC : PCs) {
+            if (characterC.getDexterity() > bestPC) {
+                bestPC = characterC.getDexterity();
+            }
+        }
+        int bestEnemy = 0;
+        for (CharacterC characterC : enemies) {
+            if (characterC.getDexterity() > bestEnemy) {
+                bestEnemy = characterC.getDexterity();
+            }
+        }
+        if (bestPC > bestEnemy) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     @Override
     public void checkForLevelUp(CharacterC characterC) {
         if (characterC.getExperience() > 50 && characterC.getLevel() < 2) {
@@ -611,6 +649,7 @@ public class Sql2oCharacterCDao implements CharacterCDao {
         }
     }
 
+
     public void populateCharacters() {
         CharacterC goblin = new CharacterC("Goblin", "A nasty Goblin", 1, 20, 10, 10, 1, 0, 2, 0, 0, 0, 2);
         CharacterC goblinGuard = new CharacterC("Goblin Guard", "A nasty Goblin who seems to be in charge", 2, 80, 20, 20, 2, 1, 3, 0, 0, 0, 3);
@@ -658,3 +697,4 @@ public class Sql2oCharacterCDao implements CharacterCDao {
 
     }
 }
+
