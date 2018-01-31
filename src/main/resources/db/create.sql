@@ -87,5 +87,5 @@ CREATE TABLE IF NOT EXISTS locations (
 
 CREATE TABLE IF NOT EXISTS words (
     id int PRIMARY KEY auto_increment,
-    word VARCHAR
+    name VARCHAR
 );
