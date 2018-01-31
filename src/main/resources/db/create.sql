@@ -84,3 +84,8 @@ CREATE TABLE IF NOT EXISTS locations (
     name VARCHAR,
     description VARCHAR
 );
+
+CREATE TABLE IF NOT EXISTS words (
+    id int PRIMARY KEY auto_increment,
+    word VARCHAR
+);
