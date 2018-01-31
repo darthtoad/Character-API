@@ -100,4 +100,10 @@ public class Sql2oLocationDaoTest {
         assertFalse(locationDao.getAll().contains(location1));
     }
 
+    @Test
+    public void createRandomLocationCreatesRandomly() throws Exception {
+        locationDao.createRandomLocation("de");
+        locationDao.createRandomLocation("fr");
+        assertNotEquals(locationDao.findById(1).getName(), locationDao.findById(2).getName());
+    }
 }

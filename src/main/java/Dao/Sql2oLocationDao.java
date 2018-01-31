@@ -4,8 +4,13 @@ import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 import org.sql2o.Sql2oException;
 import models.Location;
-
-import java.util.List;
+import com.google.gson.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.*;
 
 /**
  * Created by Guest on 1/31/18.
@@ -29,6 +34,93 @@ public class Sql2oLocationDao implements LocationDao {
         } catch (Sql2oException ex) {
             System.out.println(ex);
         }
+    }
+
+    public void createRandomLocation(String nationality) {
+        String locationName = "Place";
+        Location location = new Location(locationName);
+        String url = "https://randomuser.me/api/?inc=location";
+        String country = "&nat=" + nationality; //choices: AU, BR, CA, CH, DE, DK, ES, FI, FR, GB, IE, IR, NL, NZ, TR, US
+        if (!country.equals("&nat=")) {
+            url = url + country;
+        }
+        String charset = "UTF=8";
+
+        try {
+            URL url1 = new URL(url);
+            HttpURLConnection request = (HttpURLConnection) url1.openConnection();
+            request.connect();
+            JsonParser parser = new JsonParser();
+
+            JsonElement json = parser.parse(new InputStreamReader((InputStream) request.getContent()));
+
+//            if (json.getAsJsonObject().getAsJsonObject("results") == null) {
+//                System.out.println("error");
+//                return location;
+//            }
+
+            //get most data from first object in "events" array in json response
+            JsonArray apiResponse = json.getAsJsonObject()
+                    .getAsJsonArray("results");
+            //date and time are objects inside the events array and require reaching down further into Json data
+//            JsonObject date = json.getAsJsonObject()
+//                    .getAsJsonObject("_embedded")
+//                    .getAsJsonArray("events")
+//                    .get(0).getAsJsonObject()
+//                    .getAsJsonObject("dates")
+//                    .getAsJsonObject("start");
+//            JsonPrimitive time = json.getAsJsonObject()
+//                    .getAsJsonObject("_embedded")
+//                    .getAsJsonArray("events")
+//                    .get(0).getAsJsonObject()
+//                    .getAsJsonObject("dates")
+//                    .getAsJsonObject("start")
+//                    .getAsJsonPrimitive("localTime");
+
+            //see if there is price range data and assign it if it exists
+            if (apiResponse != null) {
+                String jsonLocation = json.getAsJsonObject()
+                        .getAsJsonArray("results")
+                        .get(0)
+                        .getAsJsonObject()
+                        .getAsJsonObject("location")
+                        .get("city")
+                        .getAsString();
+                Location random = new Location(jsonLocation);
+                this.add(random);
+                String sql = "INSERT INTO locations (name, description) VALUES (:name, :description)";
+                try (Connection con = sql2o.open()) {
+                    int id = (int) con.createQuery(sql)
+                            .bind(location)
+                            .executeUpdate()
+                            .getKey();
+                    location.setId(id);
+                } catch (Sql2oException ex) {
+                    System.out.println(ex);
+                }
+            }
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+//        Object newLocation = new Object();
+//        try (Connection con = sql2o.open()){
+
+//
+//            try {
+//                URLConnection connection = new URL(urlToUse).openConnection();
+//                connection.setRequestProperty("Accept-Charset", charset);
+//                InputStream response = connection.getInputStream();
+//                try (Scanner scanner = new Scanner(response)) {
+//                    newLocation = scanner.useDelimiter("//A").next();
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        } catch (Sql2oException ex) {
+//            System.out.println(ex);
+//        }
+//        System.out.println(newLocation);
+//        return newLocation;
     }
 
     @Override
