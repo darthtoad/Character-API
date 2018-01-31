@@ -78,3 +78,9 @@ CREATE TABLE IF NOT EXISTS effects_spells (
     effectId INTEGER,
     spellId INTEGER
 );
+
+CREATE TABLE IF NOT EXISTS locations (
+    id int PRIMARY KEY auto_increment,
+    name VARCHAR,
+    description VARCHAR
+);
