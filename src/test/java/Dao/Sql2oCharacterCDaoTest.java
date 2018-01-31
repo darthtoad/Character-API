@@ -312,13 +312,10 @@ public class Sql2oCharacterCDaoTest {
         characterCDao.add(characterC1);
         characterCDao.add(characterC2);
         characterCDao.add(characterC3);
-        List<CharacterC> PCs = new ArrayList<>();
         List<CharacterC> enemies = new ArrayList<>();
-        PCs.add(characterC);
-        PCs.add(characterC1);
         enemies.add(characterC2);
         enemies.add(characterC3);
-        assertTrue(characterCDao.runAway(PCs, enemies));
+        assertTrue(characterCDao.runAway(characterC1, enemies));
     }
 
     @Test
@@ -512,5 +509,37 @@ public class Sql2oCharacterCDaoTest {
         assertFalse(characterCDao.getAllSpellsForACharacter(characterC.getId()).contains(effect1));
     }
 
+    @Test
+    public void userInputChangesState() throws Exception {
+        CharacterC characterC = setupNewCharacterC();
+        CharacterC characterC1 = setupNewCharacterC1();
+        CharacterC characterC2 = setupNewCharacterC2();
+        CharacterC characterC3 = new CharacterC("Paul", "A guy named Paul", 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+        characterCDao.add(characterC);
+        characterCDao.add(characterC1);
+        characterCDao.add(characterC2);
+        characterCDao.add(characterC3);
+        List<CharacterC> enemies = new ArrayList<>();
+        enemies.add(characterC3);
+        int originalHP = characterC3.getCurrentHP();
+        characterCDao.userInput("attack", characterC, enemies);
+        assertNotEquals(originalHP, characterC3.getCurrentHP());
+    }
 
+    @Test
+    public void computerInputChangesState() throws Exception {
+        CharacterC characterC = setupNewCharacterC();
+        CharacterC characterC1 = setupNewCharacterC1();
+        CharacterC characterC2 = setupNewCharacterC2();
+        CharacterC characterC3 = new CharacterC("Paul", "A guy named Paul", 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+        characterCDao.add(characterC);
+        characterCDao.add(characterC1);
+        characterCDao.add(characterC2);
+        characterCDao.add(characterC3);
+        List<CharacterC> enemies = new ArrayList<>();
+        enemies.add(characterC3);
+        int originalHP = characterC3.getCurrentHP();
+        characterCDao.computerInput(characterC, enemies);
+        assertNotEquals(originalHP, characterC3.getCurrentHP());
+    }
 }

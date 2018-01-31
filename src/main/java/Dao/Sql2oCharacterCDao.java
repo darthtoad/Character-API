@@ -354,20 +354,14 @@ public class Sql2oCharacterCDao implements CharacterCDao {
         return turnOrder;
     }
 
-    public boolean runAway(List<CharacterC> PCs, List<CharacterC> enemies) {
-        int bestPC = 0;
-        for (CharacterC characterC : PCs) {
-            if (characterC.getDexterity() > bestPC) {
-                bestPC = characterC.getDexterity();
-            }
-        }
+    public boolean runAway(CharacterC runner, List<CharacterC> enemies) {
         int bestEnemy = 0;
         for (CharacterC characterC : enemies) {
             if (characterC.getDexterity() > bestEnemy) {
                 bestEnemy = characterC.getDexterity();
             }
         }
-        if (bestPC > bestEnemy) {
+        if (runner.getDexterity() > bestEnemy) {
             return true;
         } else {
             return false;
@@ -648,6 +642,54 @@ public class Sql2oCharacterCDao implements CharacterCDao {
             System.out.println(ex);
         }
     }
+
+    public void userInput(String string, CharacterC characterC, List<CharacterC> targets) {
+        if (string.toLowerCase().equals("attack")) {
+            this.attack(characterC, targets.get(0));
+        }
+        for (Spell spell : this.getAllSpellsForACharacter(characterC.getId())) {
+            if (spell.getName().equals(string)) {
+                this.castSpell(spell, characterC, targets);
+                break;
+            }
+        }
+        if (string.toLowerCase().equals("run away")) {
+            this.runAway(characterC, targets);
+        }
+    }
+
+    public void computerInput(CharacterC enemy, List<CharacterC> targets) {
+        int magicNumber = (int) Math.random() * (targets.size() - 1);
+        if (enemy.getMagic() * (Math.random() + 1) > targets.get(magicNumber).getMagicDefense() && this.getAllSpellsForACharacter(enemy.getId()).size() > 0) {
+            this.castSpell(this.getAllSpellsForACharacter(enemy.getId()).get(magicNumber), enemy, targets);
+        } else if (enemy.getCurrentHP() > 5) {
+            this.attack(enemy, targets.get(magicNumber));
+        } else {
+            this.runAway(enemy, targets);
+        }
+    }
+
+//    public void battle(List<CharacterC> PCs, List<CharacterC> enemies) {
+//        List<CharacterC> allCharacters = new ArrayList<CharacterC>() {
+//            {
+//                addAll(PCs);
+//                addAll(enemies);
+//            }
+//        };
+//        List<Integer> order = this.findTurnOrder(allCharacters);
+//        int currentTurn = 0;
+//        while (PCs.size() > 0 && enemies.size() > 0) {
+//            if (PCs.get(currentTurn).getCharClass() != null || PCs.get(currentTurn).getCharClass() != "") {
+//
+//            } else {
+//
+//            }
+//
+//            if (currentTurn >= order.size()) {
+//                currentTurn = 0;
+//            }
+//        }
+//    }
 
 
     public void populateCharacters() {

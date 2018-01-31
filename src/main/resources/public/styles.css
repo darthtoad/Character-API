@@ -1,4 +1,40 @@
 body {
+    background-image: url("/images/background2.jpg");
+    background-repeat: no-repeat;
+    background-size: 2550px 100%;
+    font-family: 'Share Tech Mono', monospace;
+}
+
+.container {
+    padding-bottom: 380px;
+    margin-right: 120px;
+}
+
+.headerRow {
+    padding-top: 50px;
+}
+
+.jumbotron {
+    height: 100px;
+    background-size: 100% 100%;
+    background-image: url("/images/ultimateWish2.png");
+}
+
+.mainContent {
+    background: rgba(161, 165, 173, 0.5);
+
+}
+
+.sideNav {
+    background: rgba(161, 165, 173, 0.5);
+}
+
+.sideNav .panel-heading {
+    background: rgba(161, 165, 173, 0.5);
+}
+
+.panel {
+    background: rgba(161, 165, 173, 0.5);
     font-family: 'Share Tech Mono', monospace;
     font-size: 22px;
     background-image: url("/images/background3.png");
@@ -56,6 +92,7 @@ body {
 .char3 {
     padding-bottom: 20px;
 }
+
 
 .charWell {
     background: rgba(161, 165, 173, .8);

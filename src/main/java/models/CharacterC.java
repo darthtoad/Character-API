@@ -20,6 +20,12 @@ public class CharacterC {
     private int dexterity;
     private String charClass;
 
+    public CharacterC(String name, String description, String charClass) {
+        this.name = name;
+        this.description = description;
+        this.charClass = charClass;
+    }
+
     public CharacterC(String name, String description, int level, int experience, int HP, int currentHP, int defense, int magicDefense, int strength, int MP, int currentMP, int magic, int dexterity, String charClass) {
         this.name = name;
         this.description = description;
@@ -224,4 +230,5 @@ public class CharacterC {
         result = 31 * result + dexterity;
         return result;
     }
+
 }
