@@ -16,7 +16,6 @@ CREATE TABLE IF NOT EXISTS characters (
     magic INTEGER,
     dexterity INTEGER,
     charClass VARCHAR
-
 );
 
 CREATE TABLE IF NOT EXISTS characters_spells (
@@ -88,4 +87,16 @@ CREATE TABLE IF NOT EXISTS locations (
 CREATE TABLE IF NOT EXISTS words (
     id int PRIMARY KEY auto_increment,
     name VARCHAR
+);
+
+CREATE TABLE IF NOT EXISTS items (
+    id int PRIMARY KEY auto_increment,
+    currentHP INTEGER,
+    currentMP INTEGER
+);
+  
+CREATE TABLE IF NOT EXISTS characters_items (
+    id int PRIMARY KEY auto_increment,
+    itemId INTEGER,
+    characterCId INTEGER
 );
