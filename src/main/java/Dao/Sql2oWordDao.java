@@ -59,6 +59,8 @@ public class Sql2oWordDao implements WordDao {
                 String jsonWord = json.getAsJsonObject()
                         .get("word")
                         .getAsString();
+                word = new Word(jsonWord);
+                this.add(word);
                 Word random = new Word(jsonWord);
                 this.add(random);
             }
