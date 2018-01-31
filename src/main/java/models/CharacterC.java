@@ -20,6 +20,11 @@ public class CharacterC {
     private int dexterity;
     private String charClass;
 
+    public CharacterC(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
     public CharacterC(String name, String description, String charClass) {
         this.name = name;
         this.description = description;

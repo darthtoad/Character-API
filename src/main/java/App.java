@@ -1,7 +1,4 @@
-import Dao.Sql2oCharacterCDao;
-import Dao.Sql2oEffectDao;
-import Dao.Sql2oEquipmentDao;
-import Dao.Sql2oSpellDao;
+import Dao.*;
 import com.google.gson.Gson;
 import models.CharacterC;
 import models.Effect;
@@ -41,6 +38,14 @@ public class App {
 
         post("/characters/new", "application/json", (request, response) -> {
             CharacterC characterC = gson.fromJson(request.body(), CharacterC.class);
+            characterCDao.add(characterC);
+            response.status(201);
+            return gson.toJson(characterC);
+        });
+
+        get("/characters/random/new", "application/json", (request, response) -> {
+            String name = characterCDao.getNameUsingRandom();
+            CharacterC characterC = new CharacterC(name, "NPC");
             characterCDao.add(characterC);
             response.status(201);
             return gson.toJson(characterC);
@@ -265,12 +270,20 @@ public class App {
 
         get("/character/new", (req, res) -> {
             Map<String, Object> model = new HashMap<String, Object>();
-            return new ModelAndView(model, "new_character.hbs");
+            return new ModelAndView(model, "new_fighter.hbs");
         }, new HandlebarsTemplateEngine());
 
         post("/character/new", (req, res) -> {
             Map<String, Object> model = new HashMap<String, Object>();
-            CharacterC character = new CharacterC(req.queryParams("name"), req.queryParams("description"), req.queryParams("charClass"));
+            CharacterC character = new CharacterC(req.queryParams("name"), "Fighter", "fighter");
+            characterCDao.add(character);
+            model.put("character", character);
+            return new ModelAndView(model, "new_redmage.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        post("/game/new", (req, res) -> {
+            Map<String, Object> model = new HashMap<String, Object>();
+            CharacterC character = new CharacterC(req.queryParams("name"), "red mage", "red mage");
             characterCDao.add(character);
             model.put("character", character);
             return new ModelAndView(model, "board1.hbs");
