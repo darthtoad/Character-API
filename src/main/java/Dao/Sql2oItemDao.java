@@ -225,11 +225,5 @@ public class Sql2oItemDao implements ItemDao {
         this.add(scorpionTail);
         this.add(ghostPlasma);
 
-
-
-
-
-
-
     }
 }
