@@ -123,6 +123,8 @@ public class Sql2oEquipmentDao implements EquipmentDao {
         this.add(iceArmor);
         Equipment diamondArmor = new Equipment("Diamond Armor", "Armor resistant against lightning", 0, 0, 0, 9, 9);
         this.add(iceArmor);
+        Equipment dragoonPlate = new Equipment("Dragoon Plate", "Armor of the legendary dragoon", 0, 1, 0, 7, 7);
+        this.add(dragoonPlate);
 
     }
 }

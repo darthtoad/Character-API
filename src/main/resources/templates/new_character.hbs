@@ -1,19 +1,19 @@
 {{#partial "content"}}
-    <div class = "well">
+    <div class = "well newCharWell">
     <h1>New Character</h1>
     <form action="/character/new" method="post">
         <label>Name: </label>
         <input name="name">
         <br>
-        <h3>Select Class:</h3>
-        <label class="radio-inline"><input type="radio" name="charClass">Fighter</label>
-        <label class="radio-inline"><input type="radio" name="charClass">Red Mage</label>
+        <h2>Select Class:</h2>
+        <label class="radio-inline"><input type="radio" name="fighter">Fighter</label>
+        <label class="radio-inline"><input type="radio" name="red mage">Red Mage</label>
         <br>
-        <h3>Select Gender:</h3>
+        <h4>Select Gender:</h4>
         <label class="radio-inline"><input type="radio" name="gender">Male</label>
         <label class="radio-inline"><input type="radio" name="gender">Female</label>
         <br>
-        <h3>Character Stats:</h3>
+        <h2>Character Stats:</h2>
         <p>HP:</p> <p>MP:</p>
         <p>Strength:</p>
         <p>Magic:</p>
@@ -29,5 +29,6 @@
         <button type="submit">submit</button>
         <a href="/">Go Back</a>
     </form>
+    </div>
 {{/partial}}
-{{>layout.hbs}}
+{{> layout.hbs}}

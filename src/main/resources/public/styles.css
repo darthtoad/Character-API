@@ -1,13 +1,16 @@
 body {
-    background-image: url("/images/background2.jpg");
-    background-repeat: no-repeat;
-    background-size: 2550px 100%;
     font-family: 'Share Tech Mono', monospace;
+    font-size: 22px;
+    background-image: url("/images/bg2.jpg");
+    background-position; center center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .container {
     padding-bottom: 380px;
-    margin-right: 120px;
+    margin-right: 50px;
+    width: 1600px;
 }
 
 .headerRow {
@@ -22,7 +25,6 @@ body {
 
 .mainContent {
     background: rgba(161, 165, 173, 0.5);
-
 }
 
 .sideNav {
@@ -35,6 +37,51 @@ body {
 
 .panel {
     background: rgba(161, 165, 173, 0.5);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 22px;
+}
+
+.headerRow {
+    padding-top: 100px;
+}
+
+.headerlogo {
+    height: 100px;
+    background-size: 100% 100%;
+    background-image: url("/images/ultimateWish1.png");
+    margin-bottom: 30px;
+}
+
+.mainContent {
+    background: rgba(161, 165, 173, .8);
+}
+
+.sideNav {
+    background: rgba(161, 165, 173, .6);
+}
+
+.sideNav .panel-heading {
+    background: rgba(161, 165, 173, .8);
+}
+
+.panel .panel-heading {
+    background: rgba(161, 165, 173, .8);
+}
+
+.char1 {
+
+}
+
+.char2 {
+
+}
+
+.char3 {
+    padding-bottom: 20px;
+}
+
+hr {
+
 }
 
 .charPorts {
@@ -46,21 +93,28 @@ body {
     margin-right: auto;
 }
 
-.char1 {
-    padding-top: 20px;
+.charWell {
+    background: rgba(161, 165, 173, .8);
 }
 
-.char3 {
-    padding-bottom: 20px;
+.newCharWell {
+    background: rgba(161, 165, 173, .8);
 }
 
 .detailsPanel {
+    font-size: 22px;
+    color: #ffffff;
     margin: auto;
     padding-bottom: 300px;
 }
 
 .gamelogWell {
-    background: rgba(161, 165, 173, 0.5);
-    font-size: 18px;
+    background: rgba(161, 165, 173, .8);
+    font-size: 22px;
+    color: #ffffff;
+}
+
+a {
+    color: #ff0c0c;
 }
 

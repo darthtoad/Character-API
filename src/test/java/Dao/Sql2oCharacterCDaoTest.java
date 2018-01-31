@@ -281,6 +281,44 @@ public class Sql2oCharacterCDaoTest {
     }
 
     @Test
+    public void findTurnOrderFindsTurnOrder() throws Exception {
+        CharacterC characterC = setupNewCharacterC();
+        CharacterC characterC1 = setupNewCharacterC1();
+        CharacterC characterC2 = setupNewCharacterC2();
+        CharacterC characterC3 = new CharacterC("Paul", "A guy named Paul", 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+        characterCDao.add(characterC);
+        characterCDao.add(characterC1);
+        characterCDao.add(characterC2);
+        characterCDao.add(characterC3);
+        List<CharacterC> characterCList = new ArrayList<>();
+        characterCList.add(characterC);
+        characterCList.add(characterC1);
+        characterCList.add(characterC2);
+        characterCList.add(characterC3);
+        List<Integer> turnOrder = characterCDao.findTurnOrder(characterCList);
+        assertTrue(turnOrder.get(0) == 2);
+        assertTrue(turnOrder.get(1) == 1);
+        assertTrue(turnOrder.get(2) == 3);
+        assertTrue(turnOrder.get(3) == 4);
+    }
+
+    @Test
+    public void runAwayRunsAway() throws Exception {
+        CharacterC characterC = setupNewCharacterC();
+        CharacterC characterC1 = setupNewCharacterC1();
+        CharacterC characterC2 = setupNewCharacterC2();
+        CharacterC characterC3 = new CharacterC("Paul", "A guy named Paul", 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+        characterCDao.add(characterC);
+        characterCDao.add(characterC1);
+        characterCDao.add(characterC2);
+        characterCDao.add(characterC3);
+        List<CharacterC> enemies = new ArrayList<>();
+        enemies.add(characterC2);
+        enemies.add(characterC3);
+        assertTrue(characterCDao.runAway(characterC1, enemies));
+    }
+
+    @Test
     public void deleteByIdDeletesCharacterCorrectly() throws Exception {
         CharacterC characterC = setupNewCharacterC();
         CharacterC characterC1 = setupNewCharacterC1();
@@ -471,5 +509,37 @@ public class Sql2oCharacterCDaoTest {
         assertFalse(characterCDao.getAllSpellsForACharacter(characterC.getId()).contains(effect1));
     }
 
+    @Test
+    public void userInputChangesState() throws Exception {
+        CharacterC characterC = setupNewCharacterC();
+        CharacterC characterC1 = setupNewCharacterC1();
+        CharacterC characterC2 = setupNewCharacterC2();
+        CharacterC characterC3 = new CharacterC("Paul", "A guy named Paul", 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+        characterCDao.add(characterC);
+        characterCDao.add(characterC1);
+        characterCDao.add(characterC2);
+        characterCDao.add(characterC3);
+        List<CharacterC> enemies = new ArrayList<>();
+        enemies.add(characterC3);
+        int originalHP = characterC3.getCurrentHP();
+        characterCDao.userInput("attack", characterC, enemies);
+        assertNotEquals(originalHP, characterC3.getCurrentHP());
+    }
 
+    @Test
+    public void computerInputChangesState() throws Exception {
+        CharacterC characterC = setupNewCharacterC();
+        CharacterC characterC1 = setupNewCharacterC1();
+        CharacterC characterC2 = setupNewCharacterC2();
+        CharacterC characterC3 = new CharacterC("Paul", "A guy named Paul", 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+        characterCDao.add(characterC);
+        characterCDao.add(characterC1);
+        characterCDao.add(characterC2);
+        characterCDao.add(characterC3);
+        List<CharacterC> enemies = new ArrayList<>();
+        enemies.add(characterC3);
+        int originalHP = characterC3.getCurrentHP();
+        characterCDao.computerInput(characterC, enemies);
+        assertNotEquals(originalHP, characterC3.getCurrentHP());
+    }
 }
