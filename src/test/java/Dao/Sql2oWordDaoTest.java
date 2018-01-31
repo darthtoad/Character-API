@@ -71,10 +71,23 @@ public class Sql2oWordDaoTest {
 
     @Test
     public void getAll() throws Exception {
+        Word word = setUpNewWord();
+        Word word1 = setUpNewWord1();
+        wordDao.add(word);
+        wordDao.add(word1);
+        assertTrue(wordDao.getAll().contains(word));
+        assertTrue(wordDao.getAll().contains(word1));
     }
 
     @Test
     public void update() throws Exception {
+        Word word = setUpNewWord();
+        Word word1 = setUpNewWord1();
+        wordDao.add(word);
+        wordDao.add(word1);
+        String originalName = word.getName();
+        wordDao.update(word.getId(), "New Zealand");
+        assertNotEquals(originalName, wordDao.findById(word.getId()).getName());
     }
 
     @Test
