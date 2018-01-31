@@ -91,6 +91,13 @@ public class Sql2oLocationDaoTest {
 
     @Test
     public void deleteAllDeletesAllCorrectly() throws Exception {
+        Location location = setupNewLocation();
+        Location location1 = setupNewLocation1();
+        locationDao.add(location);
+        locationDao.add(location1);
+        locationDao.deleteAll();
+        assertFalse(locationDao.getAll().contains(location));
+        assertFalse(locationDao.getAll().contains(location1));
     }
 
 }
