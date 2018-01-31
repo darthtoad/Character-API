@@ -1,12 +1,6 @@
-import Dao.Sql2oCharacterCDao;
-import Dao.Sql2oEffectDao;
-import Dao.Sql2oEquipmentDao;
-import Dao.Sql2oSpellDao;
+import Dao.*;
 import com.google.gson.Gson;
-import models.CharacterC;
-import models.Effect;
-import models.Equipment;
-import models.Spell;
+import models.*;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 import spark.ModelAndView;
@@ -24,6 +18,8 @@ public class App {
         Sql2oSpellDao spellDao;
         Sql2oEquipmentDao equipmentDao;
         Sql2oCharacterCDao characterCDao;
+        Sql2oLocationDao locationDao;
+        Sql2oWordDao wordDao;
         Connection connection;
         Gson gson = new Gson();
 
@@ -34,6 +30,8 @@ public class App {
         spellDao = new Sql2oSpellDao(sql2o);
         equipmentDao = new Sql2oEquipmentDao(sql2o);
         characterCDao = new Sql2oCharacterCDao(sql2o);
+        locationDao = new Sql2oLocationDao(sql2o);
+        wordDao = new Sql2oWordDao(sql2o);
 
         connection = sql2o.open();
 
@@ -151,7 +149,7 @@ public class App {
             return gson.toJson(spellDao.findById(spellId));
         });
 
-        get("spells/:id/effects", "application/json", (request, response) -> {
+        get("/spells/:id/effects", "application/json", (request, response) -> {
             int spellId = Integer.parseInt(request.params("id"));
             response.status(201);
             return gson.toJson(spellDao.getAllEffectsForSpell(spellId));
@@ -260,7 +258,21 @@ public class App {
 
         get("/game/board1", (req, res) -> {
             Map<String, Object> model = new HashMap<>();
+            characterCDao.get`RandomName("de");
+            Location ourLocation = locationDao.findById(locationDao.getAll().size());
+            model.put("ourLocation", ourLocation);
             return new ModelAndView(model, "board1.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        get("/game/board2", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            locationDao.createRandomLocation("de");
+            Location ourLocation = locationDao.findById(locationDao.getAll().size());
+            model.put("ourLocation", ourLocation);
+            wordDao.createRandomWord();
+            Word word = wordDao.findById(wordDao.getAll().size());
+            model.put("word", word);
+            return new ModelAndView(model, "board2.hbs");
         }, new HandlebarsTemplateEngine());
 
         get("/character/new", (req, res) -> {
