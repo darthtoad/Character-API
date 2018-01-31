@@ -66,7 +66,7 @@ public class Sql2oLocationDao implements LocationDao {
 
     @Override
     public void deleteById(int id) {
-        String sql = "DELETE FROM location WHERE id = :id";
+        String sql = "DELETE FROM locations WHERE id = :id";
         try (Connection connection = sql2o.open()) {
             connection.createQuery(sql)
                     .addParameter("id", id)
@@ -78,7 +78,7 @@ public class Sql2oLocationDao implements LocationDao {
 
     @Override
     public void deleteAll() {
-        String sql = "DELETE FROM location";
+        String sql = "DELETE FROM locations";
         try (Connection connection = sql2o.open()) {
             connection.createQuery(sql)
                     .executeUpdate();

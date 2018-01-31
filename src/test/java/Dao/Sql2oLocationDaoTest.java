@@ -80,6 +80,13 @@ public class Sql2oLocationDaoTest {
 
     @Test
     public void deleteByIdDeletesCorrectly() throws Exception {
+        Location location = setupNewLocation();
+        Location location1 = setupNewLocation1();
+        locationDao.add(location);
+        locationDao.add(location1);
+        locationDao.deleteById(location.getId());
+        assertFalse(locationDao.getAll().contains(location));
+        assertTrue(locationDao.getAll().contains(location1));
     }
 
     @Test
