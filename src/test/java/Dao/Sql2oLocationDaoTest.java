@@ -57,6 +57,12 @@ public class Sql2oLocationDaoTest {
 
     @Test
     public void getAllGetsAllCorrectly() throws Exception {
+        Location location = setupNewLocation();
+        Location location1 = setupNewLocation1();
+        locationDao.add(location);
+        locationDao.add(location1);
+        assertTrue(locationDao.getAll().contains(location));
+        assertTrue(locationDao.getAll().contains(location1));
     }
 
     @Test
