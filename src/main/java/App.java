@@ -296,9 +296,16 @@ public class App {
 
         get("/game/board1", (req, res) -> {
             Map<String, Object> model = new HashMap<>();
-            characterCDao.get`RandomName("de");
-            Location ourLocation = locationDao.findById(locationDao.getAll().size());
-            model.put("ourLocation", ourLocation);
+            String villainName = characterCDao.getNameUsingRandom();
+            String npcName1 = characterCDao.getNameUsingRandom();
+            CharacterC villain = new CharacterC(villainName, "villain", null);
+            model.put("villain", villain);
+            CharacterC npc1 = new CharacterC(npcName1, "npc1", null);
+//            CharacterC villainName = characterCDao.findById(characterCDao.getAll().size());
+            model.put("npc1", npc1);
+            wordDao.createRandomWord();
+            Word word = wordDao.findById(wordDao.getAll().size());
+            model.put("word", word);
             return new ModelAndView(model, "board1.hbs");
         }, new HandlebarsTemplateEngine());
 
