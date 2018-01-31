@@ -3,19 +3,19 @@
 <div class = "well charWell">
     <h2>Name: {{character.name}}</h2>
     <p>Class: {{character.charClass}}</p>
-    <p>Gender: {{character.gender}}</p>
     <p>Description: {{character.description}}</p>
+
    <h2>Character Stats:</h2>
-        <p>HP:</p> <p>MP:</p>
-        <p>Strength:</p>
-        <p>Magic:</p>
-        <p>Dexterity:</p>
-        <p>Defense:</p>
-        <p>Magic Defense:</p>
-        <p>Level:</p>
-        <p>Experience:</p>
+        <p>HP:{{character.hP}}</p>
+        <p>MP:{{character.mP}}</p>
+        <p>Strength:{{character.strength}}</p>
+        <p>Magic:{{character.magic}}</p>
+        <p>Dexterity:{{character.dexterity}}</p>
+        <p>Defense:{{character.defense}}</p>
+        <p>Magic Defense:{{character.magicDefense}}</p>
+        <p>Level:{{character.level}}</p>
+        <p>Experience:{{character.experience}}</p>
         <a href="/game">Continue Game</a>
 </div>
-
 {{/partial}}
 {{> layout.hbs}}
