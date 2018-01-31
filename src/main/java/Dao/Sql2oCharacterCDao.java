@@ -1,6 +1,6 @@
 package Dao;
 
-import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
+//import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
 import models.CharacterC;
 import models.Effect;
 import models.Equipment;
@@ -41,26 +41,9 @@ public class Sql2oCharacterCDao implements CharacterCDao {
                 characterC.setMagicDefense(4);
                 characterC.setMagic(5);
                 characterC.setDexterity(4);
-
             }
         }
 
-//                            .addColumnMapping("NAME", "name")
-//                            .addColumnMapping("DESCRIPTION", "description")
-//                            .addColumnMapping("LEVEL", "level")
-//                            .addColumnMapping("EXPERIENCE", "experience")
-//                            .addColumnMapping("HP", "HP")
-//                            .addColumnMapping("CURRENTHP", "currentHP")
-//                            .addColumnMapping("DEFENSE", "defense")
-//                            .addColumnMapping("MAGICDEFENSE", "magicDefense")
-//                            .addColumnMapping("STRENGTH", "strength")
-//                            .addColumnMapping("MP", "MP")
-//                            .addColumnMapping("CURRENTMP", "currentMP")
-//                            .addColumnMapping("MAGIC", "magic")
-//                            .addColumnMapping("DEXTERITY", "dexterity")
-//                            .addColumnMapping("SPELLS", "spells")
-//                            .addColumnMapping("EQUIPMENT", "equipment")
-//                            .addColumnMapping("EFFECTS", "effects")
         String sql = "INSERT INTO characters (name, description, level, experience, HP, currentHP, defense, magicDefense, strength, MP, currentMP, magic, dexterity) VALUES (:name, :description, :level, :experience, :HP, :currentHP, :defense, :magicDefense, :strength, :MP, :currentMP, :magic, :dexterity)";
         try (Connection con = sql2o.open()) {
             int id = (int) con.createQuery(sql)
