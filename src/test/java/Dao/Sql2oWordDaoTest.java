@@ -55,10 +55,18 @@ public class Sql2oWordDaoTest {
         wordDao.createRandomWord();
         wordDao.createRandomWord();
         assertNotEquals(wordDao.findById(1).getName(), wordDao.findById(2).getName());
+        System.out.println(wordDao.findById(1).getName());
+        System.out.println(wordDao.findById(2).getName());
     }
 
     @Test
     public void findById() throws Exception {
+        Word word = setUpNewWord();
+        Word word1 = setUpNewWord1();
+        wordDao.add(word);
+        wordDao.add(word1);
+        assertEquals(word, wordDao.findById(word.getId()));
+        assertEquals(word1, wordDao.findById(word1.getId()));
     }
 
     @Test
