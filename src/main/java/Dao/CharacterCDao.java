@@ -25,7 +25,6 @@ public interface CharacterCDao {
     void attack(CharacterC attacker, CharacterC target);
     void castSpell(Spell spell, CharacterC attacking, List<CharacterC> targets);
     void checkForLevelUp(CharacterC characterC);
-
     void removeEquipmentFromCharacterC(Equipment equipment, CharacterC characterC);
     void removeSpellFromCharacterC(Spell spell, CharacterC characterC);
     void removeEffectFromCharacterC(Effect effect, CharacterC characterC);

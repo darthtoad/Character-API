@@ -20,32 +20,10 @@ public class CharacterC {
     private int dexterity;
     private String charClass;
 
-    public CharacterC(String name, String description) {
-        this.name = name;
-        this.description = description;
-    }
-
     public CharacterC(String name, String description, String charClass) {
         this.name = name;
         this.description = description;
         this.charClass = charClass;
-    }
-
-    public CharacterC(String name, String description, int level, int experience, int HP, int currentHP, int defense, int magicDefense, int strength, int MP, int currentMP, int magic, int dexterity) {
-        this.name = name;
-        this.description = description;
-        this.level = level;
-        this.experience = experience;
-        this.HP = HP;
-        this.currentHP = currentHP;
-        this.defense = defense;
-        this.magicDefense = magicDefense;
-        this.strength = strength;
-        this.MP = MP;
-        this.currentMP = currentMP;
-        this.magic = magic;
-        this.dexterity = dexterity;
-
     }
 
     public CharacterC(String name, String description, int level, int experience, int HP, int currentHP, int defense, int magicDefense, int strength, int MP, int currentMP, int magic, int dexterity, String charClass) {
@@ -64,6 +42,26 @@ public class CharacterC {
         this.dexterity = dexterity;
         this.charClass = charClass;
     }
+
+
+    public CharacterC(String name, String description, int level, int experience, int HP, int currentHP, int defense, int magicDefense, int strength, int MP, int currentMP, int magic, int dexterity) {
+        this.name = name;
+        this.description = description;
+        this.level = level;
+        this.experience = experience;
+        this.HP = HP;
+        this.currentHP = currentHP;
+        this.defense = defense;
+        this.magicDefense = magicDefense;
+        this.strength = strength;
+        this.MP = MP;
+        this.currentMP = currentMP;
+        this.magic = magic;
+        this.dexterity = dexterity;
+
+    }
+
+
 
     public String getCharClass() {
         return charClass;
@@ -193,15 +191,38 @@ public class CharacterC {
         CharacterC that = (CharacterC) o;
 
         if (id != that.id) return false;
-        if (!name.equals(that.name)) return false;
-        return description.equals(that.description);
+        if (level != that.level) return false;
+        if (experience != that.experience) return false;
+        if (HP != that.HP) return false;
+        if (currentHP != that.currentHP) return false;
+        if (defense != that.defense) return false;
+        if (magicDefense != that.magicDefense) return false;
+        if (strength != that.strength) return false;
+        if (MP != that.MP) return false;
+        if (currentMP != that.currentMP) return false;
+        if (magic != that.magic) return false;
+        if (dexterity != that.dexterity) return false;
+        if (!description.equals(that.description)) return false;
+        return name != null ? name.equals(that.name) : that.name == null;
     }
 
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + name.hashCode();
-        result = 31 * result + description.hashCode();
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + level;
+        result = 31 * result + experience;
+        result = 31 * result + HP;
+        result = 31 * result + currentHP;
+        result = 31 * result + defense;
+        result = 31 * result + magicDefense;
+        result = 31 * result + strength;
+        result = 31 * result + MP;
+        result = 31 * result + currentMP;
+        result = 31 * result + magic;
+        result = 31 * result + dexterity;
         return result;
     }
+
 }

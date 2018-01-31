@@ -39,18 +39,6 @@ public class App {
 
         //API
 
-        get("/", (req, res) -> {
-            Map<String, Object> model = new HashMap<>();
-
-            return new ModelAndView(model, "index.hbs");
-        }, new HandlebarsTemplateEngine());
-
-        get("/game", (req, res) -> {
-            Map<String, Object> model = new HashMap<>();
-
-            return new ModelAndView(model, "hud.hbs");
-        }, new HandlebarsTemplateEngine());
-
         post("/characters/new", "application/json", (request, response) -> {
             CharacterC characterC = gson.fromJson(request.body(), CharacterC.class);
             characterCDao.add(characterC);
@@ -265,6 +253,16 @@ public class App {
         });
 
         //FRONTEND ROUTING
+        get("/", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            return new ModelAndView(model, "index.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        get("/game", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            return new ModelAndView(model, "hud.hbs");
+        }, new HandlebarsTemplateEngine());
+
         get("/character/new", (req, res) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             return new ModelAndView(model, "new_character.hbs");
