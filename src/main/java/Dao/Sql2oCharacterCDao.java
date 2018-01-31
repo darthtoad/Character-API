@@ -360,20 +360,14 @@ public class Sql2oCharacterCDao implements CharacterCDao {
         return turnOrder;
     }
 
-    public boolean runAway(List<CharacterC> PCs, List<CharacterC> enemies) {
-        int bestPC = 0;
-        for (CharacterC characterC : PCs) {
-            if (characterC.getDexterity() > bestPC) {
-                bestPC = characterC.getDexterity();
-            }
-        }
+    public boolean runAway(CharacterC runner, List<CharacterC> enemies) {
         int bestEnemy = 0;
         for (CharacterC characterC : enemies) {
             if (characterC.getDexterity() > bestEnemy) {
                 bestEnemy = characterC.getDexterity();
             }
         }
-        if (bestPC > bestEnemy) {
+        if (runner.getDexterity() > bestEnemy) {
             return true;
         } else {
             return false;
@@ -680,7 +674,54 @@ public class Sql2oCharacterCDao implements CharacterCDao {
         return name;
 
     }
+    public void userInput(String string, CharacterC characterC, List<CharacterC> targets) {
+        if (string.toLowerCase().equals("attack")) {
+            this.attack(characterC, targets.get(0));
+        }
+        for (Spell spell : this.getAllSpellsForACharacter(characterC.getId())) {
+            if (spell.getName().toLowerCase().equals(string)) {
+                this.castSpell(spell, characterC, targets);
+                break;
+            }
+        }
+        if (string.toLowerCase().equals("run away")) {
+            this.runAway(characterC, targets);
+        }
+    }
 
+    public void computerInput(CharacterC enemy, List<CharacterC> targets) {
+        int magicNumber = (int) Math.random() * (targets.size() - 1);
+        int magicNumber1 = (int) Math.random() * (targets.size() - 1);
+        if (enemy.getMagic() * (Math.random() + 1) > targets.get(magicNumber).getMagicDefense() && this.getAllSpellsForACharacter(enemy.getId()).size() > 0) {
+            this.castSpell(this.getAllSpellsForACharacter(enemy.getId()).get(magicNumber1), enemy, targets);
+        } else if (enemy.getCurrentHP() > 5) {
+            this.attack(enemy, targets.get(magicNumber));
+        } else {
+            this.runAway(enemy, targets);
+        }
+    }
+
+//    public void battle(List<CharacterC> PCs, List<CharacterC> enemies) {
+//        List<CharacterC> allCharacters = new ArrayList<CharacterC>() {
+//            {
+//                addAll(PCs);
+//                addAll(enemies);
+//            }
+//        };
+//        List<Integer> order = this.findTurnOrder(allCharacters);
+//        int currentTurn = 0;
+//        while (PCs.size() > 0 && enemies.size() > 0) {
+//            if (PCs.get(currentTurn).getCharClass() != null || PCs.get(currentTurn).getCharClass() != "") {
+//
+//            } else {
+//
+//            }
+//
+//            if (currentTurn >= order.size()) {
+//                currentTurn = 0;
+//            }
+//        }
+//    }
 
     public void populateCharacters() {
         CharacterC goblin = new CharacterC("Goblin", "A nasty Goblin", 1, 20, 10, 10, 1, 0, 2, 0, 0, 0, 2);
@@ -697,7 +738,7 @@ public class Sql2oCharacterCDao implements CharacterCDao {
         CharacterC troll = new CharacterC("Troll", "Looks a bit like Danny Devito", 3, 400, 50, 50, 4, 2, 3, 0, 0, 0, 1);
         CharacterC werewolf = new CharacterC("Werewolf", "What wolf?", 3, 160, 30, 30, 1, 1, 4, 5, 5, 1, 5);
         CharacterC scorpion = new CharacterC("Scorpion", "Sub-Zero's mortal enemy", 1, 40, 15, 15, 3, 1, 3, 10, 10, 3, 4);
-        CharacterC reaper = new CharacterC("Reaper", "'It's time...'", 6, 600, 30, 30, 3, 6, 3, 30, 30, 6, 3);
+        CharacterC reaper = new CharacterC("Reaper", "'Die, Dieee, DIIIEEEE'", 6, 600, 30, 30, 3, 6, 3, 30, 30, 6, 3);
         CharacterC pirate = new CharacterC("Pirate", "Why couldn't Samantha take her kid with her to see a pirate movie? Because it was rated RRRRRRR", 2, 40, 20, 20, 3, 1, 4, 0, 0, 0, 4);
         CharacterC ogre = new CharacterC("Ogre", "Ogre? I hardly know her!", 4, 400, 40, 40, 6, 4, 5, 0, 0, 0, 1);
         CharacterC killerShark = new CharacterC("Killer Shark", "A land shark. How did it grow legs?", 2, 40, 20, 20, 1, 0, 3, 0, 0, 0, 7);
