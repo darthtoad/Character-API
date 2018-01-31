@@ -77,11 +77,24 @@ CREATE TABLE IF NOT EXISTS effects_spells (
     effectId INTEGER,
     spellId INTEGER
 );
+
+CREATE TABLE IF NOT EXISTS locations (
+    id int PRIMARY KEY auto_increment,
+    name VARCHAR,
+    description VARCHAR
+);
+
+CREATE TABLE IF NOT EXISTS words (
+    id int PRIMARY KEY auto_increment,
+    name VARCHAR
+);
+
 CREATE TABLE IF NOT EXISTS items (
     id int PRIMARY KEY auto_increment,
     currentHP INTEGER,
-    currentMP INTEGER,
+    currentMP INTEGER
 );
+  
 CREATE TABLE IF NOT EXISTS characters_items (
     id int PRIMARY KEY auto_increment,
     itemId INTEGER,
