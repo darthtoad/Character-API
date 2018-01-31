@@ -258,9 +258,9 @@ public class App {
             return new ModelAndView(model, "index.hbs");
         }, new HandlebarsTemplateEngine());
 
-        get("/game", (req, res) -> {
+        get("/game/board1", (req, res) -> {
             Map<String, Object> model = new HashMap<>();
-            return new ModelAndView(model, "hud.hbs");
+            return new ModelAndView(model, "board1.hbs");
         }, new HandlebarsTemplateEngine());
 
         get("/character/new", (req, res) -> {
@@ -273,7 +273,7 @@ public class App {
             CharacterC character = new CharacterC(req.queryParams("name"), req.queryParams("description"), req.queryParams("charClass"));
             characterCDao.add(character);
             model.put("character", character);
-            return new ModelAndView(model, "success.hbs");
+            return new ModelAndView(model, "board1.hbs");
         }, new HandlebarsTemplateEngine());
 
         get("/character/:id", (req, res) -> {
