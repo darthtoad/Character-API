@@ -92,6 +92,13 @@ public class Sql2oWordDaoTest {
 
     @Test
     public void deleteById() throws Exception {
+        Word word = setUpNewWord();
+        Word word1 = setUpNewWord1();
+        wordDao.add(word);
+        wordDao.add(word1);
+        wordDao.deleteById(word.getId());
+        assertFalse(wordDao.getAll().contains(word));
+        assertTrue(wordDao.getAll().contains(word1));
     }
 
     @Test
