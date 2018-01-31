@@ -47,6 +47,12 @@ public class Sql2oLocationDaoTest {
 
     @Test
     public void findByIdFindsCorrectly() throws Exception {
+        Location location = setupNewLocation();
+        Location location1 = setupNewLocation1();
+        locationDao.add(location);
+        locationDao.add(location1);
+        assertEquals(location, locationDao.findById(location.getId()));
+        assertEquals(location1, locationDao.findById(location1.getId()));
     }
 
     @Test
