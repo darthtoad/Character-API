@@ -1,5 +1,6 @@
 body {
     font-family: 'Share Tech Mono', monospace;
+    font-size: 22px;
     background-image: url("/images/background3.png");
     background-position; center center;
     background-repeat: no-repeat;
@@ -24,19 +25,19 @@ body {
 }
 
 .mainContent {
-    background: rgba(161, 165, 173, 0.5);
+    background: rgba(161, 165, 173, .8);
 }
 
 .sideNav {
-    background: rgba(161, 165, 173, 0.5);
+    background: rgba(161, 165, 173, .6);
 }
 
 .sideNav .panel-heading {
-    background: rgba(161, 165, 173, 0.5);
+    background: rgba(161, 165, 173, .8);
 }
 
-.panel {
-    background: rgba(161, 165, 173, 0.5);
+.panel .panel-heading {
+    background: rgba(161, 165, 173, .8);
 }
 
 .charPorts {
@@ -49,11 +50,19 @@ body {
 }
 
 .char1 {
-    padding-top: 20px;
+    padding-top: 10px;
 }
 
 .char3 {
     padding-bottom: 20px;
+}
+
+.charWell {
+    background: rgba(161, 165, 173, .8);
+}
+
+.newCharWell {
+    background: rgba(161, 165, 173, .8);
 }
 
 .detailsPanel {
@@ -67,5 +76,9 @@ body {
     background: rgba(161, 165, 173, .8);
     font-size: 22px;
     color: #ffffff;
+}
+
+a {
+    color: #ff0c0c;
 }
 
