@@ -45,6 +45,14 @@ public class App {
             return gson.toJson(characterC);
         });
 
+        get("/characters/random/new", "application/json", (request, response) -> {
+            String name = characterCDao.getNameUsingRandom();
+            CharacterC characterC = new CharacterC(name, "NPC");
+            characterCDao.add(characterC);
+            response.status(201);
+            return gson.toJson(characterC);
+        });
+
         post("/characters/:characterId/effects/:effectId", "application/json", (request, response) -> {
             int characterId = Integer.parseInt(request.params("characterId"));
             int effectId = Integer.parseInt(request.params("effectId"));
@@ -322,12 +330,20 @@ public class App {
 
         get("/character/new", (req, res) -> {
             Map<String, Object> model = new HashMap<String, Object>();
-            return new ModelAndView(model, "new_character.hbs");
+            return new ModelAndView(model, "new_fighter.hbs");
         }, new HandlebarsTemplateEngine());
 
         post("/character/new", (req, res) -> {
             Map<String, Object> model = new HashMap<String, Object>();
-            CharacterC character = new CharacterC(req.queryParams("name"), req.queryParams("description"), req.queryParams("charClass"));
+            CharacterC character = new CharacterC(req.queryParams("name"), "Fighter", "fighter");
+            characterCDao.add(character);
+            model.put("character", character);
+            return new ModelAndView(model, "new_redmage.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        post("/game/new", (req, res) -> {
+            Map<String, Object> model = new HashMap<String, Object>();
+            CharacterC character = new CharacterC(req.queryParams("name"), "red mage", "red mage");
             characterCDao.add(character);
             model.put("character", character);
             return new ModelAndView(model, "board1.hbs");

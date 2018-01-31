@@ -40,9 +40,12 @@ public class Sql2oCharacterCDao implements CharacterCDao {
                 characterC.setLevel(1);
                 characterC.setHP(12);
                 characterC.setCurrentHP(12);
+                characterC.setMP(6);
+                characterC.setCurrentMP(6);
+                characterC.setStrength(4);
                 characterC.setDefense(3);
                 characterC.setMagicDefense(4);
-                characterC.setMagic(5);
+                characterC.setMagic(6);
                 characterC.setDexterity(4);
             }
         }
