@@ -26,6 +26,30 @@ public class CharacterC {
         this.charClass = charClass;
     }
 
+    public CharacterC(String name, String description, int level, int experience, int HP, int currentHP, int defense, int magicDefense, int strength, int MP, int currentMP, int magic, int dexterity, String charClass) {
+        this.name = name;
+        this.description = description;
+        this.level = level;
+        this.experience = experience;
+        this.HP = HP;
+        this.currentHP = currentHP;
+        this.defense = defense;
+        this.magicDefense = magicDefense;
+        this.strength = strength;
+        this.MP = MP;
+        this.currentMP = currentMP;
+        this.magic = magic;
+        this.dexterity = dexterity;
+        this.charClass = charClass;
+    }
+
+
+    public CharacterC(String name, String description, String charClass) {
+        this.name = name;
+        this.description = description;
+        this.charClass = charClass;
+    }
+
     public CharacterC(String name, String description, int level, int experience, int HP, int currentHP, int defense, int magicDefense, int strength, int MP, int currentMP, int magic, int dexterity) {
         this.name = name;
         this.description = description;
@@ -43,22 +67,7 @@ public class CharacterC {
 
     }
 
-    public CharacterC(String name, String description, int level, int experience, int HP, int currentHP, int defense, int magicDefense, int strength, int MP, int currentMP, int magic, int dexterity, String charClass) {
-        this.name = name;
-        this.description = description;
-        this.level = level;
-        this.experience = experience;
-        this.HP = HP;
-        this.currentHP = currentHP;
-        this.defense = defense;
-        this.magicDefense = magicDefense;
-        this.strength = strength;
-        this.MP = MP;
-        this.currentMP = currentMP;
-        this.magic = magic;
-        this.dexterity = dexterity;
-        this.charClass = charClass;
-    }
+
 
     public String getCharClass() {
         return charClass;
