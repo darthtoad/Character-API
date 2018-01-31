@@ -67,6 +67,15 @@ public class Sql2oLocationDaoTest {
 
     @Test
     public void updateUpdatesCorrectly() throws Exception {
+        Location location = setupNewLocation();
+        Location location1 = setupNewLocation1();
+        locationDao.add(location);
+        locationDao.add(location1);
+        String originalName = location.getName();
+        String originalDescription = location.getDescription();
+        locationDao.update(location.getId(), "New Zealand", "An island. Or two islands. Or two island surrounded by smaller islands.");
+        assertNotEquals(originalDescription, locationDao.findById(location.getId()).getDescription());
+        assertNotEquals(originalName, locationDao.findById(location.getId()).getName());
     }
 
     @Test
