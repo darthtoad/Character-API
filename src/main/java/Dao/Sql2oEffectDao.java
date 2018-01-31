@@ -13,6 +13,7 @@ public class Sql2oEffectDao implements EffectDao{
     public Sql2oEffectDao(Sql2o sql2o) {
         this.sql2o = sql2o;
     }
+
     @Override
     public void add(Effect effect) {
         String sql = "INSERT INTO effects (name, description, HP, currentHP, defense, magicDefense, strength, MP, currentMP, magic, dexterity, ) VALUES (:name, :description, :HP, :currentHP, :defense, :magicDefense, :strength, :MP, :currentMP, :magic, :dexterity, :other)";
@@ -90,5 +91,16 @@ public class Sql2oEffectDao implements EffectDao{
         } catch (Sql2oException ex) {
             System.out.println(ex);
         }
+    }
+
+    public void populateEffects() {
+        Effect poison = new Effect("Poison", "lose HP every turn", 0, -2, 0, 0, 0, 0, 0, 0, 0, "increment" );
+        this.add(poison);
+        Effect regen = new Effect("Regen", "Regenerate health every turn", 0, 2, 0, 0, 0, 0, 0, 0, 0, "increment");
+        this.add(regen);
+        Effect upAll = new Effect("Up All", "Increases all stats by 1", 1, 1, 1, 1, 1, 1, 1, 1, 1, "");
+        this.add(upAll);
+        Effect paralyze = new Effect("Paralyze", "lose all dexterity", 0, 0, 0, 0, 0, 0, 0, 0, -100, "5 turns");
+        this.add(paralyze);
     }
 }

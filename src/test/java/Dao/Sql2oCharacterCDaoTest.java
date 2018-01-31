@@ -7,6 +7,9 @@ import org.junit.Test;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 public class Sql2oCharacterCDaoTest {
@@ -76,6 +79,13 @@ public class Sql2oCharacterCDaoTest {
     }
 
     @Test
+    public void addCharacterWithClassAddsCorrectly() throws Exception {
+        CharacterC fighter = new CharacterC("Fighter", "A fighter", "fighter");
+        characterCDao.add(fighter);
+        assertEquals(6, fighter.getStrength());
+    }
+
+    @Test
     public void addEquipmentToCharacterAssociatesCorrectly() throws Exception {
         CharacterC characterC = setupNewCharacterC();
         CharacterC characterC1 = setupNewCharacterC1();
@@ -86,6 +96,19 @@ public class Sql2oCharacterCDaoTest {
         characterCDao.addEquipmentToCharacterC(equipment, characterC);
         assertEquals(1, characterCDao.getAllEquipmentForACharacter(characterC.getId()).size());
         assertTrue(characterCDao.getAllEquipmentForACharacter(characterC.getId()).contains(equipment));
+    }
+
+    @Test
+    public void addEquipmentToCharacterChangesStats() throws Exception {
+        Equipment equipment = new Equipment("Sword of Awesome", "Sword", 4, 0, 0, 0, 0);
+        CharacterC characterC = setupNewCharacterC();
+        CharacterC characterC1 = setupNewCharacterC1();
+        characterCDao.add(characterC);
+        int originalStrength = characterC.getStrength();
+        equipmentDao.add(equipment);
+        characterCDao.addEquipmentToCharacterC(equipmentDao.findById(equipment.getId()), characterCDao.findById(characterC.getId()));
+        assertNotEquals(originalStrength, characterCDao.findById(characterC.getId()));
+        assertEquals(characterCDao.findById(characterC.getId()).getStrength(), originalStrength + equipment.getStrength());
     }
 
     @Test
@@ -110,6 +133,21 @@ public class Sql2oCharacterCDaoTest {
         characterCDao.add(characterC1);
         effectDao.add(effect);
         characterCDao.addEffectToCharacterC(effect, characterC);
+        assertEquals(1, characterCDao.getAllEffectsForACharacter(characterC.getId()).size());
+        assertTrue(characterCDao.getAllEffectsForACharacter(characterC.getId()).contains(effect));
+    }
+
+    @Test
+    public void addEffectChangesStats() throws Exception {
+        CharacterC characterC = setupNewCharacterC();
+        CharacterC characterC1 = setupNewCharacterC1();
+        Effect effect = setupNewEffect();
+        characterCDao.add(characterC);
+        characterCDao.add(characterC1);
+        effectDao.add(effect);
+        int originalCurrentHP = characterCDao.findById(characterC.getId()).getCurrentHP();
+        characterCDao.addEffectToCharacterC(effect, characterC);
+        assertNotEquals(originalCurrentHP, characterC.getCurrentHP());
         assertEquals(1, characterCDao.getAllEffectsForACharacter(characterC.getId()).size());
         assertTrue(characterCDao.getAllEffectsForACharacter(characterC.getId()).contains(effect));
     }
@@ -209,9 +247,78 @@ public class Sql2oCharacterCDaoTest {
         CharacterC characterC1 = setupNewCharacterC1();
         characterCDao.add(characterC);
         int originalLevel = characterC.getLevel();
+        int originalStrength = characterC.getStrength();
         characterCDao.checkForLevelUp(characterC);
         assertNotEquals(originalLevel, characterCDao.findById(characterC.getId()).getLevel());
-        assertEquals(5, characterCDao.findById(characterC.getId()).getLevel());
+        assertEquals(6, characterCDao.findById(characterC.getId()).getLevel());
+        assertNotEquals(originalStrength, characterCDao.findById(characterC.getId()).getStrength());
+    }
+
+    @Test
+    public void checkForLevelUpWorksWithClass() throws Exception {
+        CharacterC characterC = new CharacterC("Mr Poopy-Poop", "A big piece of poop", 1, 1000, 1, 1, 1, 1, 1, 1, 1, 1, 1, "Fighter");
+        CharacterC characterC1 = setupNewCharacterC1();
+        characterCDao.add(characterC);
+        int originalLevel = characterC.getLevel();
+        int originalStrength = characterC.getStrength();
+        characterCDao.checkForLevelUp(characterC);
+        assertNotEquals(originalLevel, characterCDao.findById(characterC.getId()).getLevel());
+        assertEquals(7, characterCDao.findById(characterC.getId()).getLevel());
+        assertNotEquals(originalStrength, characterCDao.findById(characterC.getId()).getStrength());
+    }
+
+    @Test
+    public void castSpellChangesMP() throws Exception {
+        CharacterC characterC = setupNewCharacterC();
+        CharacterC characterC1 = setupNewCharacterC1();
+        List<CharacterC> charactersList = new ArrayList<>();
+        charactersList.add(characterC1);
+        Spell spell = setupNewSpell();
+        Spell spell1 = setupNewSpell1();
+        int originalMP = characterC.getCurrentMP();
+        characterCDao.castSpell(spell, characterC, charactersList);
+        assertNotEquals(originalMP, characterC.getCurrentMP());
+    }
+
+    @Test
+    public void findTurnOrderFindsTurnOrder() throws Exception {
+        CharacterC characterC = setupNewCharacterC();
+        CharacterC characterC1 = setupNewCharacterC1();
+        CharacterC characterC2 = setupNewCharacterC2();
+        CharacterC characterC3 = new CharacterC("Paul", "A guy named Paul", 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+        characterCDao.add(characterC);
+        characterCDao.add(characterC1);
+        characterCDao.add(characterC2);
+        characterCDao.add(characterC3);
+        List<CharacterC> characterCList = new ArrayList<>();
+        characterCList.add(characterC);
+        characterCList.add(characterC1);
+        characterCList.add(characterC2);
+        characterCList.add(characterC3);
+        List<Integer> turnOrder = characterCDao.findTurnOrder(characterCList);
+        assertTrue(turnOrder.get(0) == 2);
+        assertTrue(turnOrder.get(1) == 1);
+        assertTrue(turnOrder.get(2) == 3);
+        assertTrue(turnOrder.get(3) == 4);
+    }
+
+    @Test
+    public void runAwayRunsAway() throws Exception {
+        CharacterC characterC = setupNewCharacterC();
+        CharacterC characterC1 = setupNewCharacterC1();
+        CharacterC characterC2 = setupNewCharacterC2();
+        CharacterC characterC3 = new CharacterC("Paul", "A guy named Paul", 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+        characterCDao.add(characterC);
+        characterCDao.add(characterC1);
+        characterCDao.add(characterC2);
+        characterCDao.add(characterC3);
+        List<CharacterC> PCs = new ArrayList<>();
+        List<CharacterC> enemies = new ArrayList<>();
+        PCs.add(characterC);
+        PCs.add(characterC1);
+        enemies.add(characterC2);
+        enemies.add(characterC3);
+        assertTrue(characterCDao.runAway(PCs, enemies));
     }
 
     @Test
@@ -257,6 +364,28 @@ public class Sql2oCharacterCDaoTest {
         characterCDao.removeEquipmentFromCharacterC(equipment, characterC);
         assertEquals(0, characterCDao.getAllEquipmentForACharacter(characterC.getId()).size());
         assertFalse(characterCDao.getAllEquipmentForACharacter(characterC.getId()).contains(equipment));
+    }
+
+    @Test
+    public void removeEquipmentFromCharacterChangesStats() throws Exception {
+        CharacterC characterC = setupNewCharacterC();
+        CharacterC characterC1 = setupNewCharacterC1();
+        CharacterC characterC2 = setupNewCharacterC2();
+        characterCDao.add(characterC);
+        characterCDao.add(characterC1);
+        characterCDao.add(characterC2);
+        Equipment equipment = setupNewEquipment();
+        Equipment equipment1 = setupNewEquipment1();
+        equipmentDao.add(equipment);
+        equipmentDao.add(equipment1);
+        characterCDao.addEquipmentToCharacterC(equipment, characterC);
+        assertEquals(1, characterCDao.getAllEquipmentForACharacter(characterC.getId()).size());
+        assertTrue(characterCDao.getAllEquipmentForACharacter(characterC.getId()).contains(equipment));
+        int originalStrength = characterC.getStrength();
+        characterCDao.removeEquipmentFromCharacterC(equipment, characterC);
+        assertEquals(0, characterCDao.getAllEquipmentForACharacter(characterC.getId()).size());
+        assertFalse(characterCDao.getAllEquipmentForACharacter(characterC.getId()).contains(equipment));
+        assertNotEquals(originalStrength, characterCDao.findById(characterC.getId()).getStrength());
     }
 
     @Test
@@ -312,6 +441,33 @@ public class Sql2oCharacterCDaoTest {
         assertEquals(0, characterCDao.getAllEquipmentForACharacter(characterC.getId()).size());
         assertFalse(characterCDao.getAllEquipmentForACharacter(characterC.getId()).contains(equipment));
         assertFalse(characterCDao.getAllEquipmentForACharacter(characterC.getId()).contains(equipment1));
+    }
+
+    @Test
+    public void removeAllEquipmentChangesStats() throws Exception {
+        CharacterC characterC = setupNewCharacterC();
+        CharacterC characterC1 = setupNewCharacterC1();
+        CharacterC characterC2 = setupNewCharacterC2();
+        characterCDao.add(characterC);
+        characterCDao.add(characterC1);
+        characterCDao.add(characterC2);
+        Equipment equipment = setupNewEquipment();
+        Equipment equipment1 = setupNewEquipment1();
+        equipmentDao.add(equipment);
+        equipmentDao.add(equipment1);
+        characterCDao.addEquipmentToCharacterC(equipment, characterC);
+        characterCDao.addEquipmentToCharacterC(equipment1, characterC);
+        assertEquals(2, characterCDao.getAllEquipmentForACharacter(characterC.getId()).size());
+        assertTrue(characterCDao.getAllEquipmentForACharacter(characterC.getId()).contains(equipment));
+        assertTrue(characterCDao.getAllEquipmentForACharacter(characterC.getId()).contains(equipment1));
+        int originalStrength = characterCDao.findById(characterC.getId()).getStrength();
+        int originalDefense = characterCDao.findById(characterC.getId()).getDefense();
+        characterCDao.removeAllEquipmentFromCharacterC(characterC);
+        assertEquals(0, characterCDao.getAllEquipmentForACharacter(characterC.getId()).size());
+        assertFalse(characterCDao.getAllEquipmentForACharacter(characterC.getId()).contains(equipment));
+        assertFalse(characterCDao.getAllEquipmentForACharacter(characterC.getId()).contains(equipment1));
+        assertNotEquals(originalDefense, characterCDao.findById(characterC.getId()).getDefense());
+        assertNotEquals(originalStrength, characterCDao.findById(characterC.getId()).getStrength());
     }
 
     @Test
