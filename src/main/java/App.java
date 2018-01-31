@@ -13,6 +13,7 @@ import spark.ModelAndView;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static spark.Spark.*;
@@ -265,7 +266,7 @@ public class App {
 
         get("/character/new", (req, res) -> {
             Map<String, Object> model = new HashMap<String, Object>();
-            return new ModelAndView(model, "new_character.hbs");
+            return new ModelAndView(model, "new_fighter.hbs");
         }, new HandlebarsTemplateEngine());
 
         post("/character/new", (req, res) -> {
@@ -281,6 +282,11 @@ public class App {
             int characterId = Integer.parseInt(req.params("id"));
             model.put("character", characterCDao.findById(characterId));
             return new ModelAndView(model, "character.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        get("/death", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            return new ModelAndView(model, "death.hbs");
         }, new HandlebarsTemplateEngine());
 
 

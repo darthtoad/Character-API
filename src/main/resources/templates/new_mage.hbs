@@ -1,0 +1,28 @@
+{{#partial "content"}}
+    <div class = "well newCharWell">
+        <h1>New Character</h1>
+        <form action="/character/new" method="post">
+            <label>Name: </label>
+            <input name="name">
+            <br>
+            <label>Character Description: </label>
+            <input name="description">
+            <br>
+            <h2>Class: Red Mage</h2>
+            <br>
+            <h2>Character Stats</h2>
+            <p>HP:</p> <p>MP:</p>
+            <p>Strength:</p>
+            <p>Magic:</p>
+            <p>Dexterity:</p>
+            <p>Defense:</p>
+            <p>Magic Defense:</p>
+            <p>Level:</p>
+            <p>Experience:</p>
+
+            <button type="submit">submit</button>
+            <a href="/">Go Back</a>
+        </form>
+    </div>
+{{/partial}}
+{{> layout.hbs}}
