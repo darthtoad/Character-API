@@ -272,7 +272,7 @@ public class App {
 
         post("/character/new", (req, res) -> {
             Map<String, Object> model = new HashMap<String, Object>();
-            CharacterC character = new CharacterC(req.queryParams("name"), req.queryParams("description"), req.queryParams("fighter"));
+            CharacterC character = new CharacterC(req.queryParams("name"), req.queryParams("description"), req.queryParams("charClass"));
             characterCDao.add(character);
             model.put("character", character);
             return new ModelAndView(model, "success.hbs");
