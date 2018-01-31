@@ -41,8 +41,7 @@ public class Sql2oWordDao implements WordDao {
     }
 
     public void createRandomWord() {
-        String wordName = "Place";
-        Word word = new Word(wordName);
+        Word word;
         String url = "http://api.wordnik.com/v4/words.json/randomWord?includePartOfSpeech=noun&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5";
         String charset = "UTF=8";
 
@@ -59,8 +58,8 @@ public class Sql2oWordDao implements WordDao {
                 String jsonWord = json.getAsJsonObject()
                         .get("word")
                         .getAsString();
-                Word random = new Word(jsonWord);
-                this.add(random);
+                word = new Word(jsonWord);
+                this.add(word);
             }
         } catch (IOException e) {
             e.printStackTrace();
