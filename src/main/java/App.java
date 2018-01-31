@@ -33,6 +33,7 @@ public class App {
         wordDao = new Sql2oWordDao(sql2o);
         locationDao = new Sql2oLocationDao(sql2o);
 
+
         connection = sql2o.open();
 
         //API
@@ -295,7 +296,21 @@ public class App {
 
         get("/game/board1", (req, res) -> {
             Map<String, Object> model = new HashMap<>();
+            characterCDao.get`RandomName("de");
+            Location ourLocation = locationDao.findById(locationDao.getAll().size());
+            model.put("ourLocation", ourLocation);
             return new ModelAndView(model, "board1.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        get("/game/board2", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            locationDao.createRandomLocation("de");
+            Location ourLocation = locationDao.findById(locationDao.getAll().size());
+            model.put("ourLocation", ourLocation);
+            wordDao.createRandomWord();
+            Word word = wordDao.findById(wordDao.getAll().size());
+            model.put("word", word);
+            return new ModelAndView(model, "board2.hbs");
         }, new HandlebarsTemplateEngine());
 
         get("/character/new", (req, res) -> {
