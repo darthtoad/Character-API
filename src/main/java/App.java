@@ -18,8 +18,8 @@ public class App {
         Sql2oSpellDao spellDao;
         Sql2oEquipmentDao equipmentDao;
         Sql2oCharacterCDao characterCDao;
-        Sql2oLocationDao locationDao;
         Sql2oWordDao wordDao;
+        Sql2oLocationDao locationDao;
         Connection connection;
         Gson gson = new Gson();
 
@@ -30,8 +30,9 @@ public class App {
         spellDao = new Sql2oSpellDao(sql2o);
         equipmentDao = new Sql2oEquipmentDao(sql2o);
         characterCDao = new Sql2oCharacterCDao(sql2o);
-        locationDao = new Sql2oLocationDao(sql2o);
         wordDao = new Sql2oWordDao(sql2o);
+        locationDao = new Sql2oLocationDao(sql2o);
+
 
         connection = sql2o.open();
 
@@ -95,6 +96,19 @@ public class App {
             spellDao.addEffectToSpell(effectDao.findById(effectId), spellDao.findById(spellId));
             response.status(201);
             return gson.toJson(String.format("Spell '%s' gives the effect '%s'", spellDao.findById(spellId).getName(), effectDao.findById(effectId).getName()));
+        });
+
+        post("/locations/new", "application/json", (request, response) -> {
+            Location location = gson.fromJson(request.body(), Location.class);
+            locationDao.createRandomLocation(location.getDescription());
+            response.status(201);
+            return gson.toJson(locationDao.findById(locationDao.getAll().size()));
+        });
+
+        get("/words/new", "application/json", (request, response) -> {
+            wordDao.createRandomWord();
+            response.status(201);
+            return gson.toJson(wordDao.findById(wordDao.getAll().size()));
         });
 
         get("/characters", "application/json", (request, response) -> {
@@ -164,6 +178,18 @@ public class App {
             int effectId = Integer.parseInt(request.params("id"));
             response.status(201);
             return gson.toJson(effectDao.findById(effectId));
+        });
+
+        get("/words/:id", "application/json", (request, response) -> {
+            int wordId = Integer.parseInt(request.params("id"));
+            response.status(201);
+            return gson.toJson(wordDao.findById(wordId));
+        });
+
+        get("/locations/:id", "application/json", (request, response) -> {
+            int locationId = Integer.parseInt(request.params("id"));
+            response.status(201);
+            return gson.toJson(locationDao.findById(locationId));
         });
 
         post("/characters/:id/update", "application/json", (request, response) -> {
@@ -248,6 +274,18 @@ public class App {
             spellDao.deleteById(spellId);
             response.status(201);
             return gson.toJson("Your spell has been deleted");
+        });
+
+        post("/locations/delete", "application/json", (request, response) -> {
+            locationDao.deleteAll();
+            response.status(201);
+            return gson.toJson("All locations have been deleted");
+        });
+
+        post("/words/delete", "application/json", (request, response) -> {
+            wordDao.deleteAll();
+            response.status(201);
+            return gson.toJson("All words have been deleted");
         });
 
         //FRONTEND ROUTING

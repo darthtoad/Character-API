@@ -1,6 +1,12 @@
 package Dao;
 
 //import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import com.google.gson.*;
 import models.CharacterC;
 import models.Effect;
 import models.Equipment;
@@ -643,6 +649,31 @@ public class Sql2oCharacterCDao implements CharacterCDao {
         }
     }
 
+    public String getNameUsingRandom(){
+        String name = "";
+        String route = "https://randomuser.me/api/?";
+        String nationality = "&nat=us";
+        String property = "inc=name";
+        String apiRequest = (route + property + nationality).replaceAll(" ", "+");
+        try {
+            URL url = new URL(apiRequest);
+            HttpURLConnection request = (HttpURLConnection) url.openConnection();
+            request.connect();
+            JsonParser parser = new JsonParser();
+            JsonElement json = parser.parse(new InputStreamReader((InputStream) request.getContent()));
+            name = json.getAsJsonObject().get("results")
+                    .getAsJsonArray().get(0)
+                    .getAsJsonObject().get("name")
+                    .getAsJsonObject().get("first")
+                    .getAsString();
+            System.out.println(name);
+
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+        return name;
+
+    }
     public void userInput(String string, CharacterC characterC, List<CharacterC> targets) {
         if (string.toLowerCase().equals("attack")) {
             this.attack(characterC, targets.get(0));
@@ -691,7 +722,6 @@ public class Sql2oCharacterCDao implements CharacterCDao {
 //            }
 //        }
 //    }
-
 
     public void populateCharacters() {
         CharacterC goblin = new CharacterC("Goblin", "A nasty Goblin", 1, 20, 10, 10, 1, 0, 2, 0, 0, 0, 2);
