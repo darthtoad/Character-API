@@ -1,5 +1,5 @@
 body {
-    background-image: url("/images/background2.jpg");
+    background-image: url("/images/background3.png");
     background-repeat: no-repeat;
     background-size: 2550px 100%;
     font-family: 'Share Tech Mono', monospace;
@@ -37,7 +37,6 @@ body {
     background: rgba(161, 165, 173, 0.5);
     font-family: 'Share Tech Mono', monospace;
     font-size: 22px;
-    background-image: url("/images/background3.png");
     background-position; center center;
     background-repeat: no-repeat;
     background-size: cover;
