@@ -542,4 +542,10 @@ public class Sql2oCharacterCDaoTest {
         characterCDao.computerInput(characterC, enemies);
         assertNotEquals(originalHP, characterC3.getCurrentHP());
     }
+    @Test
+    public void getNameUsingRandomReturnsAStringName() throws Exception {
+        String someName = characterCDao.getNameUsingRandom();
+        String randomName = characterCDao.getNameUsingRandom();
+        assertNotEquals(someName, randomName);
+    }
 }

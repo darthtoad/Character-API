@@ -1,9 +1,6 @@
 import Dao.*;
 import com.google.gson.Gson;
-import models.CharacterC;
-import models.Effect;
-import models.Equipment;
-import models.Spell;
+import models.*;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 import spark.ModelAndView;
@@ -22,6 +19,10 @@ public class App {
         Sql2oEquipmentDao equipmentDao;
         Sql2oCharacterCDao characterCDao;
         Sql2oItemDao itemDao;
+
+        Sql2oWordDao wordDao;
+        Sql2oLocationDao locationDao;
+
         Connection connection;
         Gson gson = new Gson();
 
@@ -33,6 +34,8 @@ public class App {
         equipmentDao = new Sql2oEquipmentDao(sql2o);
         characterCDao = new Sql2oCharacterCDao(sql2o);
         itemDao = new Sql2oItemDao(sql2o);
+        wordDao = new Sql2oWordDao(sql2o);
+        locationDao = new Sql2oLocationDao(sql2o);
 
         connection = sql2o.open();
 
@@ -114,6 +117,19 @@ public class App {
             return gson.toJson(String.format("Spell '%s' gives the effect '%s'", spellDao.findById(spellId).getName(), effectDao.findById(effectId).getName()));
         });
 
+        post("/locations/new", "application/json", (request, response) -> {
+            Location location = gson.fromJson(request.body(), Location.class);
+            locationDao.createRandomLocation(location.getDescription());
+            response.status(201);
+            return gson.toJson(locationDao.findById(locationDao.getAll().size()));
+        });
+
+        get("/words/new", "application/json", (request, response) -> {
+            wordDao.createRandomWord();
+            response.status(201);
+            return gson.toJson(wordDao.findById(wordDao.getAll().size()));
+        });
+
         get("/characters", "application/json", (request, response) -> {
             response.status(201);
             return gson.toJson(characterCDao.getAll());
@@ -166,7 +182,7 @@ public class App {
             return gson.toJson(spellDao.findById(spellId));
         });
 
-        get("spells/:id/effects", "application/json", (request, response) -> {
+        get("/spells/:id/effects", "application/json", (request, response) -> {
             int spellId = Integer.parseInt(request.params("id"));
             response.status(201);
             return gson.toJson(spellDao.getAllEffectsForSpell(spellId));
@@ -181,6 +197,18 @@ public class App {
             int effectId = Integer.parseInt(request.params("id"));
             response.status(201);
             return gson.toJson(effectDao.findById(effectId));
+        });
+
+        get("/words/:id", "application/json", (request, response) -> {
+            int wordId = Integer.parseInt(request.params("id"));
+            response.status(201);
+            return gson.toJson(wordDao.findById(wordId));
+        });
+
+        get("/locations/:id", "application/json", (request, response) -> {
+            int locationId = Integer.parseInt(request.params("id"));
+            response.status(201);
+            return gson.toJson(locationDao.findById(locationId));
         });
 
         post("/characters/:id/update", "application/json", (request, response) -> {
@@ -267,6 +295,18 @@ public class App {
             return gson.toJson("Your spell has been deleted");
         });
 
+        post("/locations/delete", "application/json", (request, response) -> {
+            locationDao.deleteAll();
+            response.status(201);
+            return gson.toJson("All locations have been deleted");
+        });
+
+        post("/words/delete", "application/json", (request, response) -> {
+            wordDao.deleteAll();
+            response.status(201);
+            return gson.toJson("All words have been deleted");
+        });
+
         //FRONTEND ROUTING
         get("/", (req, res) -> {
             Map<String, Object> model = new HashMap<>();
@@ -275,7 +315,43 @@ public class App {
 
         get("/game/board1", (req, res) -> {
             Map<String, Object> model = new HashMap<>();
+            String villainName = characterCDao.getNameUsingRandom();
+            String npcName1 = characterCDao.getNameUsingRandom();
+            CharacterC villain = new CharacterC(villainName, "villain", null);
+            model.put("villain", villain);
+            CharacterC npc1 = new CharacterC(npcName1, "npc1", null);
+//            CharacterC villainName = characterCDao.findById(characterCDao.getAll().size());
+            model.put("npc1", npc1);
+            wordDao.createRandomWord();
+            Word word = wordDao.findById(wordDao.getAll().size());
+            model.put("word", word);
             return new ModelAndView(model, "board1.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        get("/game/board2", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            locationDao.createRandomLocation("de");
+            Location ourLocation = locationDao.findById(locationDao.getAll().size());
+            model.put("ourLocation", ourLocation);
+            wordDao.createRandomWord();
+            Word word = wordDao.findById(wordDao.getAll().size());
+            model.put("word", word);
+            return new ModelAndView(model, "board2.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        get("/game/board3", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            return new ModelAndView(model, "board3.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        get("/game/board3.1", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            return new ModelAndView(model, "board3.1.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        get("/game/board3.2", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            return new ModelAndView(model, "board3.2.hbs");
         }, new HandlebarsTemplateEngine());
 
         get("/character/new", (req, res) -> {

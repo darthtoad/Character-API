@@ -7,10 +7,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import com.google.gson.*;
-import models.CharacterC;
-import models.Effect;
-import models.Equipment;
-import models.Spell;
+import models.*;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 import org.sql2o.Sql2oException;
@@ -159,6 +156,41 @@ public class Sql2oCharacterCDao implements CharacterCDao {
                     .addParameter("id", id)
                     .executeAndFetchFirst(CharacterC.class);
         }
+    }
+
+    @Override
+    public void addCharacterToItem(CharacterC characterC, Item item) {
+        String sql = "INSERT INTO characters_items (characterCId, itemId) VALUES (:characterCId, :itemId)";
+        try (Connection con = sql2o.open()) {
+            con.createQuery(sql)
+                    .addParameter("characterCId", characterC.getId())
+                    .addParameter("itemId", item.getId())
+                    .executeUpdate();
+        } catch (Sql2oException ex) {
+            System.out.println(ex);
+        }
+    }
+
+    @Override
+    public List<Item> getAllItemsForCharacterC(int id) {
+        List<Item> items = new ArrayList<>();
+        String sql = "SELECT itemId FROM characters_items WHERE characterCId = :characterCId";
+        try (Connection conn = sql2o.open()) {
+            List<Integer> allItemsIds = conn.createQuery(sql)
+                    .addParameter("characterCId", id)
+                    .executeAndFetch(Integer.class);
+            for (Integer itemId : allItemsIds) {
+                String query2 = "SELECT * FROM items WHERE id = :itemId";
+                items.add(
+                        conn.createQuery(query2)
+                                .addParameter("itemId", itemId)
+                                .executeAndFetchFirst(Item.class)
+                );
+            }
+        } catch (Sql2oException ex) {
+            System.out.println(ex);
+        }
+        return items;
     }
 
     @Override
@@ -374,6 +406,19 @@ public class Sql2oCharacterCDao implements CharacterCDao {
             return true;
         } else {
             return false;
+        }
+    }
+
+    @Override
+    public void removeCharacterCItemAssociation(int characterCId, int itemId) {
+        String sql = "DELETE FROM characters_items WHERE characterCId = :characterCId AND itemId = :itemId";
+        try (Connection connection = sql2o.open()) {
+            connection.createQuery(sql)
+                    .addParameter("characterCId", characterCId)
+                    .addParameter("itemId", itemId)
+                    .executeUpdate();
+        } catch (Sql2oException ex) {
+            System.out.println(ex);
         }
     }
 
@@ -669,12 +714,12 @@ public class Sql2oCharacterCDao implements CharacterCDao {
                     .getAsJsonObject().get("name")
                     .getAsJsonObject().get("first")
                     .getAsString();
-            System.out.println(name);
+            System.out.println(name.substring(0, 1).toUpperCase() + name.substring(1));
 
         }catch (IOException e) {
             e.printStackTrace();
         }
-        return name;
+        return name.substring(0, 1).toUpperCase() + name.substring(1);
 
     }
     public void userInput(String string, CharacterC characterC, List<CharacterC> targets) {
