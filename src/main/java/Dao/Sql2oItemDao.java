@@ -101,6 +101,16 @@ public class Sql2oItemDao implements ItemDao {
 
     @Override
     public void removeCharacterCFromItem(CharacterC characterC, Item item) {
+        String sql1 = "UPDATE characters SET currentHP = :currentHP, currentMP = :currentMP WHERE id = :id";
+        try (Connection connection = sql2o.open()) {
+            connection.createQuery(sql1)
+                    .addParameter("currentHP", characterC.getCurrentHP() + item.getCurrentHP())
+                    .addParameter("currentMP", characterC.getCurrentMP() + item.getCurrentMP())
+                    .addParameter("id", characterC.getId())
+                    .executeUpdate();
+        } catch (Sql2oException ex) {
+            System.out.println(ex);
+        }
         String sql = "DELETE FROM characters_items WHERE characterCId = :characterCId AND itemId = :itemId";
         try (Connection connection = sql2o.open()) {
             connection.createQuery(sql)
