@@ -24,8 +24,11 @@
         </form>
         <br>
     {{/each}}
-    <a href="/game/highroad/1/castspell">Cast Spell</a>
-    <br>
+    {{#each spells}}
+        <a href="/game/highroad/{{id}}/castspell">Cast {{name}}</a>
+        <br>
+    {{/each}}
+
     <a href="/game/highroad/1/item">Use Item</a>
     <br>
     <a href="/game/highroad/1/runaway">Run Away</a>

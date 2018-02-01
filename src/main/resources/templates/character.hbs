@@ -6,8 +6,8 @@
     <p>Description: {{character.description}}</p>
 
    <h2>Character Stats:</h2>
-        <p>HP:{{character.hP}}</p>
-        <p>MP:{{character.mP}}</p>
+        <p>HP:{{character.hP}}/{{character.currentHP}}</p>
+        <p>MP:{{character.mP}}/{{character.currentMP}}</p>
         <p>Strength:{{character.strength}}</p>
         <p>Magic:{{character.magic}}</p>
         <p>Dexterity:{{character.dexterity}}</p>
@@ -15,7 +15,6 @@
         <p>Magic Defense:{{character.magicDefense}}</p>
         <p>Level:{{character.level}}</p>
         <p>Experience:{{character.experience}}</p>
-        <a href="/game/board1">Continue Game</a>
 </div>
 {{/partial}}
 {{> layout.hbs}}

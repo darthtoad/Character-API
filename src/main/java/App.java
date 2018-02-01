@@ -390,6 +390,10 @@ public class App {
 
         post("/character/new", (req, res) -> {
             Map<String, Object> model = new HashMap<String, Object>();
+            effectDao.populateEffects();
+            equipmentDao.populateEquipments();
+            spellDao.populateSpells();
+            itemDao.populateItems();
             CharacterC character = new CharacterC(req.queryParams("name"), "Fighter", "fighter");
             characterCDao.add(character);
             model.put("character", character);
@@ -400,11 +404,8 @@ public class App {
             Map<String, Object> model = new HashMap<String, Object>();
             CharacterC character = new CharacterC(req.queryParams("name"), "red mage", "red mage");
             characterCDao.add(character);
+            characterCDao.addSpellToCharacterC(spellDao.findById(1), characterCDao.findById(character.getId()));
             characterCDao.populateCharacters();
-            effectDao.populateEffects();
-            equipmentDao.populateEquipments();
-            spellDao.populateSpells();
-            itemDao.populateItems();
             model.put("character", character);
             CharacterC NPC = new CharacterC(characterCDao.getNameUsingRandom(), "NPC");
             characterCDao.add(NPC);
@@ -469,6 +470,9 @@ public class App {
                 System.out.println(turnOrder.get(i));
                 if (playerCharacters.contains(characterCDao.findById(turnOrder.get(i))) && playerCharacters.get(i).getCurrentHP() > 0) {
                     model.put("currentPC", characterCDao.findById(turnOrder.get(i)));
+                    if (characterCDao.getAllSpellsForACharacter(turnOrder.get(i)).size() > 0){
+                        model.put("spells", characterCDao.getAllSpellsForACharacter(turnOrder.get(i)));
+                    }
                     break;
                 }
             }
