@@ -714,12 +714,12 @@ public class Sql2oCharacterCDao implements CharacterCDao {
                     .getAsJsonObject().get("name")
                     .getAsJsonObject().get("first")
                     .getAsString();
-            System.out.println(name);
+            System.out.println(name.substring(0, 1).toUpperCase() + name.substring(1));
 
         }catch (IOException e) {
             e.printStackTrace();
         }
-        return name;
+        return name.substring(0, 1).toUpperCase() + name.substring(1);
 
     }
     public void userInput(String string, CharacterC characterC, List<CharacterC> targets) {
