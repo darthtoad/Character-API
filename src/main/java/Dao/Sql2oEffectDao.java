@@ -16,7 +16,7 @@ public class Sql2oEffectDao implements EffectDao{
 
     @Override
     public void add(Effect effect) {
-        String sql = "INSERT INTO effects (name, description, HP, currentHP, defense, magicDefense, strength, MP, currentMP, magic, dexterity, ) VALUES (:name, :description, :HP, :currentHP, :defense, :magicDefense, :strength, :MP, :currentMP, :magic, :dexterity, :other)";
+        String sql = "INSERT INTO effects (name, description, HP, currentHP, defense, magicDefense, strength, MP, currentMP, magic, dexterity, other) VALUES (:name, :description, :HP, :currentHP, :defense, :magicDefense, :strength, :MP, :currentMP, :magic, :dexterity, :other)";
         try (Connection con = sql2o.open()) {
             int id = (int) con.createQuery(sql)
                     .bind(effect)
