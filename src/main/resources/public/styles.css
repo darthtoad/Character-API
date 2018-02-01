@@ -14,34 +14,6 @@ body {
 }
 
 .headerRow {
-    padding-top: 50px;
-}
-
-.jumbotron {
-    height: 100px;
-    background-size: 100% 100%;
-    background-image: url("/images/ultimateWish2.png");
-}
-
-.mainContent {
-    background: rgba(161, 165, 173, 0.5);
-}
-
-.sideNav {
-    background: rgba(161, 165, 173, 0.5);
-}
-
-.sideNav .panel-heading {
-    background: rgba(161, 165, 173, 0.5);
-}
-
-.panel {
-    background: rgba(161, 165, 173, 0.5);
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 22px;
-}
-
-.headerRow {
     padding-top: 100px;
 }
 
@@ -52,16 +24,8 @@ body {
     margin-bottom: 30px;
 }
 
-.mainContent {
-    background: rgba(161, 165, 173, .8);
-}
-
-.sideNav {
-    background: rgba(161, 165, 173, .6);
-}
-
-.sideNav .panel-heading {
-    background: rgba(161, 165, 173, .8);
+.panel {
+    background: rgba(161, 165, 173, 0.5);
 }
 
 .panel .panel-heading {
@@ -69,19 +33,11 @@ body {
 }
 
 .char1 {
-
+    padding-top: 20px;
 }
 
-.char2 {
-
-}
-
-.char3 {
-    padding-bottom: 20px;
-}
-
-hr {
-
+.charWell {
+    background: rgba(161, 165, 173, 0.8);
 }
 
 .charPorts {
@@ -93,14 +49,6 @@ hr {
     margin-right: auto;
 }
 
-.charWell {
-    background: rgba(161, 165, 173, .8);
-}
-
-.newCharWell {
-    background: rgba(161, 165, 173, .8);
-}
-
 .detailsPanel {
     font-size: 22px;
     color: #ffffff;
@@ -109,12 +57,39 @@ hr {
 }
 
 .gamelogWell {
-    background: rgba(161, 165, 173, .8);
+    background: rgba(161, 165, 173, .9);
     font-size: 22px;
     color: #ffffff;
 }
 
 a {
-    color: #ff0c0c;
+    color: #9b282a;
 }
+
+.gameover {
+    display: block;
+    margin: auto;
+    padding-top: 100px;
+    padding-bottom: 100px;
+}
+
+.story-imgs {
+    margin: 5px;
+    position: relative;
+    height: 600px;
+    width:  990px;
+    background-position: 50% 50%;
+    background-repeat:   no-repeat;
+    background-size:     cover;
+}
+
+.attack {
+    color: #9b282a;
+}
+
+.panel-heading {
+    text-align: center;
+}
+
+
 

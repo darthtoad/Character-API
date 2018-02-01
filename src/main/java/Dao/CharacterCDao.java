@@ -1,9 +1,6 @@
 package Dao;
 
-import models.CharacterC;
-import models.Effect;
-import models.Equipment;
-import models.Spell;
+import models.*;
 
 import java.util.List;
 
@@ -30,4 +27,9 @@ public interface CharacterCDao {
     void removeEffectFromCharacterC(Effect effect, CharacterC characterC);
     void deleteById(int id);
     void deleteAll();
+
+
+    List<Item> getAllItemsForCharacterC(int id);
+    void removeCharacterCItemAssociation(int characterCId, int itemId);
+    void addCharacterToItem(CharacterC characterC, Item item);
 }

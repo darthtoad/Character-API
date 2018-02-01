@@ -1,21 +1,25 @@
 {{#partial "content"}}
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h1 class="landingHeading">And the Journey begins.</h1>
+            <h1 class="landingHeading">Let the Journey begin...</h1>
         </div>
         <div class="panel-body gameplayBody">
-            <img src="/images/path1.png" width="100%" height="100%">
+        <div class = "board1">
+            <img src="/images/path1.png" class="story-imgs">
+        </div>
         </div>
     </div>
     <div class="well gamelogWell">
-
-        <p>{{randomName}}: Hi randomName! We're suffering because the evil {{randomNameVillian}} has taken all of our {{randomWord}} for his {{randomWord}} for his {{randomWord}} reactor. He has become more powerful over time and now is our chance to stop him before it is too late. Will you help us?</p>
+        <p>{{NPC.name}}: Help! We're suffering because the evil {{villain.name}} has taken all of our {{word.name}} for his {{word.name}} reactor. He has become more powerful over time and now is our chance to stop him before it is too late. Will you help us?</p>
 
         Choose your path:
+        <br>
+        <a href="/game/board2/{{mage.id}}/{{fighter.id}}">Yes I am ready.</a>
+        
+        <a href="/gameover">No I'm busy. You'll have to figure this out on your own.</a>
 
-        <a href="">Yes I am ready.</a>
-        <a href="">No I'm busy. You'll have to figure this out on your own.</a>
-
+        <br></br>
+        
         <h4>Back to main page:<a href="/">Click Here!</a></h4>
     </div>
 {{/partial}}

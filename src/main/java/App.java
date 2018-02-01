@@ -1,18 +1,15 @@
-import Dao.Sql2oCharacterCDao;
-import Dao.Sql2oEffectDao;
-import Dao.Sql2oEquipmentDao;
-import Dao.Sql2oSpellDao;
+import Dao.*;
 import com.google.gson.Gson;
-import models.CharacterC;
-import models.Effect;
-import models.Equipment;
-import models.Spell;
+import models.*;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
+import org.sql2o.Sql2oException;
 import spark.ModelAndView;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static spark.Spark.*;
@@ -24,6 +21,11 @@ public class App {
         Sql2oSpellDao spellDao;
         Sql2oEquipmentDao equipmentDao;
         Sql2oCharacterCDao characterCDao;
+        Sql2oItemDao itemDao;
+
+        Sql2oWordDao wordDao;
+        Sql2oLocationDao locationDao;
+
         Connection connection;
         Gson gson = new Gson();
 
@@ -34,6 +36,9 @@ public class App {
         spellDao = new Sql2oSpellDao(sql2o);
         equipmentDao = new Sql2oEquipmentDao(sql2o);
         characterCDao = new Sql2oCharacterCDao(sql2o);
+        itemDao = new Sql2oItemDao(sql2o);
+        wordDao = new Sql2oWordDao(sql2o);
+        locationDao = new Sql2oLocationDao(sql2o);
 
         connection = sql2o.open();
 
@@ -41,6 +46,14 @@ public class App {
 
         post("/characters/new", "application/json", (request, response) -> {
             CharacterC characterC = gson.fromJson(request.body(), CharacterC.class);
+            characterCDao.add(characterC);
+            response.status(201);
+            return gson.toJson(characterC);
+        });
+
+        get("/characters/random/new", "application/json", (request, response) -> {
+            String name = characterCDao.getNameUsingRandom();
+            CharacterC characterC = new CharacterC(name, "NPC");
             characterCDao.add(characterC);
             response.status(201);
             return gson.toJson(characterC);
@@ -70,6 +83,14 @@ public class App {
             return gson.toJson(String.format("Character '%s' can use spell '%s'", characterCDao.findById(characterId).getName(), spellDao.findById(spellId).getName()));
         });
 
+        post("/characters/:characterId/items/:itemId", "application/json", (request, response) -> {
+            int characterId = Integer.parseInt(request.params("characterId"));
+            int itemId = Integer.parseInt(request.params("itemId"));
+            itemDao.addItemToCharacterC(itemDao.findById(itemId), characterCDao.findById(characterId));
+            response.status(201);
+            return gson.toJson(String.format("Character %s has item %s", characterCDao.findById(characterId).getName(), itemDao.findById(itemId).getName()));
+        });
+
         post("/effects/new", "application/json", (request, response) -> {
             Effect effect = gson.fromJson(request.body(), Effect.class);
             effectDao.add(effect);
@@ -97,6 +118,19 @@ public class App {
             spellDao.addEffectToSpell(effectDao.findById(effectId), spellDao.findById(spellId));
             response.status(201);
             return gson.toJson(String.format("Spell '%s' gives the effect '%s'", spellDao.findById(spellId).getName(), effectDao.findById(effectId).getName()));
+        });
+
+        post("/locations/new", "application/json", (request, response) -> {
+            Location location = gson.fromJson(request.body(), Location.class);
+            locationDao.createRandomLocation(location.getDescription());
+            response.status(201);
+            return gson.toJson(locationDao.findById(locationDao.getAll().size()));
+        });
+
+        get("/words/new", "application/json", (request, response) -> {
+            wordDao.createRandomWord();
+            response.status(201);
+            return gson.toJson(wordDao.findById(wordDao.getAll().size()));
         });
 
         get("/characters", "application/json", (request, response) -> {
@@ -129,6 +163,12 @@ public class App {
             return gson.toJson(characterCDao.getAllEffectsForACharacter(characterId));
         });
 
+        get("/characters/:id/items", "application/json", (request, response) -> {
+            int characterId = Integer.parseInt(request.params("id"));
+            response.status(201);
+            return gson.toJson(itemDao.getAllItemsForCharacters(characterId));
+        });
+
         get("/equipment", "application/json", (request, response) -> {
             response.status(201);
             return gson.toJson(equipmentDao.getAll());
@@ -151,7 +191,7 @@ public class App {
             return gson.toJson(spellDao.findById(spellId));
         });
 
-        get("spells/:id/effects", "application/json", (request, response) -> {
+        get("/spells/:id/effects", "application/json", (request, response) -> {
             int spellId = Integer.parseInt(request.params("id"));
             response.status(201);
             return gson.toJson(spellDao.getAllEffectsForSpell(spellId));
@@ -166,6 +206,18 @@ public class App {
             int effectId = Integer.parseInt(request.params("id"));
             response.status(201);
             return gson.toJson(effectDao.findById(effectId));
+        });
+
+        get("/words/:id", "application/json", (request, response) -> {
+            int wordId = Integer.parseInt(request.params("id"));
+            response.status(201);
+            return gson.toJson(wordDao.findById(wordId));
+        });
+
+        get("/locations/:id", "application/json", (request, response) -> {
+            int locationId = Integer.parseInt(request.params("id"));
+            response.status(201);
+            return gson.toJson(locationDao.findById(locationId));
         });
 
         post("/characters/:id/update", "application/json", (request, response) -> {
@@ -213,6 +265,14 @@ public class App {
             return gson.toJson("Your character has been deleted");
         });
 
+        post("/character/:characterId/item/:itemId/delete", "application/json", (request, response) -> {
+            int characterId = Integer.parseInt(request.params("characterId"));
+            int itemId = Integer.parseInt(request.params("itemId"));
+            itemDao.removeCharacterCFromItem(characterCDao.findById(characterId), itemDao.findById(itemId));
+            response.status(201);
+            return gson.toJson("Your character has used item");
+        });
+
         post("/effect/delete", "application/json", (request, response) -> {
             effectDao.deleteAll();
             response.status(201);
@@ -252,6 +312,18 @@ public class App {
             return gson.toJson("Your spell has been deleted");
         });
 
+        post("/locations/delete", "application/json", (request, response) -> {
+            locationDao.deleteAll();
+            response.status(201);
+            return gson.toJson("All locations have been deleted");
+        });
+
+        post("/words/delete", "application/json", (request, response) -> {
+            wordDao.deleteAll();
+            response.status(201);
+            return gson.toJson("All words have been deleted");
+        });
+
         //FRONTEND ROUTING
         get("/", (req, res) -> {
             Map<String, Object> model = new HashMap<>();
@@ -260,19 +332,140 @@ public class App {
 
         get("/game/board1", (req, res) -> {
             Map<String, Object> model = new HashMap<>();
+            String villainName = characterCDao.getNameUsingRandom();
+            String npcName1 = characterCDao.getNameUsingRandom();
+            CharacterC villain = new CharacterC(villainName, "villain", null);
+            model.put("villain", villain);
+            CharacterC npc1 = new CharacterC(npcName1, "npc1", null);
+//            CharacterC villainName = characterCDao.findById(characterCDao.getAll().size());
+            model.put("npc1", npc1);
+            wordDao.createRandomWord();
+            Word word = wordDao.findById(wordDao.getAll().size());
+            model.put("word", word);
             return new ModelAndView(model, "board1.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        get("/game/board2/:character1Id/:character2Id", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            CharacterC mage = characterCDao.findById(Integer.parseInt(req.params("character1Id")));
+            CharacterC fighter = characterCDao.findById(Integer.parseInt(req.params("character2Id")));
+            model.put("mage", mage);
+            model.put("fighter", fighter);
+            locationDao.createRandomLocation("de");
+            Location ourLocation = locationDao.findById(locationDao.getAll().size());
+            model.put("ourLocation", ourLocation);
+            wordDao.createRandomWord();
+            Word word = wordDao.findById(wordDao.getAll().size());
+            model.put("word", word);
+            return new ModelAndView(model, "board2.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        get("/game/board3/:character1Id/:character2Id", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            CharacterC mage = characterCDao.findById(Integer.parseInt(req.params("character1Id")));
+            CharacterC fighter = characterCDao.findById(Integer.parseInt(req.params("character2Id")));
+            model.put("mage", mage);
+            model.put("fighter", fighter);
+            return new ModelAndView(model, "board3.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        get("/game/board3.1/:character1Id/:character2Id", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            List<CharacterC> characters = characterCDao.getAll();
+            List<CharacterC> playerCharacter = new ArrayList<>();
+            for (CharacterC character : characters) {
+                try {
+                    if (character.getCharClass().toLowerCase().equals("fighter") || character.getCharClass().toLowerCase().equals("red mage")) {
+                        playerCharacter.add(character);
+                    }
+                } catch (NullPointerException ex) {
+                    System.out.println(ex);
+                }
+            }
+
+            for (CharacterC characterC : playerCharacter) {
+                characterC.setCurrentMP(characterC.getMP());
+                characterC.setCurrentHP(characterC.getHP());
+                characterCDao.update(characterC.getId(), characterC.getName(), characterC.getDescription(), characterC.getLevel(), characterC.getExperience(), characterC.getHP(), characterC.getCurrentHP(), characterC.getDefense(), characterC.getMagicDefense(), characterC.getStrength(), characterC.getMP(), characterC.getCurrentMP(), characterC.getMagic(), characterC.getDexterity());
+            }
+            CharacterC mage = characterCDao.findById(Integer.parseInt(req.params("character1Id")));
+            CharacterC fighter = characterCDao.findById(Integer.parseInt(req.params("character2Id")));
+            model.put("mage", mage);
+            model.put("fighter", fighter);
+            return new ModelAndView(model, "board3.1.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        get("/game/board3.2/:character1Id/:character2Id", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            CharacterC mage = characterCDao.findById(Integer.parseInt(req.params("character1Id")));
+            CharacterC fighter = characterCDao.findById(Integer.parseInt(req.params("character2Id")));
+            model.put("mage", mage);
+            model.put("fighter", fighter);
+            return new ModelAndView(model, "board3.2.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        get("/game/board2/:character1Id/:character2Id", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            CharacterC mage = characterCDao.findById(Integer.parseInt(req.params("character1Id")));
+            CharacterC fighter = characterCDao.findById(Integer.parseInt(req.params("character2Id")));
+            model.put("mage", mage);
+            model.put("fighter", fighter);
+            locationDao.createRandomLocation("de");
+            Location ourLocation = locationDao.findById(locationDao.getAll().size());
+            model.put("ourLocation", ourLocation);
+            wordDao.createRandomWord();
+            Word word = wordDao.findById(wordDao.getAll().size());
+            model.put("word", word);
+            return new ModelAndView(model, "board2.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        get("/game/board4/:character1Id/:character2Id", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            CharacterC mage = characterCDao.findById(Integer.parseInt(req.params("character1Id")));
+            CharacterC fighter = characterCDao.findById(Integer.parseInt(req.params("character2Id")));
+            model.put("mage", mage);
+            model.put("fighter", fighter);
+            locationDao.createRandomLocation("dk");
+            Location ourLocation = locationDao.findById(locationDao.getAll().size());
+            model.put("ourLocation", ourLocation);
+            return new ModelAndView(model, "town.hbs");
         }, new HandlebarsTemplateEngine());
 
         get("/character/new", (req, res) -> {
             Map<String, Object> model = new HashMap<String, Object>();
-            return new ModelAndView(model, "new_character.hbs");
+            return new ModelAndView(model, "new_fighter.hbs");
         }, new HandlebarsTemplateEngine());
 
         post("/character/new", (req, res) -> {
             Map<String, Object> model = new HashMap<String, Object>();
-            CharacterC character = new CharacterC(req.queryParams("name"), req.queryParams("description"), req.queryParams("charClass"));
+            effectDao.populateEffects();
+            equipmentDao.populateEquipments();
+            spellDao.populateSpells();
+            itemDao.populateItems();
+            CharacterC character = new CharacterC(req.queryParams("name"), "Fighter", "fighter");
             characterCDao.add(character);
             model.put("character", character);
+            return new ModelAndView(model, "new_redmage.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        post("/game/new", (req, res) -> {
+            Map<String, Object> model = new HashMap<String, Object>();
+            CharacterC mage = new CharacterC(req.queryParams("name"), "red mage", "red mage");
+            characterCDao.add(mage);
+            characterCDao.addSpellToCharacterC(spellDao.findById(1), characterCDao.findById(mage.getId()));
+            characterCDao.populateCharacters();
+            model.put("mage", mage);
+            CharacterC fighter = new CharacterC(req.queryParams("name"), "Fighter", "fighter");
+            characterCDao.add(fighter);
+            model.put("fighter", fighter);
+            CharacterC NPC = new CharacterC(characterCDao.getNameUsingRandom(), "NPC");
+            characterCDao.add(NPC);
+            model.put("NPC", NPC);
+            CharacterC villain = new CharacterC(characterCDao.getNameUsingRandom(), "villain");
+            model.put("villain", villain);
+            wordDao.createRandomWord();
+            Word word = wordDao.findById(wordDao.getAll().size());
+            model.put("word", word);
             return new ModelAndView(model, "board1.hbs");
         }, new HandlebarsTemplateEngine());
 
@@ -283,7 +476,265 @@ public class App {
             return new ModelAndView(model, "character.hbs");
         }, new HandlebarsTemplateEngine());
 
+        get("/gameover", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            return new ModelAndView(model, "death.hbs");
+        }, new HandlebarsTemplateEngine());
 
+        get("/game/highroad/1/:character1Id/:character2Id", (request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+            CharacterC mage = characterCDao.findById(Integer.parseInt(request.params("character1Id")));
+            CharacterC fighter = characterCDao.findById(Integer.parseInt(request.params("character2Id")));
+            model.put("mage", mage);
+            model.put("fighter", fighter);
+            if (characterCDao.findAllByName("Ghoul").size() < 2) {
+                characterCDao.copyCharacter(characterCDao.findByName("Ghoul").getId());
+            }
+            List<CharacterC> characters = characterCDao.getAll();
+            List<CharacterC> playerCharacters = new ArrayList<>();
+            for (CharacterC character : characters) {
+                try {
+                    if (character.getCharClass().toLowerCase().equals("fighter") || character.getCharClass().toLowerCase().equals("red mage")) {
+                        if (character.getCurrentHP() > 0) {
+                            playerCharacters.add(character);
+                        }
+                    }
+                } catch (NullPointerException ex) {
+                    System.out.println(ex);
+                }
+            }
+            List<CharacterC> enemies = characterCDao.findAllByName("Ghoul");
+            List<CharacterC> battleCharacters = new ArrayList<>();
+            battleCharacters.addAll(playerCharacters);
+            battleCharacters.addAll(enemies);
+            List<Integer> turnOrder = characterCDao.findTurnOrder(battleCharacters);
+            if (!playerCharacters.contains(characterCDao.findById(turnOrder.get(0)))) {
+                model.put("damage", true);
+                characterCDao.computerInput(characterCDao.findById(turnOrder.get(0)), playerCharacters);
+                characterCDao.updateAttacked(characterCDao.findById(turnOrder.get(0)));
+                if (!playerCharacters.contains(characterCDao.findById(turnOrder.get(1)))) {
+                    characterCDao.computerInput(characterCDao.findById(turnOrder.get(1)), playerCharacters);
+                    characterCDao.updateAttacked(characterCDao.findById(turnOrder.get(1)));
+                }
+                turnOrder = characterCDao.findTurnOrder(battleCharacters);
+            }
+
+            model.put("enemies", enemies);
+            for (int i = 0; i < playerCharacters.size(); i++) {
+                if (playerCharacters.contains(characterCDao.findById(turnOrder.get(i))) && playerCharacters.get(i).getCurrentHP() > 0) {
+                    model.put("currentPC", characterCDao.findById(turnOrder.get(i)));
+                    if (characterCDao.getAllSpellsForACharacter(turnOrder.get(i)).size() > 0){
+                        model.put("spells", characterCDao.getAllSpellsForACharacter(turnOrder.get(i)));
+                    }
+                    break;
+                }
+            }
+            return new ModelAndView(model, "highroad1.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        post("/game/highroad/1/:id/castspell", (request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+            List<CharacterC> characters = characterCDao.getAll();
+            List<CharacterC> playerCharacters = new ArrayList<>();
+            for (CharacterC character : characters) {
+                try {
+                    if (character.getCharClass().toLowerCase().equals("fighter") || character.getCharClass().toLowerCase().equals("red mage") && character.getCurrentHP() > 0) {
+                        playerCharacters.add(character);
+                        System.out.println(playerCharacters.get(playerCharacters.size() - 1).getName());
+                    }
+                } catch (NullPointerException ex) {
+                    System.out.println(ex);
+//                    playerCharacters.add(characters);
+                    System.out.println(playerCharacters.get(playerCharacters.size() - 1).getName());
+                }
+            }
+            System.out.println("Length: " + playerCharacters.size());
+            List<CharacterC> enemies = new ArrayList<>();
+            for (CharacterC characterC : characterCDao.findAllByName("Ghoul")) {
+                try {
+                    if (characterC.getCurrentHP() > 0) {
+                        enemies.add(characterC);
+                    }
+                } catch (NullPointerException ex) {
+                    System.out.println(ex);
+                }
+            }
+            System.out.println("Enemies: " + enemies.size());
+            model.put("enemies", enemies);
+            CharacterC PC = characterCDao.findById(2);
+            characterCDao.userInput("cast spell", PC, enemies);
+            List<CharacterC> battleCharacters = new ArrayList<>();
+            battleCharacters.addAll(playerCharacters);
+            battleCharacters.addAll(enemies);
+            List<Integer> turnOrder = characterCDao.findTurnOrder(battleCharacters);
+            System.out.println(turnOrder);
+            if (turnOrder.size() == 0) {
+                for (CharacterC c : battleCharacters) {
+                    characterCDao.findById(c.getId()).setAttacked("false");
+//                    turnOrder = characterCDao.findTurnOrder(battleCharacters);
+                    System.out.println(turnOrder);
+                    turnOrder = characterCDao.findTurnOrder(battleCharacters);
+                }
+            } else {
+                if (!playerCharacters.contains(characterCDao.findById(turnOrder.get(0)))) {
+                    model.put("damage", true);
+                    characterCDao.computerInput(characterCDao.findById(turnOrder.get(0)), playerCharacters);
+//                    characterCDao.updateAttacked(turnOrder.get(0));
+                    try {
+                        if (battleCharacters.get(turnOrder.get(1)).getName().equals("ghoul")) {
+                            characterCDao.computerInput(characterCDao.findById(turnOrder.get(1)), playerCharacters);
+//                        characterCDao.updateAttacked(turnOrder.get(1));
+                        }
+                    } catch (IndexOutOfBoundsException ex) {
+                        System.out.println(ex);
+                    }
+
+                }
+                turnOrder = characterCDao.findTurnOrder(playerCharacters);
+            }
+            System.out.println(turnOrder);
+            boolean win = true;
+            for (CharacterC thisEnemy : enemies) {
+                if (thisEnemy.getCurrentHP() > 0) {
+                    win = false;
+                }
+            }
+            if (win) {
+                model.put("win", win);
+            } else {
+                try {
+                    CharacterC currentPC = characterCDao.findById(turnOrder.get(0));
+                    model.put("currentPC", currentPC);
+                    if (characterCDao.getAllSpellsForACharacter(currentPC.getId()).size() > 0) {
+                        List<Spell> spells = characterCDao.getAllSpellsForACharacter(currentPC.getId());
+                        model.put("spells", spells);
+                    }
+                } catch (IndexOutOfBoundsException ex) {
+                    System.out.println(ex);
+                    CharacterC currentPC = characterCDao.findById(1);
+                    model.put("currentPC", currentPC);
+                    if (characterCDao.getAllSpellsForACharacter(currentPC.getId()).size() > 0) {
+                        List<Spell> spells = characterCDao.getAllSpellsForACharacter(currentPC.getId());
+                        model.put("spells", spells);
+                    }
+                }
+            }
+            return new ModelAndView(model, "highroad1-1.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        post("/game/highroad/1/attack/pc/:pcId/enemy/:enemyId/:character1Id/:character2Id", (request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+            CharacterC mage = characterCDao.findById(Integer.parseInt(request.params("character1Id")));
+            CharacterC fighter = characterCDao.findById(Integer.parseInt(request.params("character2Id")));
+            model.put("mage", mage);
+            model.put("fighter", fighter);
+            List<CharacterC> characters = characterCDao.getAll();
+            List<CharacterC> playerCharacters = new ArrayList<>();
+            for (CharacterC character : characters) {
+                try {
+                    if (character.getCharClass().toLowerCase().equals("fighter") || character.getCharClass().toLowerCase().equals("red mage") && character.getCurrentHP() > 0) {
+                        playerCharacters.add(character);
+                        System.out.println(playerCharacters.get(playerCharacters.size() - 1).getName());
+                    }
+                } catch (NullPointerException ex) {
+                    System.out.println(ex);
+//                    playerCharacters.add(characters);
+                    System.out.println(playerCharacters.get(playerCharacters.size() - 1).getName());
+                }
+            }
+            System.out.println("Length: " + playerCharacters.size());
+            List<CharacterC> enemies = new ArrayList<>();
+            for (CharacterC characterC : characterCDao.findAllByName("Ghoul")) {
+                try {
+                    if (characterC.getCurrentHP() > 0) {
+                        enemies.add(characterC);
+                    }
+                } catch (NullPointerException ex) {
+                    System.out.println(ex);
+                }
+            }
+            System.out.println("Enemies: " + enemies.size());
+            model.put("enemies", enemies);
+            CharacterC PC = characterCDao.findById(Integer.parseInt(request.params("pcId")));
+            System.out.println(PC.getName());
+            CharacterC enemy = characterCDao.findById(Integer.parseInt(request.params("enemyId")));
+            List<CharacterC> smallEnemy = new ArrayList<>();
+            smallEnemy.add(enemy);
+            characterCDao.userInput("attack", PC, smallEnemy);
+            List<CharacterC> battleCharacters = new ArrayList<>();
+//            for (CharacterC characters : playerCharacters) {
+//
+//            }
+//                playerCharacters.remove(i)
+            battleCharacters.addAll(playerCharacters);
+            battleCharacters.addAll(enemies);
+//            List<CharacterC> notGone = new ArrayList<>();
+//            for (CharacterC characterC : battleCharacters) {
+//                try {
+//                    if (!characterC.getAttacked().equals("true") && characterC.getCurrentHP() > 0) {
+//                        notGone.add(characterC);
+//                    }
+//                } catch (NullPointerException ex) {
+//                    System.out.println(ex);
+//                    notGone.add(characterC);
+//                }
+//
+//            }
+            List<Integer> turnOrder = characterCDao.findTurnOrder(battleCharacters);
+            System.out.println(turnOrder);
+            if (turnOrder.size() == 0) {
+                for (CharacterC c : battleCharacters) {
+                    characterCDao.findById(c.getId()).setAttacked("false");
+//                    turnOrder = characterCDao.findTurnOrder(battleCharacters);
+                    System.out.println(turnOrder);
+                    turnOrder = characterCDao.findTurnOrder(battleCharacters);
+                }
+            } else {
+                if (!playerCharacters.contains(characterCDao.findById(turnOrder.get(0)))) {
+                    model.put("damage", true);
+                    characterCDao.computerInput(characterCDao.findById(turnOrder.get(0)), playerCharacters);
+//                    characterCDao.updateAttacked(turnOrder.get(0));
+                    try {
+                        if (battleCharacters.get(turnOrder.get(1)).getName().equals("ghoul")) {
+                        characterCDao.computerInput(characterCDao.findById(turnOrder.get(1)), playerCharacters);
+//                        characterCDao.updateAttacked(turnOrder.get(1));
+                        }
+                    } catch (IndexOutOfBoundsException ex) {
+                        System.out.println(ex);
+                    }
+
+                }
+                turnOrder = characterCDao.findTurnOrder(playerCharacters);
+            }
+            System.out.println(turnOrder);
+            boolean win = true;
+            for (CharacterC thisEnemy : enemies) {
+                if (thisEnemy.getCurrentHP() > 0) {
+                    win = false;
+                }
+            }
+            if (win) {
+                model.put("win", win);
+            } else {
+                try {
+                    CharacterC currentPC = characterCDao.findById(turnOrder.get(0));
+                    model.put("currentPC", currentPC);
+                    if (characterCDao.getAllSpellsForACharacter(currentPC.getId()).size() > 0) {
+                        List<Spell> spells = characterCDao.getAllSpellsForACharacter(currentPC.getId());
+                        model.put("spells", spells);
+                    }
+                } catch (IndexOutOfBoundsException ex) {
+                    System.out.println(ex);
+                    CharacterC currentPC = characterCDao.findById(1);
+                    model.put("currentPC", currentPC);
+                    if (characterCDao.getAllSpellsForACharacter(currentPC.getId()).size() > 0) {
+                        List<Spell> spells = characterCDao.getAllSpellsForACharacter(currentPC.getId());
+                        model.put("spells", spells);
+                    }
+                }
+            }
+            return new ModelAndView(model, "highroad1-1.hbs");
+        }, new HandlebarsTemplateEngine());
 
 
     }

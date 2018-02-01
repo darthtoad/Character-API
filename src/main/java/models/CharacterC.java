@@ -19,6 +19,12 @@ public class CharacterC {
     private int magic;
     private int dexterity;
     private String charClass;
+    private String attacked;
+
+    public CharacterC(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
 
     public CharacterC(String name, String description, String charClass) {
         this.name = name;
@@ -26,7 +32,7 @@ public class CharacterC {
         this.charClass = charClass;
     }
 
-    public CharacterC(String name, String description, int level, int experience, int HP, int currentHP, int defense, int magicDefense, int strength, int MP, int currentMP, int magic, int dexterity, String charClass) {
+    public CharacterC(String name, String description, int level, int experience, int HP, int currentHP, int defense, int magicDefense, int strength, int MP, int currentMP, int magic, int dexterity, String charClass, String attacked) {
         this.name = name;
         this.description = description;
         this.level = level;
@@ -41,8 +47,25 @@ public class CharacterC {
         this.magic = magic;
         this.dexterity = dexterity;
         this.charClass = charClass;
+        this.attacked = attacked;
     }
 
+    public CharacterC(String name, String description, int level, int experience, int HP, int currentHP, int defense, int magicDefense, int strength, int MP, int currentMP, int magic, int dexterity, String attacked) {
+        this.name = name;
+        this.description = description;
+        this.level = level;
+        this.experience = experience;
+        this.HP = HP;
+        this.currentHP = currentHP;
+        this.defense = defense;
+        this.magicDefense = magicDefense;
+        this.strength = strength;
+        this.MP = MP;
+        this.currentMP = currentMP;
+        this.magic = magic;
+        this.dexterity = dexterity;
+        this.attacked = attacked;
+    }
 
     public CharacterC(String name, String description, int level, int experience, int HP, int currentHP, int defense, int magicDefense, int strength, int MP, int currentMP, int magic, int dexterity) {
         this.name = name;
@@ -181,6 +204,14 @@ public class CharacterC {
 
     public void setDexterity(int dexterity) {
         this.dexterity = dexterity;
+    }
+
+    public String getAttacked() {
+        return attacked;
+    }
+
+    public void setAttacked(String attacked) {
+        this.attacked = attacked;
     }
 
     @Override

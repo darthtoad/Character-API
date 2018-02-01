@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS characters (
     currentMP INTEGER,
     magic INTEGER,
     dexterity INTEGER,
+    attacked VARCHAR,
     charClass VARCHAR
 );
 
