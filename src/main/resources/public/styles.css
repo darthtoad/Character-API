@@ -17,28 +17,6 @@ body {
     padding-top: 50px;
 }
 
-.mainContent {
-    background: rgba(161, 165, 173, 0.5);
-}
-
-.sideNav {
-    background: rgba(161, 165, 173, 0.5);
-}
-
-.sideNav .panel-heading {
-    background: rgba(161, 165, 173, 0.5);
-}
-
-.panel {
-    background: rgba(161, 165, 173, 0.5);
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 22px;
-}
-
-.headerRow {
-    padding-top: 100px;
-}
-
 .headerlogo {
     height: 100px;
     background-size: 100% 100%;
@@ -46,16 +24,9 @@ body {
     margin-bottom: 30px;
 }
 
-.mainContent {
-    background: rgba(161, 165, 173, .8);
-}
-
-.sideNav {
-    background: rgba(161, 165, 173, .6);
-}
-
-.sideNav .panel-heading {
-    background: rgba(161, 165, 173, .8);
+.panel {
+    background: rgba(161, 165, 173, 0.5);
+    font-size: 22px;
 }
 
 .panel .panel-heading {
@@ -87,7 +58,7 @@ body {
 }
 
 .gamelogWell {
-    background: rgba(161, 165, 173, .8);
+    background: rgba(161, 165, 173, .9);
     font-size: 22px;
     color: #ffffff;
 }
