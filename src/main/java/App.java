@@ -160,6 +160,12 @@ public class App {
             return gson.toJson(characterCDao.getAllEffectsForACharacter(characterId));
         });
 
+        get("/characters/:id/items", "application/json", (request, response) -> {
+            int characterId = Integer.parseInt(request.params("id"));
+            response.status(201);
+            return gson.toJson(itemDao.getAllItemsForCharacters(characterId));
+        });
+
         get("/equipment", "application/json", (request, response) -> {
             response.status(201);
             return gson.toJson(equipmentDao.getAll());
@@ -254,6 +260,14 @@ public class App {
             characterCDao.deleteById(characterId);
             response.status(201);
             return gson.toJson("Your character has been deleted");
+        });
+
+        post("/character/:characterId/item/:itemId/delete", "application/json", (request, response) -> {
+            int characterId = Integer.parseInt(request.params("characterId"));
+            int itemId = Integer.parseInt(request.params("itemId"));
+            itemDao.removeCharacterCFromItem(characterCDao.findById(characterId), itemDao.findById(itemId));
+            response.status(201);
+            return gson.toJson("Your character has used item");
         });
 
         post("/effect/delete", "application/json", (request, response) -> {
