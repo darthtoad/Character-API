@@ -18,8 +18,11 @@ public class App {
         Sql2oSpellDao spellDao;
         Sql2oEquipmentDao equipmentDao;
         Sql2oCharacterCDao characterCDao;
+        Sql2oItemDao itemDao;
+
         Sql2oWordDao wordDao;
         Sql2oLocationDao locationDao;
+
         Connection connection;
         Gson gson = new Gson();
 
@@ -30,9 +33,9 @@ public class App {
         spellDao = new Sql2oSpellDao(sql2o);
         equipmentDao = new Sql2oEquipmentDao(sql2o);
         characterCDao = new Sql2oCharacterCDao(sql2o);
+        itemDao = new Sql2oItemDao(sql2o);
         wordDao = new Sql2oWordDao(sql2o);
         locationDao = new Sql2oLocationDao(sql2o);
-
 
         connection = sql2o.open();
 
@@ -75,6 +78,14 @@ public class App {
             characterCDao.addSpellToCharacterC(spellDao.findById(spellId), characterCDao.findById(characterId));
             response.status(201);
             return gson.toJson(String.format("Character '%s' can use spell '%s'", characterCDao.findById(characterId).getName(), spellDao.findById(spellId).getName()));
+        });
+
+        post("/characters/:characterId/items/:itemId", "application/json", (request, response) -> {
+            int characterId = Integer.parseInt(request.params("characterId"));
+            int itemId = Integer.parseInt(request.params("itemId"));
+            itemDao.addItemToCharacterC(itemDao.findById(itemId), characterCDao.findById(characterId));
+            response.status(201);
+            return gson.toJson(String.format("Character %s has item %s", characterCDao.findById(characterId).getName(), itemDao.findById(itemId).getName()));
         });
 
         post("/effects/new", "application/json", (request, response) -> {
@@ -147,6 +158,12 @@ public class App {
             int characterId = Integer.parseInt(request.params("id"));
             response.status(201);
             return gson.toJson(characterCDao.getAllEffectsForACharacter(characterId));
+        });
+
+        get("/characters/:id/items", "application/json", (request, response) -> {
+            int characterId = Integer.parseInt(request.params("id"));
+            response.status(201);
+            return gson.toJson(itemDao.getAllItemsForCharacters(characterId));
         });
 
         get("/equipment", "application/json", (request, response) -> {
@@ -245,6 +262,14 @@ public class App {
             return gson.toJson("Your character has been deleted");
         });
 
+        post("/character/:characterId/item/:itemId/delete", "application/json", (request, response) -> {
+            int characterId = Integer.parseInt(request.params("characterId"));
+            int itemId = Integer.parseInt(request.params("itemId"));
+            itemDao.removeCharacterCFromItem(characterCDao.findById(characterId), itemDao.findById(itemId));
+            response.status(201);
+            return gson.toJson("Your character has used item");
+        });
+
         post("/effect/delete", "application/json", (request, response) -> {
             effectDao.deleteAll();
             response.status(201);
@@ -328,6 +353,21 @@ public class App {
             return new ModelAndView(model, "board2.hbs");
         }, new HandlebarsTemplateEngine());
 
+        get("/game/board3", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            return new ModelAndView(model, "board3.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        get("/game/board3.1", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            return new ModelAndView(model, "board3.1.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        get("/game/board3.2", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            return new ModelAndView(model, "board3.2.hbs");
+        }, new HandlebarsTemplateEngine());
+
         get("/character/new", (req, res) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             return new ModelAndView(model, "new_fighter.hbs");
@@ -345,6 +385,11 @@ public class App {
             Map<String, Object> model = new HashMap<String, Object>();
             CharacterC character = new CharacterC(req.queryParams("name"), "red mage", "red mage");
             characterCDao.add(character);
+            characterCDao.populateCharacters();
+            effectDao.populateEffects();
+            equipmentDao.populateEquipments();
+            spellDao.populateSpells();
+            itemDao.populateItems();
             model.put("character", character);
             return new ModelAndView(model, "board1.hbs");
         }, new HandlebarsTemplateEngine());

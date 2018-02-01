@@ -50,7 +50,7 @@ public class Sql2oCharacterCDao implements CharacterCDao {
             }
         }
 
-        String sql = "INSERT INTO characters (name, description, level, experience, HP, currentHP, defense, magicDefense, strength, MP, currentMP, magic, dexterity) VALUES (:name, :description, :level, :experience, :HP, :currentHP, :defense, :magicDefense, :strength, :MP, :currentMP, :magic, :dexterity)";
+        String sql = "INSERT INTO characters (name, description, charClass, level, experience, HP, currentHP, defense, magicDefense, strength, MP, currentMP, magic, dexterity) VALUES (:name, :description, :charClass, :level, :experience, :HP, :currentHP, :defense, :magicDefense, :strength, :MP, :currentMP, :magic, :dexterity)";
         try (Connection con = sql2o.open()) {
             int id = (int) con.createQuery(sql)
                     .bind(characterC)
@@ -714,12 +714,12 @@ public class Sql2oCharacterCDao implements CharacterCDao {
                     .getAsJsonObject().get("name")
                     .getAsJsonObject().get("first")
                     .getAsString();
-            System.out.println(name);
+            System.out.println(name.substring(0, 1).toUpperCase() + name.substring(1));
 
         }catch (IOException e) {
             e.printStackTrace();
         }
-        return name;
+        return name.substring(0, 1).toUpperCase() + name.substring(1);
 
     }
     public void userInput(String string, CharacterC characterC, List<CharacterC> targets) {
