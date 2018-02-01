@@ -64,25 +64,25 @@ public class Sql2oItemDao implements ItemDao {
     }
 
     @Override
-    public List<CharacterC> getAllCharacterCForItem(int id) {
-        List<CharacterC> characters = new ArrayList<>();
-        String sql = "SELECT characterCId FROM characters_items WHERE itemId = :itemId";
+    public List<Item> getAllItemsForCharacters(int id) {
+        List<Item> items = new ArrayList<>();
+        String sql = "SELECT itemId FROM characters_items WHERE characterCId = :characterCId";
         try (Connection conn = sql2o.open()) {
-            List<Integer> allCharacterIds = conn.createQuery(sql)
-                    .addParameter("itemId", id)
+            List<Integer> allItemIds = conn.createQuery(sql)
+                    .addParameter("characterCId", id)
                     .executeAndFetch(Integer.class);
-            for (Integer characterId : allCharacterIds) {
-                String query2 = "SELECT * FROM characters WHERE id = :characterId";
-                characters.add(
+            for (Integer itemId : allItemIds) {
+                String query2 = "SELECT * FROM items WHERE id = :itemId";
+                items.add(
                         conn.createQuery(query2)
-                                .addParameter("characterId", characterId)
-                                .executeAndFetchFirst(CharacterC.class)
+                                .addParameter("itemId", itemId)
+                                .executeAndFetchFirst(Item.class)
                 );
             }
         } catch (Sql2oException ex) {
             System.out.println(ex);
         }
-        return characters;
+        return items;
     }
 
     @Override

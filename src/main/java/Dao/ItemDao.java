@@ -11,7 +11,7 @@ public interface ItemDao {
 
     Item findById(int id);
     List<Item> getAll();
-    List<CharacterC> getAllCharacterCForItem(int id);
+    List<Item> getAllItemsForCharacters(int id);
 
     void update(int id, int currentHP, int currentMP);
 

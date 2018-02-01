@@ -56,13 +56,13 @@ public class Item {
         if (id != item.id) return false;
         if (currentHP != item.currentHP) return false;
         if (currentMP != item.currentMP) return false;
-        return name.equals(item.name);
+        return name != null ? name.equals(item.name) : item.name == null;
     }
 
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + name.hashCode();
+        result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + currentHP;
         result = 31 * result + currentMP;
         return result;

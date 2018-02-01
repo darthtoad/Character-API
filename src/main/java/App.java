@@ -144,6 +144,12 @@ public class App {
             return gson.toJson(characterCDao.getAllEffectsForACharacter(characterId));
         });
 
+        get("/characters/:id/items", "application/json", (request, response) -> {
+            int characterId = Integer.parseInt(request.params("id"));
+            response.status(201);
+            return gson.toJson(itemDao.getAllItemsForCharacters(characterId));
+        });
+
         get("/equipment", "application/json", (request, response) -> {
             response.status(201);
             return gson.toJson(equipmentDao.getAll());
