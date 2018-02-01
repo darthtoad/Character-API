@@ -26,7 +26,6 @@ body {
 
 .panel {
     background: rgba(161, 165, 173, 0.5);
-    font-size: 22px;
 }
 
 .panel .panel-heading {
@@ -37,8 +36,8 @@ body {
     padding-top: 20px;
 }
 
-.char2 {
-
+.charWell {
+    background: rgba(161, 165, 173, 0.8);
 }
 
 .charPorts {
@@ -64,7 +63,7 @@ body {
 }
 
 a {
-    color: #ff0c0c;
+    color: #9b282a;
 }
 
 .gameover {
@@ -72,6 +71,25 @@ a {
     margin: auto;
     padding-top: 100px;
     padding-bottom: 100px;
+}
+
+.story-imgs {
+    margin: 5px;
+    position: relative;
+    height: 600px;
+    width:  990px;
+    background-position: 50% 50%;
+    background-repeat:   no-repeat;
+    background-size:     cover;
+}
+
+.attack {
+    color: #9b282a;
+}
+
+.ghouls {
+    background: url("/images/sprites/enemy/ghoul - Copy2.png");
+    float: left;
 }
 
 

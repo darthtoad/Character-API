@@ -5,14 +5,16 @@
         </div>
         <div class="panel-body gameplayBody">
             <div class = "board1">
-                <img src="/images/highroad.jpg" width="100%" height="100%">
+                <img src="/images/highroad.jpg" class="story-imgs">
             </div>
         </div>
     </div>
     <div class="well gamelogWell">
         {{#if win}}
             <h1>You just won the fight</h1>
+
             <a href="/game/board4/{{mage.id}}/{{fighter.id}}">Keep walking</a>
+
         {{else}}
             <p>Currently fighting ghouls.</p>
 
@@ -29,8 +31,12 @@
                 <br>
             {{/each}}
 
-            <a href="/game/highroad/1/castspell">Cast Spell</a>
+        {{#each spells}}
+        <form action="/game/highroad/1/{{id}}/castspell" method="post">
+            <button type="submit">Cast {{name}}</button>
+        </form>
             <br>
+        {{/each}}
             <a href="/game/highroad/1/item">Use Item</a>
             <br>
             <a href="/game/highroad/1/runaway">Run Away</a>
