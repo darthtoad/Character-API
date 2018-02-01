@@ -366,10 +366,15 @@ public class App {
             List<CharacterC> characters = characterCDao.getAll();
             List<CharacterC> playerCharacter = new ArrayList<>();
             for (CharacterC character : characters) {
-                if (character.getCharClass().toLowerCase().equals("fighter") || character.getCharClass().toLowerCase().equals("red mage")) {
-                    playerCharacter.add(character);
+                try {
+                    if (character.getCharClass().toLowerCase().equals("fighter") || character.getCharClass().toLowerCase().equals("red mage")) {
+                        playerCharacter.add(character);
+                    }
+                } catch (NullPointerException ex) {
+                    System.out.println(ex);
                 }
             }
+
             for (CharacterC characterC : playerCharacter) {
                 characterC.setCurrentMP(characterC.getMP());
                 characterC.setCurrentHP(characterC.getHP());
@@ -520,6 +525,7 @@ public class App {
 //
 //            }
             List<Integer> turnOrder = characterCDao.findTurnOrder(battleCharacters);
+            System.out.println(turnOrder);
             if (turnOrder.size() == 0) {
                 for (CharacterC c : battleCharacters) {
                     characterCDao.findById(c.getId()).setAttacked("false");

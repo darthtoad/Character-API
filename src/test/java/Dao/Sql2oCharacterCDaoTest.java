@@ -304,6 +304,30 @@ public class Sql2oCharacterCDaoTest {
     }
 
     @Test
+    public void findTurnOrderFindsTurnOrderWithAttacked() throws Exception {
+        CharacterC characterC = setupNewCharacterC();
+        CharacterC characterC1 = setupNewCharacterC1();
+        CharacterC characterC2 = setupNewCharacterC2();
+        CharacterC characterC3 = new CharacterC("Paul", "A guy named Paul", 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+        characterC3.setAttacked("true");
+        characterCDao.add(characterC);
+        characterCDao.add(characterC1);
+        characterCDao.add(characterC2);
+        characterCDao.add(characterC3);
+        List<CharacterC> characterCList = new ArrayList<>();
+        characterCList.add(characterC);
+        characterCList.add(characterC1);
+        characterCList.add(characterC2);
+        characterCList.add(characterC3);
+        List<Integer> turnOrder = characterCDao.findTurnOrder(characterCList);
+        System.out.println(turnOrder);
+        assertTrue(turnOrder.get(0) == 2);
+        assertTrue(turnOrder.get(1) == 1);
+        assertTrue(turnOrder.get(2) == 3);
+        assertEquals(3, turnOrder.size());
+    }
+
+    @Test
     public void runAwayRunsAway() throws Exception {
         CharacterC characterC = setupNewCharacterC();
         CharacterC characterC1 = setupNewCharacterC1();

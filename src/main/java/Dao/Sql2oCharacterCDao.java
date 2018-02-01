@@ -460,7 +460,9 @@ public class Sql2oCharacterCDao implements CharacterCDao {
                     }
                 }
             }
-            turnOrder.add(id);
+            if (id != 0) {
+                turnOrder.add(id);
+            }
             characters.remove(this.findById(id));
         }
         return turnOrder;
