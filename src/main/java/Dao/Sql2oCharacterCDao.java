@@ -50,7 +50,7 @@ public class Sql2oCharacterCDao implements CharacterCDao {
             }
         }
 
-        String sql = "INSERT INTO characters (name, description, charClass, level, experience, HP, currentHP, defense, magicDefense, strength, MP, currentMP, magic, dexterity) VALUES (:name, :description, :charClass, :level, :experience, :HP, :currentHP, :defense, :magicDefense, :strength, :MP, :currentMP, :magic, :dexterity)";
+        String sql = "INSERT INTO characters (name, description, charClass, level, experience, HP, currentHP, defense, magicDefense, strength, MP, currentMP, magic, dexterity, attacked) VALUES (:name, :description, :charClass, :level, :experience, :HP, :currentHP, :defense, :magicDefense, :strength, :MP, :currentMP, :magic, :dexterity, :attacked)";
         try (Connection con = sql2o.open()) {
             int id = (int) con.createQuery(sql)
                     .bind(characterC)
@@ -325,30 +325,63 @@ public class Sql2oCharacterCDao implements CharacterCDao {
         }
     }
 
-    public void updateAttacked(int id) {
+    public void updateAttacked(CharacterC characterC) {
+        String attacked = "true";
+        int id = characterC.getId();
         try {
-            if (this.findById(id).getAttacked().equals(null) || this.findById(id).getAttacked().equals("")) {
-                this.findById(id).setAttacked("true");
-                String sql = "INSERT INTO characters (attacked) VALUES (:attacked) WHERE id = :id";
+            if (!characterC.getAttacked().toLowerCase().equals("true")) {
+                characterC.setAttacked("true");
+//                String sql = "INSERT INTO characters (attacked) VALUES (:attacked) WHERE id = :id";
+//                try (Connection connection = sql2o.open()) {
+//                    connection.createQuery(sql)
+//                            .bind(this.findById(id))
+//                            .executeUpdate();
+//                } catch (Sql2oException ex) {
+//                    System.out.println(ex);
+//                }
+                String sql1 = "UPDATE characters SET attacked = :attacked WHERE id = :id";
                 try (Connection connection = sql2o.open()) {
-                    connection.createQuery(sql)
-                            .bind(this.findById(id))
+                    connection.createQuery(sql1)
+                            .addParameter("attacked", attacked)
+                            .addParameter("id", id)
                             .executeUpdate();
-                } catch (Sql2oException ex) {
-                    System.out.println(ex);
+                } catch (Sql2oException ex1) {
+                    System.out.println(ex1);
                 }
             } else {
-                this.findById(id).setAttacked("true");
-                String sql = "UPDATE characters SET attacked = :attacked WHERE id = :id";
+                characterC.setAttacked("true");
+                String sql1 = "UPDATE characters SET attacked = :attacked WHERE id = :id";
                 try (Connection connection = sql2o.open()) {
-                    connection.createQuery(sql)
-                            .addParameter("attacked", "true")
+                    connection.createQuery(sql1)
+                            .addParameter("attacked", attacked)
+                            .addParameter("id", id)
                             .executeUpdate();
-                } catch (Sql2oException ex) {
-                    System.out.println(ex);
+                } catch (Sql2oException ex1) {
+                    System.out.println(ex1);
                 }
             }
+//            else {
+//                this.findById(id).setAttacked("true");
+//                String sql = "UPDATE characters SET attacked = :attacked WHERE id = :id";
+//                try (Connection connection = sql2o.open()) {
+//                    connection.createQuery(sql)
+//                            .addParameter("attacked", "true")
+//                            .executeUpdate();
+//                } catch (Sql2oException ex) {
+//                    System.out.println(ex);
+//                }
+//            }
         } catch (NullPointerException ex) {
+            this.findById(id).setAttacked("true");
+            String sql1 = "UPDATE characters SET attacked = :attacked WHERE id = :id";
+            try (Connection connection = sql2o.open()) {
+                connection.createQuery(sql1)
+                        .addParameter("attacked", attacked)
+                        .addParameter("id", id)
+                        .executeUpdate();
+            } catch (Sql2oException ex1) {
+                System.out.println(ex1);
+            }
             System.out.println(ex);
         }
     }
@@ -388,6 +421,8 @@ public class Sql2oCharacterCDao implements CharacterCDao {
             }
             this.checkForLevelUp(attacker);
         }
+        this.updateAttacked(attacker);
+        System.out.println(attacker.getAttacked() + " important");
     }
 
     @Override
@@ -435,6 +470,7 @@ public class Sql2oCharacterCDao implements CharacterCDao {
                 this.checkForLevelUp(caster);
             }
         }
+        this.updateAttacked(caster);
     }
 
     public List<Integer> findTurnOrder(List<CharacterC> characters) {
@@ -444,7 +480,6 @@ public class Sql2oCharacterCDao implements CharacterCDao {
             int bestDex = 0;
             int id = 0;
             for (CharacterC characterC : characters) {
-                System.out.println(characterC.getAttacked() + " eafoj");
                 try {
                     if (characterC.getAttacked() == null || characterC.getAttacked().equals("false")){
                         if (characterC.getDexterity() > 0 && bestDex < characterC.getDexterity()) {
@@ -460,7 +495,7 @@ public class Sql2oCharacterCDao implements CharacterCDao {
                     }
                 }
             }
-            if (id != 0) {
+            if (id != 0 && !turnOrder.contains(id)) {
                 turnOrder.add(id);
             }
             characters.remove(this.findById(id));
@@ -787,7 +822,7 @@ public class Sql2oCharacterCDao implements CharacterCDao {
                     .getAsJsonObject().get("name")
                     .getAsJsonObject().get("first")
                     .getAsString();
-            System.out.println(name.substring(0, 1).toUpperCase() + name.substring(1));
+            //System.out.println(name.substring(0, 1).toUpperCase() + name.substring(1));
 
         }catch (IOException e) {
             e.printStackTrace();
@@ -810,6 +845,7 @@ public class Sql2oCharacterCDao implements CharacterCDao {
         if (string.toLowerCase().equals("run away")) {
             this.runAway(characterC, targets);
         }
+        this.updateAttacked(characterC);
     }
 
     public void computerInput(CharacterC enemy, List<CharacterC> targets) {
@@ -826,6 +862,8 @@ public class Sql2oCharacterCDao implements CharacterCDao {
         } catch (NullPointerException ex) {
             System.out.println(ex);
         }
+        this.updateAttacked(enemy);
+        System.out.println(enemy.getAttacked());
     }
 
 //    public void battle(List<CharacterC> PCs, List<CharacterC> enemies) {

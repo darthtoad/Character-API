@@ -444,8 +444,10 @@ public class App {
             List<CharacterC> playerCharacters = new ArrayList<>();
             for (CharacterC character : characters) {
                 try {
-                    if (character.getCharClass().toLowerCase().equals("fighter") || character.getCharClass().toLowerCase().equals("red mage") && character.getCurrentHP() > 0) {
-                        playerCharacters.add(character);
+                    if (character.getCharClass().toLowerCase().equals("fighter") || character.getCharClass().toLowerCase().equals("red mage")) {
+                        if (character.getCurrentHP() > 0) {
+                            playerCharacters.add(character);
+                        }
                     }
                 } catch (NullPointerException ex) {
                     System.out.println(ex);
@@ -456,23 +458,19 @@ public class App {
             battleCharacters.addAll(playerCharacters);
             battleCharacters.addAll(enemies);
             List<Integer> turnOrder = characterCDao.findTurnOrder(battleCharacters);
-            System.out.println(turnOrder);
-            System.out.println(characterCDao.findById(turnOrder.get(0)));
             if (!playerCharacters.contains(characterCDao.findById(turnOrder.get(0)))) {
                 model.put("damage", true);
                 characterCDao.computerInput(characterCDao.findById(turnOrder.get(0)), playerCharacters);
-                characterCDao.updateAttacked(turnOrder.get(0));
+                characterCDao.updateAttacked(characterCDao.findById(turnOrder.get(0)));
                 if (!playerCharacters.contains(characterCDao.findById(turnOrder.get(1)))) {
                     characterCDao.computerInput(characterCDao.findById(turnOrder.get(1)), playerCharacters);
-                    characterCDao.updateAttacked(turnOrder.get(1));
+                    characterCDao.updateAttacked(characterCDao.findById(turnOrder.get(1)));
                 }
                 turnOrder = characterCDao.findTurnOrder(battleCharacters);
             }
 
-            System.out.println(turnOrder);
             model.put("enemies", enemies);
             for (int i = 0; i < playerCharacters.size(); i++) {
-                System.out.println(turnOrder.get(i));
                 if (playerCharacters.contains(characterCDao.findById(turnOrder.get(i))) && playerCharacters.get(i).getCurrentHP() > 0) {
                     model.put("currentPC", characterCDao.findById(turnOrder.get(i)));
                     if (characterCDao.getAllSpellsForACharacter(turnOrder.get(i)).size() > 0){
@@ -492,27 +490,41 @@ public class App {
                 try {
                     if (character.getCharClass().toLowerCase().equals("fighter") || character.getCharClass().toLowerCase().equals("red mage") && character.getCurrentHP() > 0) {
                         playerCharacters.add(character);
+                        System.out.println(playerCharacters.get(playerCharacters.size() - 1).getName());
+                    }
+                } catch (NullPointerException ex) {
+                    System.out.println(ex);
+//                    playerCharacters.add(characters);
+                    System.out.println(playerCharacters.get(playerCharacters.size() - 1).getName());
+                }
+            }
+            System.out.println("Length: " + playerCharacters.size());
+            List<CharacterC> enemies = new ArrayList<>();
+            for (CharacterC characterC : characterCDao.findAllByName("Ghoul")) {
+                try {
+                    if (characterC.getCurrentHP() > 0) {
+                        enemies.add(characterC);
                     }
                 } catch (NullPointerException ex) {
                     System.out.println(ex);
                 }
             }
-            List<CharacterC> enemies = new ArrayList<>();
-            for (CharacterC characterC : characterCDao.findAllByName("Ghoul")) {
-                if (characterC.getCurrentHP() > 0) {
-                    enemies.add(characterC);
-                }
-            }
+            System.out.println("Enemies: " + enemies.size());
             model.put("enemies", enemies);
-            CharacterC enemy = characterCDao.findById(Integer.parseInt(request.params("enemyId")));
             CharacterC PC = characterCDao.findById(Integer.parseInt(request.params("pcId")));
+            System.out.println(PC.getName());
+            CharacterC enemy = characterCDao.findById(Integer.parseInt(request.params("enemyId")));
             List<CharacterC> smallEnemy = new ArrayList<>();
             smallEnemy.add(enemy);
             characterCDao.userInput("attack", PC, smallEnemy);
             List<CharacterC> battleCharacters = new ArrayList<>();
+//            for (CharacterC characters : playerCharacters) {
+//
+//            }
+//                playerCharacters.remove(i)
             battleCharacters.addAll(playerCharacters);
             battleCharacters.addAll(enemies);
-            List<CharacterC> notGone = new ArrayList<>();
+//            List<CharacterC> notGone = new ArrayList<>();
 //            for (CharacterC characterC : battleCharacters) {
 //                try {
 //                    if (!characterC.getAttacked().equals("true") && characterC.getCurrentHP() > 0) {
@@ -529,23 +541,28 @@ public class App {
             if (turnOrder.size() == 0) {
                 for (CharacterC c : battleCharacters) {
                     characterCDao.findById(c.getId()).setAttacked("false");
+//                    turnOrder = characterCDao.findTurnOrder(battleCharacters);
+                    System.out.println(turnOrder);
+                    turnOrder = characterCDao.findTurnOrder(battleCharacters);
                 }
             } else {
                 if (!playerCharacters.contains(characterCDao.findById(turnOrder.get(0)))) {
                     model.put("damage", true);
                     characterCDao.computerInput(characterCDao.findById(turnOrder.get(0)), playerCharacters);
-                    characterCDao.updateAttacked(turnOrder.get(0));
+//                    characterCDao.updateAttacked(turnOrder.get(0));
                     try {
                         if (battleCharacters.get(turnOrder.get(1)).getName().equals("ghoul")) {
                         characterCDao.computerInput(characterCDao.findById(turnOrder.get(1)), playerCharacters);
-                        characterCDao.updateAttacked(turnOrder.get(1));
+//                        characterCDao.updateAttacked(turnOrder.get(1));
                         }
                     } catch (IndexOutOfBoundsException ex) {
                         System.out.println(ex);
                     }
 
                 }
+                turnOrder = characterCDao.findTurnOrder(playerCharacters);
             }
+            System.out.println(turnOrder);
             boolean win = true;
             for (CharacterC thisEnemy : enemies) {
                 if (thisEnemy.getCurrentHP() > 0) {
@@ -555,8 +572,14 @@ public class App {
             if (win) {
                 model.put("win", win);
             } else {
-                CharacterC currentPC = characterCDao.findById(turnOrder.get(0));
-                model.put("currentPC", currentPC);
+                try {
+                    CharacterC currentPC = characterCDao.findById(turnOrder.get(0));
+                    model.put("currentPC", currentPC);
+                } catch (IndexOutOfBoundsException ex) {
+                    System.out.println(ex);
+                    CharacterC currentPC = characterCDao.findById(1);
+                    model.put("currentPC", currentPC);
+                }
             }
             return new ModelAndView(model, "highroad1-1.hbs");
         }, new HandlebarsTemplateEngine());

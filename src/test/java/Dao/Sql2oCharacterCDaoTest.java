@@ -44,15 +44,15 @@ public class Sql2oCharacterCDaoTest {
     }
 
     public CharacterC setupNewCharacterC() {
-        return new CharacterC("Fog", "A blonde hero who is not name Cloud", 4, 588, 49, 38, 5, 4, 7, 3, 2, 5, 8);
+        return new CharacterC("Fog", "A blonde hero who is not name Cloud", 4, 588, 49, 38, 5, 4, 7, 3, 2, 5, 8, "false");
     }
 
     public CharacterC setupNewCharacterC1() {
-        return new CharacterC("Erin", "A red haired girl who is not Aeris", 3, 495, 35, 30, 4, 6, 5, 6, 4, 10, 9);
+        return new CharacterC("Erin", "A red haired girl who is not Aeris", 3, 495, 35, 30, 4, 6, 5, 6, 4, 10, 9, "false");
     }
 
     public CharacterC setupNewCharacterC2() {
-        return new CharacterC("Barretaccus", "Not Mr. T or Barret", 5, 600, 66, 44, 5, 2, 10, 1, 0, 3, 5);
+        return new CharacterC("Barretaccus", "Not Mr. T or Barret", 5, 600, 66, 44, 5, 2, 10, 1, 0, 3, 5, "false");
     }
 
     @Before
@@ -342,6 +342,14 @@ public class Sql2oCharacterCDaoTest {
         enemies.add(characterC3);
         assertTrue(characterCDao.runAway(characterC1, enemies));
     }
+    @Test
+    public void updateAttackedChangesAttacked() throws Exception {
+        CharacterC characterC = setupNewCharacterC();
+        characterCDao.add(characterC);
+//        String original = characterCDao.findById(characterC.getId()).getAttacked();
+        characterCDao.updateAttacked(characterC);
+        assertEquals("true", characterCDao.findById(characterC.getId()).getAttacked());
+    }
 
     @Test
     public void deleteByIdDeletesCharacterCorrectly() throws Exception {
@@ -552,6 +560,23 @@ public class Sql2oCharacterCDaoTest {
     }
 
     @Test
+    public void userInputChangesAttackStatus() throws Exception {
+        CharacterC characterC = setupNewCharacterC();
+        CharacterC characterC1 = setupNewCharacterC1();
+        CharacterC characterC2 = setupNewCharacterC2();
+        CharacterC characterC3 = new CharacterC("Paul", "A guy named Paul", 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+        characterCDao.add(characterC);
+        characterCDao.add(characterC1);
+        characterCDao.add(characterC2);
+        characterCDao.add(characterC3);
+        List<CharacterC> enemies = new ArrayList<>();
+        enemies.add(characterC3);
+        String originalAttacked = characterC.getAttacked();
+        characterCDao.userInput("attack", characterC, enemies);
+        assertFalse(characterC.getAttacked().equals(originalAttacked));
+    }
+
+    @Test
     public void computerInputChangesState() throws Exception {
         CharacterC characterC = setupNewCharacterC();
         CharacterC characterC1 = setupNewCharacterC1();
@@ -567,6 +592,24 @@ public class Sql2oCharacterCDaoTest {
         characterCDao.computerInput(characterC, enemies);
         assertNotEquals(originalHP, characterC3.getCurrentHP());
     }
+
+    @Test
+    public void computerInputChangesAttacked() throws Exception {
+        CharacterC characterC = setupNewCharacterC();
+        CharacterC characterC1 = setupNewCharacterC1();
+        CharacterC characterC2 = setupNewCharacterC2();
+        CharacterC characterC3 = new CharacterC("Paul", "A guy named Paul", 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+        characterCDao.add(characterC);
+        characterCDao.add(characterC1);
+        characterCDao.add(characterC2);
+        characterCDao.add(characterC3);
+        List<CharacterC> enemies = new ArrayList<>();
+        enemies.add(characterC3);
+        String originalAttacked = characterCDao.findById(characterC.getId()).getAttacked();
+        characterCDao.computerInput(characterC, enemies);
+        assertNotEquals(originalAttacked, characterC.getAttacked());
+    }
+
     @Test
     public void getNameUsingRandomReturnsAStringName() throws Exception {
         String someName = characterCDao.getNameUsingRandom();
