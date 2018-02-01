@@ -326,26 +326,30 @@ public class Sql2oCharacterCDao implements CharacterCDao {
     }
 
     public void updateAttacked(int id) {
-        if (this.findById(id).getAttacked().equals(null) || this.findById(id).getAttacked().equals("")) {
-            this.findById(id).setAttacked("true");
-            String sql = "INSERT INTO characters (attacked) VALUES (:attacked) WHERE id = :id";
-            try (Connection connection = sql2o.open()) {
-                connection.createQuery(sql)
-                        .bind(this.findById(id))
-                        .executeUpdate();
-            } catch (Sql2oException ex) {
-                System.out.println(ex);
+        try {
+            if (this.findById(id).getAttacked().equals(null) || this.findById(id).getAttacked().equals("")) {
+                this.findById(id).setAttacked("true");
+                String sql = "INSERT INTO characters (attacked) VALUES (:attacked) WHERE id = :id";
+                try (Connection connection = sql2o.open()) {
+                    connection.createQuery(sql)
+                            .bind(this.findById(id))
+                            .executeUpdate();
+                } catch (Sql2oException ex) {
+                    System.out.println(ex);
+                }
+            } else {
+                this.findById(id).setAttacked("true");
+                String sql = "UPDATE characters SET attacked = :attacked WHERE id = :id";
+                try (Connection connection = sql2o.open()) {
+                    connection.createQuery(sql)
+                            .addParameter("attacked", "true")
+                            .executeUpdate();
+                } catch (Sql2oException ex) {
+                    System.out.println(ex);
+                }
             }
-        } else {
-            this.findById(id).setAttacked("true");
-            String sql = "UPDATE characters SET attacked = :attacked WHERE id = :id";
-            try (Connection connection = sql2o.open()) {
-                connection.createQuery(sql)
-                        .addParameter("attacked", "true")
-                        .executeUpdate();
-            } catch (Sql2oException ex) {
-                System.out.println(ex);
-            }
+        } catch (NullPointerException ex) {
+            System.out.println(ex);
         }
     }
 
@@ -440,9 +444,20 @@ public class Sql2oCharacterCDao implements CharacterCDao {
             int bestDex = 0;
             int id = 0;
             for (CharacterC characterC : characters) {
-                if (characterC.getDexterity() > 0 && bestDex < characterC.getDexterity()) {
-                    bestDex = characterC.getDexterity();
-                    id = characterC.getId();
+                System.out.println(characterC.getAttacked() + " eafoj");
+                try {
+                    if (characterC.getAttacked() == null || characterC.getAttacked().equals("false")){
+                        if (characterC.getDexterity() > 0 && bestDex < characterC.getDexterity()) {
+                            bestDex = characterC.getDexterity();
+                            id = characterC.getId();
+                        }
+                    }
+                } catch (NullPointerException ex) {
+                    System.out.println(ex);
+                    if (characterC.getDexterity() > 0 && bestDex < characterC.getDexterity()) {
+                        bestDex = characterC.getDexterity();
+                        id = characterC.getId();
+                    }
                 }
             }
             turnOrder.add(id);
@@ -798,12 +813,16 @@ public class Sql2oCharacterCDao implements CharacterCDao {
     public void computerInput(CharacterC enemy, List<CharacterC> targets) {
         int magicNumber = (int) Math.random() * (targets.size() - 1);
         int magicNumber1 = (int) Math.random() * (targets.size() - 1);
-        if (enemy.getMagic() * (Math.random() + 1) > targets.get(magicNumber).getMagicDefense() && this.getAllSpellsForACharacter(enemy.getId()).size() > 0) {
-            this.castSpell(this.getAllSpellsForACharacter(enemy.getId()).get(magicNumber1), enemy, targets);
-        } else if (enemy.getCurrentHP() > 5) {
-            this.attack(enemy, targets.get(magicNumber));
-        } else {
-            this.runAway(enemy, targets);
+        try {
+            if (enemy.getMagic() * (Math.random() + 1) > targets.get(magicNumber).getMagicDefense() && this.getAllSpellsForACharacter(enemy.getId()).size() > 0) {
+                this.castSpell(this.getAllSpellsForACharacter(enemy.getId()).get(magicNumber1), enemy, targets);
+            } else if (enemy.getCurrentHP() > 5) {
+                this.attack(enemy, targets.get(magicNumber));
+            } else {
+                this.runAway(enemy, targets);
+            }
+        } catch (NullPointerException ex) {
+            System.out.println(ex);
         }
     }
 

@@ -16,10 +16,14 @@
         <p>Your party has taken damage</p>
     {{/if}}
 
-    Choose your path:
+    Choose your path, {{currentPC.name}}:
     <br>
-    <a href="/game/highroad/1/attack">Attack</a>
-    <br>
+    {{#each enemies}}
+        <form action="/game/highroad/1/attack/pc/{{currentPC.id}}/enemy/{{id}}" method="post">
+            <button type="submit"><p>Attack {{name}}<p></button>
+        </form>
+        <br>
+    {{/each}}
     <a href="/game/highroad/1/castspell">Cast Spell</a>
     <br>
     <a href="/game/highroad/1/item">Use Item</a>

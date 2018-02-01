@@ -296,6 +296,7 @@ public class Sql2oCharacterCDaoTest {
         characterCList.add(characterC2);
         characterCList.add(characterC3);
         List<Integer> turnOrder = characterCDao.findTurnOrder(characterCList);
+        System.out.println(turnOrder);
         assertTrue(turnOrder.get(0) == 2);
         assertTrue(turnOrder.get(1) == 1);
         assertTrue(turnOrder.get(2) == 3);
