@@ -320,6 +320,21 @@ public class App {
             return new ModelAndView(model, "board2.hbs");
         }, new HandlebarsTemplateEngine());
 
+        get("/game/board3", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            return new ModelAndView(model, "board3.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        get("/game/board3.1", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            return new ModelAndView(model, "board3.1.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        get("/game/board3.2", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            return new ModelAndView(model, "board3.2.hbs");
+        }, new HandlebarsTemplateEngine());
+
         get("/character/new", (req, res) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             return new ModelAndView(model, "new_character.hbs");
