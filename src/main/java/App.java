@@ -345,8 +345,12 @@ public class App {
             return new ModelAndView(model, "board1.hbs");
         }, new HandlebarsTemplateEngine());
 
-        get("/game/board2", (req, res) -> {
+        get("/game/board2/:character1Id/:character2Id", (req, res) -> {
             Map<String, Object> model = new HashMap<>();
+            CharacterC mage = characterCDao.findById(Integer.parseInt(req.params("character1Id")));
+            CharacterC fighter = characterCDao.findById(Integer.parseInt(req.params("character2Id")));
+            model.put("mage", mage);
+            model.put("fighter", fighter);
             locationDao.createRandomLocation("de");
             Location ourLocation = locationDao.findById(locationDao.getAll().size());
             model.put("ourLocation", ourLocation);
@@ -356,30 +360,44 @@ public class App {
             return new ModelAndView(model, "board2.hbs");
         }, new HandlebarsTemplateEngine());
 
-        get("/game/board3", (req, res) -> {
+        get("/game/board3/:character1Id/:character2Id", (req, res) -> {
             Map<String, Object> model = new HashMap<>();
+            CharacterC mage = characterCDao.findById(Integer.parseInt(req.params("character1Id")));
+            CharacterC fighter = characterCDao.findById(Integer.parseInt(req.params("character2Id")));
+            model.put("mage", mage);
+            model.put("fighter", fighter);
             return new ModelAndView(model, "board3.hbs");
         }, new HandlebarsTemplateEngine());
 
-        get("/game/board3.1", (req, res) -> {
+        get("/game/board3.1/:character1Id/:character2Id", (req, res) -> {
             Map<String, Object> model = new HashMap<>();
-            List<CharacterC> characters = characterCDao.getAll();
-            List<CharacterC> playerCharacter = new ArrayList<>();
-            for (CharacterC character : characters) {
-                if (character.getCharClass().toLowerCase().equals("fighter") || character.getCharClass().toLowerCase().equals("red mage")) {
-                    playerCharacter.add(character);
-                }
-            }
-            for (CharacterC characterC : playerCharacter) {
-                characterC.setCurrentMP(characterC.getMP());
-                characterC.setCurrentHP(characterC.getHP());
-                characterCDao.update(characterC.getId(), characterC.getName(), characterC.getDescription(), characterC.getLevel(), characterC.getExperience(), characterC.getHP(), characterC.getCurrentHP(), characterC.getDefense(), characterC.getMagicDefense(), characterC.getStrength(), characterC.getMP(), characterC.getCurrentMP(), characterC.getMagic(), characterC.getDexterity());
-            }
+            CharacterC mage = characterCDao.findById(Integer.parseInt(req.params("character1Id")));
+            CharacterC fighter = characterCDao.findById(Integer.parseInt(req.params("character2Id")));
+            model.put("mage", mage);
+            model.put("fighter", fighter);
+//            List<CharacterC> characters = characterCDao.getAll();
+//            List<CharacterC> playerCharacter = new ArrayList<>();
+//            for (CharacterC character : characters) {
+//                if (character.getCharClass().toLowerCase().equals("fighter") || character.getCharClass().toLowerCase().equals("red mage")) {
+//                    playerCharacter.add(character);
+//                }
+//            }
+//            for (CharacterC characterC : playerCharacter) {
+//                characterC.setCurrentMP(characterC.getMP());
+//                characterC.setCurrentHP(characterC.getHP());
+//                characterCDao.update(characterC.getId(), characterC.getName(), characterC.getDescription(), characterC.getLevel(), characterC.getExperience(), characterC.getHP(), characterC.getCurrentHP(), characterC.getDefense(), characterC.getMagicDefense(), characterC.getStrength(), characterC.getMP(), characterC.getCurrentMP(), characterC.getMagic(), characterC.getDexterity());
+//            }
+            model.put("mage", mage);
+            model.put("fighter", fighter);
             return new ModelAndView(model, "board3.1.hbs");
         }, new HandlebarsTemplateEngine());
 
-        get("/game/board3.2", (req, res) -> {
+        get("/game/board3.2/:character1Id/:character2Id", (req, res) -> {
             Map<String, Object> model = new HashMap<>();
+            CharacterC mage = characterCDao.findById(Integer.parseInt(req.params("character1Id")));
+            CharacterC fighter = characterCDao.findById(Integer.parseInt(req.params("character2Id")));
+            model.put("mage", mage);
+            model.put("fighter", fighter);
             return new ModelAndView(model, "board3.2.hbs");
         }, new HandlebarsTemplateEngine());
 
@@ -402,11 +420,14 @@ public class App {
 
         post("/game/new", (req, res) -> {
             Map<String, Object> model = new HashMap<String, Object>();
-            CharacterC character = new CharacterC(req.queryParams("name"), "red mage", "red mage");
-            characterCDao.add(character);
-            characterCDao.addSpellToCharacterC(spellDao.findById(1), characterCDao.findById(character.getId()));
+            CharacterC mage = new CharacterC(req.queryParams("name"), "red mage", "red mage");
+            characterCDao.add(mage);
+            characterCDao.addSpellToCharacterC(spellDao.findById(1), characterCDao.findById(mage.getId()));
             characterCDao.populateCharacters();
-            model.put("character", character);
+            model.put("mage", mage);
+            CharacterC fighter = new CharacterC(req.queryParams("name"), "Fighter", "fighter");
+            characterCDao.add(fighter);
+            model.put("fighter", fighter);
             CharacterC NPC = new CharacterC(characterCDao.getNameUsingRandom(), "NPC");
             characterCDao.add(NPC);
             model.put("NPC", NPC);
@@ -430,8 +451,12 @@ public class App {
             return new ModelAndView(model, "death.hbs");
         }, new HandlebarsTemplateEngine());
 
-        get("/game/highroad/1", (request, response) -> {
+        get("/game/highroad/1/:character1Id/:character2Id", (request, response) -> {
             Map<String, Object> model = new HashMap<>();
+            CharacterC mage = characterCDao.findById(Integer.parseInt(request.params("character1Id")));
+            CharacterC fighter = characterCDao.findById(Integer.parseInt(request.params("character2Id")));
+            model.put("mage", mage);
+            model.put("fighter", fighter);
             if (characterCDao.findAllByName("Ghoul").size() < 2) {
                 characterCDao.copyCharacter(characterCDao.findByName("Ghoul").getId());
             }
@@ -479,8 +504,12 @@ public class App {
             return new ModelAndView(model, "highroad1.hbs");
         }, new HandlebarsTemplateEngine());
 
-        post("/game/highroad/1/attack/pc/:pcId/enemy/:enemyId", (request, response) -> {
+        post("/game/highroad/1/attack/pc/:pcId/enemy/:enemyId/:character1Id/:character2Id", (request, response) -> {
             Map<String, Object> model = new HashMap<>();
+            CharacterC mage = characterCDao.findById(Integer.parseInt(request.params("character1Id")));
+            CharacterC fighter = characterCDao.findById(Integer.parseInt(request.params("character2Id")));
+            model.put("mage", mage);
+            model.put("fighter", fighter);
             List<CharacterC> characters = characterCDao.getAll();
             List<CharacterC> playerCharacters = new ArrayList<>();
             for (CharacterC character : characters) {

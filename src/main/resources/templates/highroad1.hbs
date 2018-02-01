@@ -19,7 +19,7 @@
     Choose your path, {{currentPC.name}}:
     <br>
     {{#each enemies}}
-        <form action="/game/highroad/1/attack/pc/{{currentPC.id}}/enemy/{{id}}" method="post">
+        <form action="/game/highroad/1/attack/pc/{{currentPC.id}}/enemy/{{id}}/{{mage.id}}/{{fighter.id}}" method="post">
             <button type="submit"><p>Attack {{name}}<p></button>
         </form>
         <br>
