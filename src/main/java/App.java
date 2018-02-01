@@ -532,8 +532,12 @@ public class App {
             return new ModelAndView(model, "highroad1.hbs");
         }, new HandlebarsTemplateEngine());
 
-        post("/game/highroad/1/:id/castspell", (request, response) -> {
+        post("/game/highroad/1/:id/castspell/:character1Id/:character2Id", (request, response) -> {
             Map<String, Object> model = new HashMap<>();
+            CharacterC mage = characterCDao.findById(Integer.parseInt(request.params("character1Id")));
+            CharacterC fighter = characterCDao.findById(Integer.parseInt(request.params("character2Id")));
+            model.put("mage", mage);
+            model.put("fighter", fighter);
             List<CharacterC> characters = characterCDao.getAll();
             List<CharacterC> playerCharacters = new ArrayList<>();
             for (CharacterC character : characters) {

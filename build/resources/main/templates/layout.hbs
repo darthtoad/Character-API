@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{#block "title"}}Ultimate Wish{{/block}}</title>
+    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'>
+    <link rel='stylesheet' href='/styles.css'>
+    <link href="https://fonts.googleapis.com/css?family=Share+Tech+Mono" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<div class="container">
+    <div class="row headerRow">
+        <div class="col-md-12">
+            <div class="headerlogo">
+            </div>
+        </div>
+    </div>
+    <div class="row mainRow">
+        <div class="col-md-2">
+            <div class="panel panel-default sideNav">
+                <div class="panel-heading">
+                    <h2>Party</h2>
+                </div>
+                <div class="char1">
+                    <a href="/character/1"><img class="charPorts"  src="/images/char3.png"></a>
+                </div>
+                <hr>
+                <div class="char2">
+                    <a href="/character/2"><img class="charPorts" src="/images/redmage.jpg"></a>
+                </div>
+                <hr>
+            </div>
+        </div>
+        <div class="col-md-8">
+            {{#block "content"}}
+            {{/block}}
+        </div>
+        <div class="col-md-2">
+            <div class="panel panel-default sideNav">
+                <div class="panel-heading">
+                    <h2>Party Stats</h2>
+                </div>
+                <div class="well stats">
+                    <ul>
+                        <h3>Class: Fighter</h3>
+                        <li>HP:{{fighter.hP}}/{{fighter.currentHP}}</li>
+                        <li>MP:{{fighter.mP}}/{{fighter.currentMP}}</li>
+                        <li>Level:{{fighter.level}}</li>
+                        <li>Experience:{{fighter.experience}}</li>
+                        <li>Strength:{{fighter.strength}}</li>
+                        <li>Magic:{{fighter.magic}}</li>
+                        <li>Dexterity:{{fighter.dexterity}}</li>
+                        <li>Defense:{{fighter.defense}}</li>
+                        <li>Magic Defense:{{fighter.magicDefense}}</li>
+                    </ul>
+                </div>
+                <hr>
+                <div class="well stats">
+                  <ul>
+                    <h3>Class: Red Mage</h3>
+                      <li>HP:{{mage.hP}}/{{mage.currentHP}}</li>
+                      <li>MP:{{mage.mP}}/{{mage.currentMP}}</li>
+                      <li>Level:{{mage.level}}</li>
+                      <li>Experience:{{mage.experience}}</li>
+                      <li>Strength:{{mage.strength}}</li>
+                      <li>Magic:{{mage.magic}}</li>
+                      <li>Dexterity:{{mage.dexterity}}</li>
+                      <li>Defense:{{mage.defense}}</li>
+                      <li>Magic Defense:{{mage.magicDefense}}</li>
+                    </ul>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

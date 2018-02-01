@@ -1,0 +1,95 @@
+body {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 22px;
+    background-image: url("/images/bg2.jpg");
+    background-position; center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.container {
+    padding-bottom: 380px;
+    margin-right: 50px;
+    width: 1600px;
+}
+
+.headerRow {
+    padding-top: 100px;
+}
+
+.headerlogo {
+    height: 100px;
+    background-size: 100% 100%;
+    background-image: url("/images/ultimateWish1.png");
+    margin-bottom: 30px;
+}
+
+.panel {
+    background: rgba(161, 165, 173, 0.5);
+}
+
+.panel .panel-heading {
+    background: rgba(161, 165, 173, .8);
+}
+
+.char1 {
+    padding-top: 20px;
+}
+
+.charWell {
+    background: rgba(161, 165, 173, 0.8);
+}
+
+.charPorts {
+    height: 160px;
+    width: 120px;
+    border-radius: 25px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.detailsPanel {
+    font-size: 22px;
+    color: #ffffff;
+    margin: auto;
+    padding-bottom: 300px;
+}
+
+.gamelogWell {
+    background: rgba(161, 165, 173, .9);
+    font-size: 22px;
+    color: #ffffff;
+}
+
+a {
+    color: #9b282a;
+}
+
+.gameover {
+    display: block;
+    margin: auto;
+    padding-top: 100px;
+    padding-bottom: 100px;
+}
+
+.story-imgs {
+    margin: 5px;
+    position: relative;
+    height: 600px;
+    width:  990px;
+    background-position: 50% 50%;
+    background-repeat:   no-repeat;
+    background-size:     cover;
+}
+
+.attack {
+    color: #9b282a;
+}
+
+.panel-heading {
+    text-align: center;
+}
+
+
+
