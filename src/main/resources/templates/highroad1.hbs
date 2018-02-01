@@ -1,0 +1,30 @@
+{{#partial "content"}}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h1 class="landingHeading">High Roads</h1>
+    </div>
+    <div class="panel-body gameplayBody">
+        <div class = "board1">
+            <img src="/images/highroad.jpg" width="100%" height="100%">
+        </div>
+    </div>
+</div>
+<div class="well gamelogWell">
+    <p>You are on the high roads. You walk for a while until two ghouls approach you, wanting to eat your soul.</p>
+
+    {{#if damage}}
+        <p>Your party has taken damage</p>
+    {{/if}}
+
+    Choose your path:
+    <br>
+    <a href="/game/highroad/1/attack">Attack</a>
+    <br>
+    <a href="/game/highroad/1/castspell">Cast Spell</a>
+    <br>
+    <a href="/game/highroad/1/item">Use Item</a>
+    <br>
+    <a href="/game/highroad/1/runaway">Run Away</a>
+</div>
+{{/partial}}
+{{> layout.hbs}}

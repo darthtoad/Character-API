@@ -6,7 +6,9 @@ import org.sql2o.Sql2o;
 import spark.ModelAndView;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static spark.Spark.*;
@@ -360,6 +362,18 @@ public class App {
 
         get("/game/board3.1", (req, res) -> {
             Map<String, Object> model = new HashMap<>();
+            List<CharacterC> characters = characterCDao.getAll();
+            List<CharacterC> playerCharacter = new ArrayList<>();
+            for (CharacterC character : characters) {
+                if (character.getCharClass().toLowerCase().equals("fighter") || character.getCharClass().toLowerCase().equals("red mage")) {
+                    playerCharacter.add(character);
+                }
+            }
+            for (CharacterC characterC : playerCharacter) {
+                characterC.setCurrentMP(characterC.getMP());
+                characterC.setCurrentHP(characterC.getHP());
+                characterCDao.update(characterC.getId(), characterC.getName(), characterC.getDescription(), characterC.getLevel(), characterC.getExperience(), characterC.getHP(), characterC.getCurrentHP(), characterC.getDefense(), characterC.getMagicDefense(), characterC.getStrength(), characterC.getMP(), characterC.getCurrentMP(), characterC.getMagic(), characterC.getDexterity());
+            }
             return new ModelAndView(model, "board3.1.hbs");
         }, new HandlebarsTemplateEngine());
 
@@ -391,6 +405,14 @@ public class App {
             spellDao.populateSpells();
             itemDao.populateItems();
             model.put("character", character);
+            CharacterC NPC = new CharacterC(characterCDao.getNameUsingRandom(), "NPC");
+            characterCDao.add(NPC);
+            model.put("NPC", NPC);
+            CharacterC villain = new CharacterC(characterCDao.getNameUsingRandom(), "villain");
+            model.put("villain", villain);
+            wordDao.createRandomWord();
+            Word word = wordDao.findById(wordDao.getAll().size());
+            model.put("word", word);
             return new ModelAndView(model, "board1.hbs");
         }, new HandlebarsTemplateEngine());
 
@@ -406,7 +428,75 @@ public class App {
             return new ModelAndView(model, "death.hbs");
         }, new HandlebarsTemplateEngine());
 
+        get("/game/highroad/1", (request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+            characterCDao.copyCharacter(characterCDao.findByName("Ghoul").getId());
+            List<CharacterC> characters = characterCDao.getAll();
+            List<CharacterC> playerCharacters = new ArrayList<>();
+            for (CharacterC character : characters) {
+                if (character.getCharClass().toLowerCase().equals("fighter") || character.getCharClass().toLowerCase().equals("red mage") && character.getCurrentHP() > 0) {
+                    playerCharacters.add(character);
+                }
+            }
+            List<CharacterC> enemies = characterCDao.findAllByName("Ghoul");
+            List<CharacterC> battleCharacters = new ArrayList<>();
+            battleCharacters.addAll(playerCharacters);
+            battleCharacters.addAll(enemies);
+            List<Integer> turnOrder = characterCDao.findTurnOrder(battleCharacters);
+            if (!playerCharacters.contains(characterCDao.findById(turnOrder.get(0)))) {
+                model.put("damage", true);
+                characterCDao.computerInput(characterCDao.findById(turnOrder.get(0)), playerCharacters);
+                characterCDao.updateAttacked(turnOrder.get(0));
+                if (!playerCharacters.contains(characterCDao.findById(turnOrder.get(1)))) {
+                    characterCDao.computerInput(characterCDao.findById(turnOrder.get(1)), playerCharacters);
+                    characterCDao.updateAttacked(turnOrder.get(1));
+                }
+            }
+            return new ModelAndView(model, "highroad1.hbs");
+        }, new HandlebarsTemplateEngine());
 
+        get("/game/highroad/1/attack/pc/:pcId/enemy/:enemyId", (request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+            List<CharacterC> characters = characterCDao.getAll();
+            List<CharacterC> playerCharacters = new ArrayList<>();
+            for (CharacterC character : characters) {
+                if (character.getCharClass().toLowerCase().equals("fighter") || character.getCharClass().toLowerCase().equals("red mage") && character.getCurrentHP() > 0) {
+                    playerCharacters.add(character);
+                }
+            }
+            List<CharacterC> enemies = characterCDao.findAllByName("Ghoul");
+            CharacterC enemy = characterCDao.findById(Integer.parseInt(request.params("enemyId")));
+            CharacterC PC = characterCDao.findById(Integer.parseInt(request.params("pcId")));
+            List<CharacterC> smallEnemy = new ArrayList<>();
+            smallEnemy.add(enemy);
+            characterCDao.userInput("attack", PC, smallEnemy);
+            List<CharacterC> battleCharacters = new ArrayList<>();
+            battleCharacters.addAll(playerCharacters);
+            battleCharacters.addAll(enemies);
+            List<CharacterC> notGone = new ArrayList<>();
+            for (CharacterC characterC : battleCharacters) {
+                if (!characterC.getAttacked().equals("true")) {
+                    notGone.add(characterC);
+                }
+            }
+            List<Integer> turnOrder = characterCDao.findTurnOrder(notGone);
+            if (turnOrder.size() == 0) {
+                for (CharacterC c : battleCharacters) {
+                    characterCDao.findById(c.getId()).setAttacked("false");
+                }
+            } else {
+                if (!playerCharacters.contains(characterCDao.findById(turnOrder.get(0)))) {
+                    model.put("damage", true);
+                    characterCDao.computerInput(characterCDao.findById(turnOrder.get(0)), playerCharacters);
+                    characterCDao.updateAttacked(turnOrder.get(0));
+                    if (battleCharacters.get(turnOrder.get(1)).getName().equals("ghoul")) {
+                        characterCDao.computerInput(characterCDao.findById(turnOrder.get(1)), playerCharacters);
+                        characterCDao.updateAttacked(turnOrder.get(1));
+                    }
+                }
+            }
+            return new ModelAndView(model, "highroad1-1.hbs");
+        }, new HandlebarsTemplateEngine());
 
 
     }

@@ -19,6 +19,7 @@ public class CharacterC {
     private int magic;
     private int dexterity;
     private String charClass;
+    private String attacked;
 
     public CharacterC(String name, String description) {
         this.name = name;
@@ -186,6 +187,14 @@ public class CharacterC {
 
     public void setDexterity(int dexterity) {
         this.dexterity = dexterity;
+    }
+
+    public String getAttacked() {
+        return attacked;
+    }
+
+    public void setAttacked(String attacked) {
+        this.attacked = attacked;
     }
 
     @Override

@@ -158,6 +158,38 @@ public class Sql2oCharacterCDao implements CharacterCDao {
         }
     }
 
+    public CharacterC findByName(String name) {
+        String sql = "SELECT * FROM characters WHERE name = :name";
+        try (Connection connection = sql2o.open()) {
+            return connection.createQuery(sql)
+                    .addParameter("name", name)
+                    .executeAndFetchFirst(CharacterC.class);
+        }
+    }
+
+    public List<CharacterC> findAllByName(String name) {
+        String sql = "SELECT * FROM characters WHERE name = :name";
+        try (Connection connection = sql2o.open()) {
+            return connection.createQuery(sql)
+                    .addParameter("name", name)
+                    .executeAndFetch(CharacterC.class);
+        }
+    }
+
+    public void copyCharacter(int characterCId) {
+        String sql = "INSERT INTO characters (name, description, charClass, level, experience, HP, currentHP, defense, magicDefense, strength, MP, currentMP, magic, dexterity) VALUES (:name, :description, :charClass, :level, :experience, :HP, :currentHP, :defense, :magicDefense, :strength, :MP, :currentMP, :magic, :dexterity)";
+        CharacterC characterToCopy = this.findById(characterCId);
+        try (Connection connection = sql2o.open()) {
+            int id = (int) connection.createQuery(sql)
+                    .bind(characterToCopy)
+                    .executeUpdate()
+                    .getKey();
+            characterToCopy.setId(id);
+        } catch (Sql2oException ex) {
+            System.out.println(ex);
+        }
+    }
+
     @Override
     public void addCharacterToItem(CharacterC characterC, Item item) {
         String sql = "INSERT INTO characters_items (characterCId, itemId) VALUES (:characterCId, :itemId)";
@@ -290,6 +322,30 @@ public class Sql2oCharacterCDao implements CharacterCDao {
                     .executeUpdate();
         } catch (Sql2oException ex) {
             System.out.println(ex);
+        }
+    }
+
+    public void updateAttacked(int id) {
+        if (this.findById(id).getAttacked().equals(null) || this.findById(id).getAttacked().equals("")) {
+            this.findById(id).setAttacked("true");
+            String sql = "INSERT INTO characters (attacked) VALUES (:attacked) WHERE id = :id";
+            try (Connection connection = sql2o.open()) {
+                connection.createQuery(sql)
+                        .bind(this.findById(id))
+                        .executeUpdate();
+            } catch (Sql2oException ex) {
+                System.out.println(ex);
+            }
+        } else {
+            this.findById(id).setAttacked("true");
+            String sql = "UPDATE characters SET attacked = :attacked WHERE id = :id";
+            try (Connection connection = sql2o.open()) {
+                connection.createQuery(sql)
+                        .addParameter("attacked", "true")
+                        .executeUpdate();
+            } catch (Sql2oException ex) {
+                System.out.println(ex);
+            }
         }
     }
 
@@ -726,10 +782,12 @@ public class Sql2oCharacterCDao implements CharacterCDao {
         if (string.toLowerCase().equals("attack")) {
             this.attack(characterC, targets.get(0));
         }
-        for (Spell spell : this.getAllSpellsForACharacter(characterC.getId())) {
-            if (spell.getName().toLowerCase().equals(string)) {
-                this.castSpell(spell, characterC, targets);
-                break;
+        if (string.toLowerCase().equals("cast spell")){
+            for (Spell spell : this.getAllSpellsForACharacter(characterC.getId())) {
+                if (spell.getName().toLowerCase().equals(string)) {
+                    this.castSpell(spell, characterC, targets);
+                    break;
+                }
             }
         }
         if (string.toLowerCase().equals("run away")) {
