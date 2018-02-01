@@ -15,8 +15,8 @@ CREATE TABLE IF NOT EXISTS characters (
     currentMP INTEGER,
     magic INTEGER,
     dexterity INTEGER,
-    charClass VARCHAR,
-    attacked VARCHAR
+    attacked VARCHAR,
+    charClass VARCHAR
 );
 
 CREATE TABLE IF NOT EXISTS characters_spells (
