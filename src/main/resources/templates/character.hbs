@@ -1,4 +1,9 @@
 {{#partial "content"}}
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
 
 <div class = "well charWell">
     <h2>Name: {{character.name}}</h2>
@@ -15,6 +20,8 @@
         <p>Magic Defense:{{character.magicDefense}}</p>
         <p>Level:{{character.level}}</p>
         <p>Experience:{{character.experience}}</p>
+
+    <button onclick="goBack()">Go Back</button>
 </div>
 {{/partial}}
 {{> layout.hbs}}
