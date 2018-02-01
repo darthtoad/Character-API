@@ -34,7 +34,7 @@
                 <div class="well curLocation">
                     <h4>Loc/Time</h4>
                     <ul>
-                        <li>Current Loc</li>
+                        <li>Current Loc:</li>
                         <li>Current Time</li>
                     </ul>
                 </div>
@@ -47,41 +47,38 @@
         <div class="col-md-2">
             <div class="panel panel-default sideNav">
                 <div class="panel-heading">
-                    <h2>Inv./Stats</h2>
-                </div>
-                <div class="well level">
-                    <ul>
-                        <li>Level Numerical</li>
-                    </ul>
+                    <h2>Character Stats</h2>
                 </div>
                 <hr>
                 <div class="well stats">
                     <ul>
-                        <li>Current HP/Max HP</li>
-                        <li>Def</li>
-                        <li>Str</li>
-                        <li>Magic</li>
-                        <li>Dex</li>
-                        <li>Current MP/Max MP</li>
+                        <h3>Class: Fighter</h3>
+                        <li>HP:{{fighter.hP}}/{{fighter.currentHP}}</li>
+                        <li>MP:{{fighter.mP}}/{{fighter.currentMP}}</li>
+                        <li>Level:{{fighter.level}}</li>
+                        <li>Experience:{{fighter.experience}}</li>
+                        <li>Strength:{{fighter.strength}}</li>
+                        <li>Magic:{{fighter.magic}}</li>
+                        <li>Dexterity:{{fighter.dexterity}}</li>
+                        <li>Defense:{{fighter.defense}}</li>
+                        <li>Magic Defense:{{fighter.magicDefense}}</li>
                     </ul>
                 </div>
                 <hr>
-                <div class="well inv">
-                    <h4>Spells</h4>
-                    <ul>
-                        <li>Spell1</li>
-                        <li></li>
+                <div class="well stats">
+                  <ul>
+                    <h3>Class: Red Mage</h3>
+                      <li>HP:{{mage.hP}}/{{mage.currentHP}}</li>
+                      <li>MP:{{mage.mP}}/{{mage.currentMP}}</li>
+                      <li>Level:{{mage.level}}</li>
+                      <li>Experience:{{mage.experience}}</li>
+                      <li>Strength:{{mage.strength}}</li>
+                      <li>Magic:{{mage.magic}}</li>
+                      <li>Dexterity:{{mage.dexterity}}</li>
+                      <li>Defense:{{mage.defense}}</li>
+                      <li>Magic Defense:{{mage.magicDefense}}</li>
                     </ul>
-                    <h4>Weapons</h4>
-                    <ul>
-                        <li>Weapon1</li>
-                        <li></li>
-                    </ul>
-                    <h4>Armor/Items</h4>
-                    <ul>
-                        <li>Armor/Item1</li>
-                        <li></li>
-                    </ul>
+                  </div>
                 </div>
             </div>
         </div>

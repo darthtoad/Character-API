@@ -5,7 +5,7 @@
     </div>
     <div class="panel-body gameplayBody">
         <div class = "board1">
-            <img src="/images/highroad.jpg" width="100%" height="100%">
+            <img src="/images/highroad.jpg" class="story-imgs">
         </div>
     </div>
 </div>
@@ -19,7 +19,7 @@
     Choose your path, {{currentPC.name}}:
     <br>
     {{#each enemies}}
-        <form action="/game/highroad/1/attack/pc/{{currentPC.id}}/enemy/{{id}}" method="post">
+        <form action="/game/highroad/1/attack/pc/{{currentPC.id}}/enemy/{{id}}/{{mage.id}}/{{fighter.id}}" method="post">
             <button type="submit"><p>Attack {{name}}<p></button>
         </form>
         <br>
