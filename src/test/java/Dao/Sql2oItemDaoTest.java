@@ -83,6 +83,22 @@ public class Sql2oItemDaoTest {
         assertNotEquals(characterCDao.findById(characterC.getId()).getCurrentHP(), originalCurrentHP);
     }
 
+    @Test
+    public void removeAllItemsFromCharacterCRemovesAllItems() throws Exception {
+        Item item = setupNewItem();
+        Item item1 = setupNewItem1();
+        CharacterC characterC = setupNewCharacterC();
+        CharacterC characterC1 = setupNewCharacterC1();
+        characterCDao.add(characterC);
+        characterCDao.add(characterC1);
+        itemDao.add(item);
+        itemDao.add(item1);
+        itemDao.addItemToCharacterC(item, characterC);
+        itemDao.addItemToCharacterC(item1, characterC);
+        itemDao.removeAllCharacterCFromItem(characterCDao.findById(characterC.getId()));
+        assertEquals(0, itemDao.getAllItemsForCharacters(characterC.getId()).size());
+    }
+
 
     public Item setupNewItem() {
         return new Item("Thing",2,4);

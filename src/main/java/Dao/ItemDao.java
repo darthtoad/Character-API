@@ -16,7 +16,7 @@ public interface ItemDao {
     void update(int id, int currentHP, int currentMP);
 
     void removeCharacterCFromItem(CharacterC characterC, Item item);
-    void removeAllCharacterCFromItem(Item item);
+    void removeAllCharacterCFromItem(CharacterC characterC);
 
     void deleteById(int id);
     void deleteAll();

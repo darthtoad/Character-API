@@ -123,11 +123,11 @@ public class Sql2oItemDao implements ItemDao {
     }
 
     @Override
-    public void removeAllCharacterCFromItem(Item item) {
-        String sql = "DELETE FROM characters_items WHERE itemId = :itemId";
+    public void removeAllCharacterCFromItem(CharacterC characterC) {
+        String sql = "DELETE FROM characters_items WHERE characterCId = :characterCId";
         try (Connection connection = sql2o.open()) {
             connection.createQuery(sql)
-                    .addParameter("itemId", item.getId())
+                    .addParameter("characterCId", characterC.getId())
                     .executeUpdate();
         } catch (Sql2oException ex) {
             System.out.println(ex);
