@@ -17,12 +17,6 @@ body {
     padding-top: 50px;
 }
 
-.jumbotron {
-    height: 100px;
-    background-size: 100% 100%;
-    background-image: url("/images/ultimateWish2.png");
-}
-
 .mainContent {
     background: rgba(161, 165, 173, 0.5);
 }
@@ -69,18 +63,10 @@ body {
 }
 
 .char1 {
-
+    padding-top: 20px;
 }
 
 .char2 {
-
-}
-
-.char3 {
-    padding-bottom: 20px;
-}
-
-hr {
 
 }
 
@@ -91,14 +77,6 @@ hr {
     display: block;
     margin-left: auto;
     margin-right: auto;
-}
-
-.charWell {
-    background: rgba(161, 165, 173, .8);
-}
-
-.newCharWell {
-    background: rgba(161, 165, 173, .8);
 }
 
 .detailsPanel {
@@ -116,6 +94,13 @@ hr {
 
 a {
     color: #ff0c0c;
+}
+
+.gameover {
+    display: block;
+    margin: auto;
+    padding-top: 100px;
+    padding-bottom: 100px;
 }
 
 

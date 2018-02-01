@@ -356,6 +356,11 @@ public class App {
             return new ModelAndView(model, "character.hbs");
         }, new HandlebarsTemplateEngine());
 
+        get("/gameover", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            return new ModelAndView(model, "death.hbs");
+        }, new HandlebarsTemplateEngine());
+
 
 
 
