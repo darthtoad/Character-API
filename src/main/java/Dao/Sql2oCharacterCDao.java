@@ -835,12 +835,7 @@ public class Sql2oCharacterCDao implements CharacterCDao {
             this.attack(characterC, targets.get(0));
         }
         if (string.toLowerCase().equals("cast spell")){
-            for (Spell spell : this.getAllSpellsForACharacter(characterC.getId())) {
-                if (spell.getName().toLowerCase().equals(string)) {
-                    this.castSpell(spell, characterC, targets);
-                    break;
-                }
-            }
+            this.castSpell(this.getAllSpellsForACharacter(characterC.getId()).get(0), characterC, targets);
         }
         if (string.toLowerCase().equals("run away")) {
             this.runAway(characterC, targets);
