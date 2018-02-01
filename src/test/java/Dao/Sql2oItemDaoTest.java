@@ -43,20 +43,73 @@ public class Sql2oItemDaoTest {
         itemDao.add(item1);
         itemDao.addItemToCharacterC(item, characterC);
         itemDao.addItemToCharacterC(item1, characterC1);
-        assertEquals(1, itemDao.getAllCharacterCForItem(item.getId()).size());
-        assertTrue(itemDao.getAllCharacterCForItem(item.getId()).contains(characterC));
+        assertEquals(1, itemDao.getAllItemsForCharacters(item.getId()).size());
+        System.out.println(itemDao.getAllItemsForCharacters(item.getId()));
+        assertTrue(itemDao.getAllItemsForCharacters(characterC.getId()).contains(itemDao.findById(item.getId())));
+    }
+
+    @Test
+    public void removeCharacterCFromItemRemovesCorrectly() throws Exception {
+        Item item = setupNewItem();
+        Item item1 = setupNewItem1();
+
+        CharacterC characterC = setupNewCharacterC();
+        CharacterC characterC1 = setupNewCharacterC1();
+        characterCDao.add(characterC);
+        characterCDao.add(characterC1);
+        itemDao.add(item);
+        itemDao.add(item1);
+        itemDao.addItemToCharacterC(item, characterC);
+        itemDao.addItemToCharacterC(item1, characterC);
+        itemDao.removeCharacterCFromItem(characterC, item);
+        assertFalse(itemDao.getAllItemsForCharacters(characterC.getId()).contains(item));
+        assertEquals(1, itemDao.getAllItemsForCharacters(characterC.getId()).size());
+    }
+
+    @Test
+    public void removeItemFromCharacterCUpdatesInfo() throws Exception {
+        Item item = setupNewItem();
+        Item item1 = setupNewItem1();
+        CharacterC characterC = setupNewCharacterC();
+        CharacterC characterC1 = setupNewCharacterC1();
+        characterCDao.add(characterC);
+        characterCDao.add(characterC1);
+        itemDao.add(item);
+        itemDao.add(item1);
+        itemDao.addItemToCharacterC(item, characterC);
+        itemDao.addItemToCharacterC(item1, characterC);
+        int originalCurrentHP = characterC.getCurrentHP();
+        itemDao.removeCharacterCFromItem(characterC, item);
+        assertNotEquals(characterCDao.findById(characterC.getId()).getCurrentHP(), originalCurrentHP);
+    }
+
+    @Test
+    public void removeAllItemsFromCharacterCRemovesAllItems() throws Exception {
+        Item item = setupNewItem();
+        Item item1 = setupNewItem1();
+        CharacterC characterC = setupNewCharacterC();
+        CharacterC characterC1 = setupNewCharacterC1();
+        characterCDao.add(characterC);
+        characterCDao.add(characterC1);
+        itemDao.add(item);
+        itemDao.add(item1);
+        itemDao.addItemToCharacterC(item, characterC);
+        itemDao.addItemToCharacterC(item1, characterC);
+        itemDao.removeAllCharacterCFromItem(characterCDao.findById(characterC.getId()));
+        assertEquals(0, itemDao.getAllItemsForCharacters(characterC.getId()).size());
     }
 
 
     public Item setupNewItem() {
-        return new Item(2,4);
+        return new Item("Thing",2,4);
     }
     public Item setupNewItem1() {
-        return new Item(4,8);
+        return new Item("other thing",4,8);
     }
     public Item setupNewItem2() {
-        return new Item(6,7);
+        return new Item("yet another thing",6,7);
     }
+
     public CharacterC setupNewCharacterC() {
         return new CharacterC("Fog", "A blonde hero who is not name Cloud", 4, 588, 49, 38, 5, 4, 7, 3, 2, 5, 8);
     }

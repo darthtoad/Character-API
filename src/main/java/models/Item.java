@@ -4,10 +4,12 @@ import java.util.Objects;
 
 public class Item {
     private int id;
+    private String name;
     private int currentHP;
     private int currentMP;
 
-    public Item(int currentHP, int currentMP){
+    public Item(String name, int currentHP, int currentMP){
+        this.name = name;
         this.currentHP = currentHP;
         this.currentMP = currentMP;
     }
@@ -36,6 +38,14 @@ public class Item {
         this.currentMP = currentMP;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -45,12 +55,14 @@ public class Item {
 
         if (id != item.id) return false;
         if (currentHP != item.currentHP) return false;
-        return (Integer)currentMP != null ? currentMP != item.currentMP : (Integer)item.currentMP == null;
+        if (currentMP != item.currentMP) return false;
+        return name != null ? name.equals(item.name) : item.name == null;
     }
 
     @Override
     public int hashCode() {
         int result = id;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + currentHP;
         result = 31 * result + currentMP;
         return result;
