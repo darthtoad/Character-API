@@ -12,7 +12,9 @@
     <div class="well gamelogWell">
         {{#if win}}
             <h1>You just won the fight</h1>
-            <a href="/town">Keep walking</a>
+
+            <a href="/game/board4/{{mage.id}}/{{fighter.id}}">Keep walking</a>
+
         {{else}}
             <p>Currently fighting ghouls.</p>
 

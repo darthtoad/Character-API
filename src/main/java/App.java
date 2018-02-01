@@ -404,6 +404,33 @@ public class App {
             return new ModelAndView(model, "board3.2.hbs");
         }, new HandlebarsTemplateEngine());
 
+        get("/game/board2/:character1Id/:character2Id", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            CharacterC mage = characterCDao.findById(Integer.parseInt(req.params("character1Id")));
+            CharacterC fighter = characterCDao.findById(Integer.parseInt(req.params("character2Id")));
+            model.put("mage", mage);
+            model.put("fighter", fighter);
+            locationDao.createRandomLocation("de");
+            Location ourLocation = locationDao.findById(locationDao.getAll().size());
+            model.put("ourLocation", ourLocation);
+            wordDao.createRandomWord();
+            Word word = wordDao.findById(wordDao.getAll().size());
+            model.put("word", word);
+            return new ModelAndView(model, "board2.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        get("/game/board4/:character1Id/:character2Id", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            CharacterC mage = characterCDao.findById(Integer.parseInt(req.params("character1Id")));
+            CharacterC fighter = characterCDao.findById(Integer.parseInt(req.params("character2Id")));
+            model.put("mage", mage);
+            model.put("fighter", fighter);
+            locationDao.createRandomLocation("dk");
+            Location ourLocation = locationDao.findById(locationDao.getAll().size());
+            model.put("ourLocation", ourLocation);
+            return new ModelAndView(model, "town.hbs");
+        }, new HandlebarsTemplateEngine());
+
         get("/character/new", (req, res) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             return new ModelAndView(model, "new_fighter.hbs");

@@ -28,6 +28,7 @@ public class Sql2oCharacterCDao implements CharacterCDao {
     public void add(CharacterC characterC) {
         if (characterC.getCharClass() != null && characterC.getCharClass() != "") {
             if (characterC.getCharClass().toLowerCase().equals("fighter")) {
+                characterC.setDescription("I am a Fighter");
                 characterC.setLevel(1);
                 characterC.setHP(15);
                 characterC.setCurrentHP(15);
