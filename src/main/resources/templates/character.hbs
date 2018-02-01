@@ -1,4 +1,9 @@
 {{#partial "content"}}
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
     <div class="panel panel-default">
         <div class="panel-heading">
             <h1 class="landingHeading">{{character.name}}</h1>
@@ -27,44 +32,5 @@
 
         <h4>Back to main page:<a href="/">Click Here!</a></h4>
     </div>
-{{/partial}}
-{{> layout.hbs}}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{{#partial "content"}}
-
-<div class = "well charWell">
-    <h2>Name: {{character.name}}</h2>
-    <p>Class: {{character.charClass}}</p>
-    <p>Description: {{character.description}}</p>
-
-   <h2>Character Stats:</h2>
-        <p>HP:{{character.hP}}/{{character.currentHP}}</p>
-        <p>MP:{{character.mP}}/{{character.currentMP}}</p>
-        <p>Strength:{{character.strength}}</p>
-        <p>Magic:{{character.magic}}</p>
-        <p>Dexterity:{{character.dexterity}}</p>
-        <p>Defense:{{character.defense}}</p>
-        <p>Magic Defense:{{character.magicDefense}}</p>
-        <p>Level:{{character.level}}</p>
-        <p>Experience:{{character.experience}}</p>
-</div>
 {{/partial}}
 {{> layout.hbs}}
