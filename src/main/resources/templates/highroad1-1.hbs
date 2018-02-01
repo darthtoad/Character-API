@@ -24,7 +24,7 @@
             <br>
             {{#each enemies}}
                 <form action="/game/highroad/1/attack/pc/{{currentPC.id}}/enemy/{{id}}/{{mage.id}}/{{fighter.id}}" method="post">
-                    <button type="submit"><p>Attack {{name}}<p></button>
+                    <button type="submit"><p class="attack">Attack {{name}}<p></button>
                 </form>
                 <br>
             {{/each}}

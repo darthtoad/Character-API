@@ -14,7 +14,7 @@ body {
 }
 
 .headerRow {
-    padding-top: 50px;
+    padding-top: 100px;
 }
 
 .headerlogo {
@@ -87,9 +87,8 @@ a {
     color: #9b282a;
 }
 
-.ghouls {
-    background: url("/images/sprites/enemy/ghoul - Copy2.png");
-    float: left;
+.panel-heading {
+    text-align: center;
 }
 
 

@@ -10,17 +10,17 @@
     </div>
 </div>
 <div class="well gamelogWell">
-    <p>You are on the high roads. You walk for a while until two ghouls approach you, wanting to eat your soul.</p>
+    <p>You are on the high roads. You walk for a while... ghouls approach... wanting to eat your soul.</p>
 
     {{#if damage}}
         <p>Your party has taken damage</p>
     {{/if}}
 
-    Choose your path, {{currentPC.name}}:
+    You must fight for your life, {{currentPC.name}}:
     <br>
     {{#each enemies}}
         <form action="/game/highroad/1/attack/pc/{{currentPC.id}}/enemy/{{id}}/{{mage.id}}/{{fighter.id}}" method="post">
-            <button type="submit"><p>Attack {{name}}<p></button>
+            <button type="submit"><p class="attack">Attack {{name}}<p></button>
         </form>
         <br>
     {{/each}}
